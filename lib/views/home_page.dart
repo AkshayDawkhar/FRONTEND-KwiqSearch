@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import 'package:takeahome/views/map_page.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class HomePage extends StatelessWidget {
           // ),
           Container(
             // margin: EdgeInsets.all(12),
-            margin: EdgeInsets.symmetric(vertical: 6,horizontal: 12),
+            margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
             child: Row(
               children: [
                 Expanded(
@@ -91,12 +92,14 @@ class HomePage extends StatelessWidget {
                         filled: true,
                       ),
                       onChanged: (value) {},
-                      items: ['1 RK','1 BHK', '2 BHK','3 BHK', '4 BHK']
+                      items: ['1 RK', '1 BHK', '2 BHK', '3 BHK', '4 BHK']
                           .map((e) => DropdownMenuItem(
-                                child: Row(mainAxisSize: MainAxisSize.min,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Checkbox(
-                                        value: false, onChanged: (bool? value) {  }),
+                                        value: false,
+                                        onChanged: (bool? value) {}),
                                     Text(e)
                                   ],
                                 ),
@@ -108,7 +111,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.symmetric(vertical: 6,horizontal: 12),
+            margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
             // margin: EdgeInsets.all(12),
             child: Row(
               children: [
@@ -128,7 +131,13 @@ class HomePage extends StatelessWidget {
                         filled: true,
                       ),
                       onChanged: (value) {},
-                      items: ['Ready To Move','6 month' ,'1 Year', '2 Year','3 +3 Year']
+                      items: [
+                        'Ready To Move',
+                        '6 month',
+                        '1 Year',
+                        '2 Year',
+                        '3 +3 Year'
+                      ]
                           .map((e) => DropdownMenuItem(
                                 child: Text(e),
                                 value: e,
@@ -138,31 +147,51 @@ class HomePage extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Expanded(flex: 2,child: InkWell(
-                  onTap: (){
-                    showDialog(context: context, builder: (q){return AlertDialog(title: Text('name'),);});
-                  },
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      label: Text('Carpet Area'),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(20),)
-                    ),
-
-                    enabled: false,
-                    initialValue: 'sq',
-                    onTap: (){
-                      showDialog(context: context, builder: (q){return AlertDialog(title: Text('name'),);});
-                    },
-                    onChanged: (value){
-                      showDialog(context: context, builder: (q){return AlertDialog(title: Text('name'),);});
-                    },
-                  ),
-                ))
+                Expanded(
+                    flex: 2,
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (q) {
+                              return AlertDialog(
+                                title: Text('name'),
+                              );
+                            });
+                      },
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                            label: Text('Carpet Area'),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            )),
+                        enabled: false,
+                        initialValue: 'sq',
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (q) {
+                                return AlertDialog(
+                                  title: Text('name'),
+                                );
+                              });
+                        },
+                        onChanged: (value) {
+                          showDialog(
+                              context: context,
+                              builder: (q) {
+                                return AlertDialog(
+                                  title: Text('name'),
+                                );
+                              });
+                        },
+                      ),
+                    ))
               ],
             ),
           ),
           Container(
-            margin: EdgeInsets.symmetric(vertical: 6,horizontal: 12),
+            margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
             child: Row(
               children: [
                 Expanded(
@@ -181,7 +210,7 @@ class HomePage extends StatelessWidget {
                         filled: true,
                       ),
                       onChanged: (value) {},
-                      items: ['Yes','No']
+                      items: ['Yes', 'No']
                           .map((e) => DropdownMenuItem(
                                 child: Text(e),
                                 value: e,
@@ -191,32 +220,56 @@ class HomePage extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Expanded(flex: 2,child: InkWell(
-                  onTap: (){
-                    showDialog(context: context, builder: (q){return AlertDialog(title: Text('name'),);});
-                  },
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      label: Text('Budget'),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(20),)
-                    ),
-
-                    enabled: false,
-                    initialValue: '61 - 71',
-                    onTap: (){
-                      showDialog(context: context, builder: (q){return AlertDialog(title: Text('name'),);});
-                    },
-                    onChanged: (value){
-                      showDialog(context: context, builder: (q){return AlertDialog(title: Text('name'),);});
-                    },
-                  ),
-                ))
+                Expanded(
+                    flex: 2,
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (q) {
+                              return AlertDialog(
+                                title: Text('name'),
+                              );
+                            });
+                      },
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                            label: Text('Budget'),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            )),
+                        enabled: false,
+                        initialValue: '61 - 71',
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (q) {
+                                return AlertDialog(
+                                  title: Text('name'),
+                                );
+                              });
+                        },
+                        onChanged: (value) {
+                          showDialog(
+                              context: context,
+                              builder: (q) {
+                                return AlertDialog(
+                                  title: Text('name'),
+                                );
+                              });
+                        },
+                      ),
+                    ))
               ],
             ),
           ),
-
-
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.to(MapPage());
+        },
+        child: Text('name'),
       ),
     );
   }
