@@ -73,5 +73,132 @@ class Room {
   String loc;
   double bhk;
 
-  Room({required this.name, required this.number, required this.loc, required this.bhk});
+  Room(
+      {required this.name,
+      required this.number,
+      required this.loc,
+      required this.bhk});
 }
+
+class Flat {
+  String area;
+  String name;
+  double bhk;
+  DateTime possession;
+  int price;
+  int carpetArea;
+
+  Flat({
+    required this.name,
+    required this.area,
+    required this.bhk,
+    required this.possession,
+    required this.price,
+    required this.carpetArea,
+  });
+}
+
+List<Flat> dummyFlats = [
+  Flat(
+      area: 'Mamurdi',
+      bhk: 1,
+      possession: DateTime(2024, 12),
+      price: 3200000,
+      carpetArea: 402, name: 'my flat'),
+  Flat(
+      area: 'Mamurdi',
+      bhk: 1,
+      possession: DateTime(2024, 6),
+      price: 4000000,
+      carpetArea: 420, name: 'my flat2'),
+  Flat(
+      area: 'Mamurdi',
+      bhk: 2,
+      possession: DateTime(2024, 3),
+      price: 5000000,
+      carpetArea: 700, name: 'my flat3'),
+  Flat(
+      area: 'Wakad',
+      bhk: 2,
+      possession: DateTime(2024, 3),
+      price: 5000000,
+      carpetArea: 700, name: 'my flat4'),
+  Flat(
+      area: 'Wakad',
+      bhk: 2,
+      possession: DateTime(2023, 3),
+      price: 8200000,
+      carpetArea: 767, name: 'Mont Vert Sonnet'),
+  Flat(
+      area: 'Wakad',
+      bhk: 2,
+      possession: DateTime(2024, 12),
+      price: 7700000,
+      carpetArea: 787, name: 'AR atlas'),
+  Flat(
+      area: 'Wakad',
+      bhk: 2,
+      possession: DateTime(2024, 12),
+      price: 8650000,
+      carpetArea: 786, name: 'Leela heights'),
+  Flat(
+      area: 'Wakad',
+      bhk: 2,
+      possession: DateTime(2024, 1),
+      price: 6900000,
+      carpetArea: 740, name: 'Plam spring'),
+  Flat(
+      area: 'Wakad',
+      bhk: 2,
+      possession: DateTime(2024, 3),
+      price: 6300000,
+      carpetArea: 692, name: 'Santiago nest'),
+  Flat(
+      area: 'Wakad',
+      bhk: 2,
+      possession: DateTime(2025, 12),
+      price: 8400000,
+      carpetArea: 755, name: '97 sepia'),
+  Flat(
+      area: 'Wakad',
+      bhk: 3,
+      possession: DateTime(2024, 25),
+      price: 10700000,
+      carpetArea: 1058, name: 'Leela heights'),
+  Flat(
+      area: 'Wakad',
+      bhk: 3,
+      possession: DateTime(2024, 3),
+      price: 15000000,
+      carpetArea: 1256, name: 'AR atlas'),
+  Flat(
+      area: 'Wakad',
+      bhk: 3,
+      possession: DateTime(2026, 8),
+      price: 17000000,
+      carpetArea: 1700, name: 'Plam spring'),
+  Flat(
+      area: 'Wakad',
+      bhk: 3,
+      possession: DateTime(2024, 12),
+      price: 18000000,
+      carpetArea: 1900, name: '97 sepia'),
+  Flat(
+      area: 'Wakad',
+      bhk: 1,
+      possession: DateTime(2025, 3),
+      price: 5000000,
+      carpetArea: 500, name: 'Santiago nest'),
+  Flat(
+      area: 'Wakad',
+      bhk: 2,
+      possession: DateTime(2027, 3),
+      price: 6500000,
+      carpetArea: 800, name: 'GK Mirai'),
+  Flat(
+      area: 'Wakad',
+      bhk: 2,
+      possession: DateTime(2026, 1),
+      price: 7600000,
+      carpetArea: 817, name: 'Rahul downtown'),
+];

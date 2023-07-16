@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:takeahome/views/add_project.dart';
 import 'package:takeahome/views/home_page.dart';
 
 void main() {
@@ -18,17 +19,26 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: HomePage());
+        home: HomePage(),
+      initialRoute: '/home',
+      getPages: [
+        GetPage(name: '/home', page: () => HomePage()),
+        GetPage(name: '/add-project', page: () => AddProject()),
+
+        // GetPage(name: '/about', page: () => AboutPage()),
+      ],
+    );
+
   }
 }
 
-class Room {
-  String name;
-  int bhk;
-  int cp;
-  bool amn;
-  int price;
-  String location;
-
-  Room({required this.name, required this.bhk, required this.cp, required this.amn, required this.price, required this.location});
-}
+// class Room {
+//   String name;
+//   int bhk;
+//   int cp;
+//   bool amn;
+//   int price;
+//   String location;
+//
+//   Room({required this.name, required this.bhk, required this.cp, required this.amn, required this.price, required this.location});
+// }
