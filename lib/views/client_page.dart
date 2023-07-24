@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:takeahome/controller/client_page.dart';
+import 'package:takeahome/model/client_page.dart';
 
 class ClientPage extends StatelessWidget {
+  var clientController = Get.put(ClientController());
+  var followUpController= Get.put(FollowUpController());
+  var createFollowUPController= Get.put(CreateFollowUPController());
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -68,36 +73,40 @@ class ClientPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12)),
                 padding: EdgeInsets.all(12),
                 margin: EdgeInsets.all(12),
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: GetBuilder<ClientController>(
+                  builder: (context) {
+                    return Column(
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Client Name',
-                          style: TextStyle(fontSize: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Client Name',
+                              style: TextStyle(fontSize: 30),
+                            ),
+                            Row(
+                              children: [
+                                IconButton(
+                                    onPressed: () {}, icon: Icon(Icons.message)),
+                                IconButton(
+                                    onPressed: () {}, icon: Icon(Icons.call)),
+                              ],
+                            ),
+                          ],
                         ),
                         Row(
                           children: [
-                            IconButton(
-                                onPressed: () {}, icon: Icon(Icons.message)),
-                            IconButton(
-                                onPressed: () {}, icon: Icon(Icons.call)),
+                            Text('Area : banner, wakad'),
                           ],
                         ),
+                        Text('Budget : 50L - 80L'),
+                        Text('Unit : 2BHK, 3BHK'),
+                        Text('Carpet Area : 800'),
                       ],
-                    ),
-                    Row(
-                      children: [
-                        Text('Area : banner, wakad'),
-                      ],
-                    ),
-                    Text('Budget : 50L - 80L'),
-                    Text('Unit : 2BHK, 3BHK'),
-                    Text('Carpet Area : 800'),
-                  ],
+                    );
+                  }
                 ),
               ),
               // Divider(),
@@ -115,95 +124,101 @@ class ClientPage extends StatelessWidget {
                 child: TabBarView(
                   children: [
                     // Content for Tab 1
-                    ListView.builder(
-                        itemCount: 2,
-                        itemBuilder: (BuildContext cont, int index) {
-                          return Container(
-                            margin: EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                                color: Colors.blue[100],
-                                borderRadius: BorderRadius.circular(12)),
-                            child: InkWell(
-                              onTap: () {},
-                              child: ListTile(
-                                title: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('12/12/2012'),
-                                    Text('01:12 PM'),
-                                  ],
-                                ),
-                                subtitle: Text(
-                                    'client meetup on fridayclient meetup on fridayclient meetup on friday'),
-                                // trailing: Text('18/01'),
-                                leading: Icon(Icons.call),
-                                trailing: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          Get.dialog(AlertDialog(
-                                            title: Text('Feed Back'),
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                DropdownButtonFormField<String>(
-                                                  // value: selectedOption,
-                                                  decoration: InputDecoration(
-                                                    border:
-                                                        OutlineInputBorder(),
-                                                    // filled: true,
-                                                    labelText: 'Response',
-                                                    // prefixIcon: Icon(Icons.arrow_drop_down),
-                                                  ),
-                                                  onChanged: (newValue) {
-                                                    // setState(() {
-                                                    //   selectedOption = newValue;
-                                                    // });
-                                                  },
-                                                  items: [
-                                                    DropdownMenuItem<String>(
-                                                      value: '-1',
-                                                      child: Text('Cold'),
+                    GetBuilder<FollowUpController>(
+                      builder: (controller) {
+                        return ListView.builder(
+                            itemCount: controller.followUP.length,
+                            itemBuilder: (BuildContext cont, int index) {
+                              return Container(
+                                margin: EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                    color: Colors.blue[100],
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: ListTile(
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('12/12/2012'),
+                                        Text('01:12 PM'),
+                                      ],
+                                    ),
+                                    subtitle: Text(
+                                        'client meetup on fridayclient meetup on fridayclient meetup on friday'),
+                                    // trailing: Text('18/01'),
+                                    leading: Icon(Icons.call),
+                                    trailing: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        IconButton(
+                                            onPressed: () {
+                                              Get.dialog(AlertDialog(
+                                                title: Text('Feed Back'),
+                                                content: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    DropdownButtonFormField<String>(
+                                                      // value: selectedOption,
+                                                      decoration: InputDecoration(
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                        // filled: true,
+                                                        labelText: 'Response',
+                                                        // prefixIcon: Icon(Icons.arrow_drop_down),
+                                                      ),
+                                                      onChanged: (newValue) {
+                                                        // setState(() {
+                                                        //   selectedOption = newValue;
+                                                        // });
+                                                      },
+                                                      items: [
+                                                        DropdownMenuItem<String>(
+                                                          value: '-1',
+                                                          child: Text('Cold'),
+                                                        ),
+                                                        DropdownMenuItem<String>(
+                                                          value: '0',
+                                                          child: Text('Neutral'),
+                                                        ),
+                                                        DropdownMenuItem<String>(
+                                                          value: '1',
+                                                          child: Text('Hot'),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    DropdownMenuItem<String>(
-                                                      value: '0',
-                                                      child: Text('Neutral'),
+                                                    SizedBox(
+                                                      height: 10,
                                                     ),
-                                                    DropdownMenuItem<String>(
-                                                      value: '1',
-                                                      child: Text('Hot'),
+                                                    TextFormField(
+                                                      decoration: InputDecoration(
+                                                        hintText: 'Feed Back',
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                TextFormField(
-                                                  decoration: InputDecoration(
-                                                    hintText: 'Feed Back',
-                                                    border:
-                                                        OutlineInputBorder(),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                  onPressed: () {},
-                                                  child: Text('ADD'))
-                                            ],
-                                          ));
-                                        },
-                                        icon: Icon(Icons.arrow_forward_ios)),
-                                  ],
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () {
+
+                                                      },
+                                                      child: Text('ADD'))
+                                                ],
+                                              ));
+                                            },
+                                            icon: Icon(Icons.arrow_forward_ios)),
+                                      ],
+                                    ),
+                                    // style: ,
+                                  ),
                                 ),
-                                // style: ,
-                              ),
-                            ),
-                          );
-                        }),
+                              );
+                            });
+                      }
+                    ),
                     ListView.builder(
                         itemCount: 5,
                         itemBuilder: (BuildContext cont, int index) {
@@ -257,85 +272,91 @@ class ClientPage extends StatelessWidget {
             onPressed: () {
               Get.dialog(AlertDialog(
                 title: Text('Add Follow UP'),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      decoration: InputDecoration(
-                          hintText: 'description',
-                          border: OutlineInputBorder()),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    DropdownButtonFormField<String>(
-                      // value: selectedOption,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        // filled: true,
-                        labelText: 'Select an option',
-                        // prefixIcon: Icon(Icons.arrow_drop_down),
+                content: GetBuilder<FollowUpController>(
+                  builder: (controller) {
+                    return Form(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            decoration: InputDecoration(
+                                hintText: 'description',
+                                border: OutlineInputBorder()),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          DropdownButtonFormField<String>(
+                            // value: selectedOption,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              // filled: true,
+                              labelText: 'Select an option',
+                              // prefixIcon: Icon(Icons.arrow_drop_down),
+                            ),
+                            onChanged: (newValue) {
+                              // setState(() {
+                              //   selectedOption = newValue;
+                              // });
+                            },
+                            items: [
+                              DropdownMenuItem<String>(
+                                value: 'call',
+                                child: Text('Call'),
+                              ),
+                              DropdownMenuItem<String>(
+                                value: 'visit',
+                                child: Text('Visit'),
+                              ),
+                              DropdownMenuItem<String>(
+                                value: 'massage',
+                                child: Text('Massage'),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          TextFormField(
+                            onTap: () {
+                              showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime(2020),
+                                  firstDate: DateTime(2019),
+                                  lastDate: DateTime(2023));
+                            },
+                            decoration: InputDecoration(
+                                hintText: 'Date',
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.date_range)),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          TextFormField(
+                            onTap: () {
+                              showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay(hour: 12, minute: 1));
+                            },
+                            decoration: InputDecoration(
+                                hintText: 'Time',
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.timer)),
+                          ),
+                          // InkWell(
+                          //   onTap: () {},
+                          //   child: Row(
+                          //     children: [
+                          //       /*IconButton(onPressed: (){},icon:*/ Icon(Icons.calendar_month),
+                          //       /*IconButton(onPressed: (){},icon: */ Icon(Icons.timer),
+                          //     ],
+                          //   ),
+                          // ),
+                        ],
                       ),
-                      onChanged: (newValue) {
-                        // setState(() {
-                        //   selectedOption = newValue;
-                        // });
-                      },
-                      items: [
-                        DropdownMenuItem<String>(
-                          value: 'call',
-                          child: Text('Call'),
-                        ),
-                        DropdownMenuItem<String>(
-                          value: 'visit',
-                          child: Text('Visit'),
-                        ),
-                        DropdownMenuItem<String>(
-                          value: 'massage',
-                          child: Text('Massage'),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      onTap: () {
-                        showDatePicker(
-                            context: context,
-                            initialDate: DateTime(2020),
-                            firstDate: DateTime(2019),
-                            lastDate: DateTime(2023));
-                      },
-                      decoration: InputDecoration(
-                          hintText: 'Date',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.date_range)),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      onTap: () {
-                        showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay(hour: 12, minute: 1));
-                      },
-                      decoration: InputDecoration(
-                          hintText: 'Time',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.timer)),
-                    ),
-                    // InkWell(
-                    //   onTap: () {},
-                    //   child: Row(
-                    //     children: [
-                    //       /*IconButton(onPressed: (){},icon:*/ Icon(Icons.calendar_month),
-                    //       /*IconButton(onPressed: (){},icon: */ Icon(Icons.timer),
-                    //     ],
-                    //   ),
-                    // ),
-                  ],
+                    );
+                  }
                 ),
                 actions: [
                   TextButton(
@@ -343,7 +364,10 @@ class ClientPage extends StatelessWidget {
                         Get.back();
                       },
                       child: Text('cansel')),
-                  TextButton(onPressed: () {}, child: Text('Add')),
+                  TextButton(onPressed: () {
+                    createFollowUPController.send(DateTime.now());
+
+                  }, child: Text('Add')),
                 ],
               ));
             },
