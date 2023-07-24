@@ -38,7 +38,7 @@ class _MapPickerState extends State<MapPicker> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title:Text('pick Image')),
+      appBar: AppBar(title: Text('pick Image')),
       body: OSMFlutter(
         controller: mapController,
         mapIsLoading: Center(
@@ -66,12 +66,12 @@ class _MapPickerState extends State<MapPicker> {
         ),
         markerOption: MarkerOption(
             defaultMarker: MarkerIcon(
-              icon: Icon(
-                Icons.location_on,
-                color: Colors.black,
-                size: 148,
-              ),
-            )),
+          icon: Icon(
+            Icons.location_on,
+            color: Colors.black,
+            size: 148,
+          ),
+        )),
         // onGeoPointClicked: (GeoPoint g) {
         //   print(g.latitude);
         // },

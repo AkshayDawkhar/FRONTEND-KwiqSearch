@@ -14,7 +14,8 @@ class AddProject {
   int availableUnit;
   String amenities;
   String parking;
-  String location;
+  double longitude;
+  double latitude;
   bool transport;
   bool readyToMove;
   bool power;
@@ -29,40 +30,42 @@ class AddProject {
   double bhk;
   int carpetArea;
   int price;
-  List<Map<String,dynamic>> units;
-  AddProject({
-    required this.area,
-    required this.projectName,
-    required this.projectType,
-    required this.developerName,
-    required this.landParcel,
-    required this.landmark,
-    required this.areaIn,
-    required this.waterSupply,
-    required this.lifts,
-    required this.floors,
-    required this.flatsPerFloors,
-    required this.totalUnit,
-    required this.availableUnit,
-    required this.amenities,
-    required this.parking,
-    required this.location,
-    required this.transport,
-    required this.readyToMove,
-    required this.power,
-    required this.goods,
-    required this.rera,
-    required this.possession,
-    required this.contactPerson,
-    required this.contactNumber,
-    required this.marketValue,
-    required this.brokerage,
-    required this.incentive,
-    required this.bhk,
-    required this.carpetArea,
-    required this.price,
-    required this.units
-  });
+  List<Map<String, dynamic>> units;
+
+  AddProject(
+      {required this.area,
+      required this.projectName,
+      required this.projectType,
+      required this.developerName,
+      required this.landParcel,
+      required this.landmark,
+      required this.areaIn,
+      required this.waterSupply,
+      required this.lifts,
+      required this.floors,
+      required this.flatsPerFloors,
+      required this.totalUnit,
+      required this.availableUnit,
+      required this.amenities,
+      required this.parking,
+      required this.longitude,
+      required this.latitude,
+      required this.transport,
+      required this.readyToMove,
+      required this.power,
+      required this.goods,
+      required this.rera,
+      required this.possession,
+      required this.contactPerson,
+      required this.contactNumber,
+      required this.marketValue,
+      required this.brokerage,
+      required this.incentive,
+      required this.bhk,
+      required this.carpetArea,
+      required this.price,
+      required this.units});
+
   Map<String, dynamic> toMap() {
     return {
       'area': area,
@@ -73,14 +76,15 @@ class AddProject {
       'landmark': landmark,
       'areaIn': areaIn,
       'waterSupply': waterSupply,
-      'lifts':lifts,
+      'lifts': lifts,
       'floors': floors,
       'flatsPerFloors': flatsPerFloors,
       'totalUnit': totalUnit,
       'availableUnit': availableUnit,
       'amenities': amenities,
       'parking': parking,
-      'location': location,
+      'longitude': longitude,
+      'latitude': latitude,
       'transport': transport,
       'readyToMove': readyToMove,
       'power': power,
@@ -96,5 +100,6 @@ class AddProject {
       'carpetArea': carpetArea,
       'price': price,
       'units': units
-    };}
+    };
+  }
 }

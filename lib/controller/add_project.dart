@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:takeahome/constants.dart';
+import 'package:takeahome/helper.dart';
 import 'package:takeahome/views/home_page.dart';
 
 import '../model/add_project.dart';
@@ -26,7 +27,8 @@ class NewProductController extends GetxController {
   TextEditingController availableUnit = TextEditingController();
   TextEditingController amenities = TextEditingController();
   TextEditingController parking = TextEditingController();
-  TextEditingController location = TextEditingController();
+  TextEditingController longitude = TextEditingController();
+  TextEditingController latitude = TextEditingController();
   bool transport = false;
   bool readyToMove = false;
   bool power = false;
@@ -125,7 +127,8 @@ class NewProductController extends GetxController {
         availableUnit: int.tryParse(availableUnit.text) ?? 0,
         amenities: amenities.text,
         parking: parking.text,
-        location: location.text,
+        longitude: double.tryParse(longitude.text) ?? 0,
+        latitude: double.tryParse(latitude.text) ?? 0,
         transport: transport,
         readyToMove: readyToMove,
         power: power,
@@ -150,7 +153,8 @@ class NewProductController extends GetxController {
     // return a.toString();
     print(a.toMap().toString());
     // json.encoder;
-    output.text = a.toMap().toString();
+    // output.text = a.toMap().toString();
+    addProject(a.toMap());
     output.text = json.encode(a.toMap());
     update();
   }

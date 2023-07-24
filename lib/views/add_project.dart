@@ -14,7 +14,7 @@ class AddProject extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              flex: 4,
+              flex: 6,
               child: DropdownButtonFormField(
                   decoration: inputDecoration('BHK'),
                   value: newProductController.bhk.text == null ? null : null,
@@ -44,7 +44,11 @@ class AddProject extends StatelessWidget {
               flex: 4,
               child: TextFormField(
                 keyboardType: TextInputType.number,
-                decoration: inputDecoration('Price ₹'),
+                // decoration: inputDecoration('Price ₹ in L'),
+                decoration: InputDecoration(
+                    labelText: 'Price',
+                    border: OutlineInputBorder(),
+                    suffixText: 'L'),
                 controller:
                     newProductController.units.elementAt(index)['price'],
               ),
@@ -150,6 +154,7 @@ class AddProject extends StatelessWidget {
               )),
               fixedContainer(
                   child: TextFormField(
+                keyboardType: TextInputType.number,
                 decoration: inputDecoration('Land Parcel'),
                 controller: controller.landParcel,
               )),
@@ -191,7 +196,8 @@ class AddProject extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 decoration: inputDecoration('Lifts'),
                 controller: controller.lifts,
-              )),fixedContainer(
+              )),
+              fixedContainer(
                   child: TextFormField(
                 keyboardType: TextInputType.number,
                 decoration: inputDecoration('Floors'),
@@ -391,11 +397,11 @@ class AddProject extends StatelessWidget {
                       controller.parking.text = value.toString();
                     }),
               ),
-              fixedContainer(
-                  child: TextFormField(
-                decoration: inputDecoration('location'),
-                controller: controller.location,
-              )),
+              // fixedContainer(
+              //     child: TextFormField(
+              //   decoration: inputDecoration('location'),
+              //   controller: controller.location,
+              // )),
               CheckboxListTile(
                 value: controller.transport,
                 controlAffinity: ListTileControlAffinity.leading,
@@ -524,28 +530,77 @@ class AddProject extends StatelessWidget {
                   }),
               Divider(),
               fixedContainer(
-                  child: IconButton(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
                       onPressed: () {
                         controller.addUnit();
                       },
-                      icon: Icon(Icons.add))),
+                      icon: Icon(Icons.remove)),
+                  IconButton(
+                      onPressed: () {
+                        controller.addUnit();
+                      },
+                      icon: Icon(Icons.add)),
+                ],
+              )),
+
+              // SizedBox(
+              //   height: 200,
+              //   child: fixedContainer(
+              //     child: TextFormField(
+              //       maxLines: null,
+              //       minLines: null,
+              //       expands: true,
+              //       // keyboardType: TextInputType.number,
+              //       decoration: inputDecoration('OutPut'),
+              //       controller: controller.output,
+              //     ),
+              //   ),
+              // SizedBox(
+              //   child: MapPicker(),
+              //   height: 520,
+              //   width: 520,
+              // ),
+              fixedContainer(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        decoration: inputDecoration('longitude'),
+                        controller: controller.longitude,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        decoration: inputDecoration('latitude'),
+                        controller: controller.latitude,
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () {}, icon: Icon(Icons.location_searching))
+                  ],
+                ),
+              ),
               SizedBox(
                 height: 100,
               ),
+
               SizedBox(
-                height: 200,
-                child: fixedContainer(
-                  child: TextFormField(
-                    maxLines: null,
-                    minLines: null,
-                    expands: true,
-                    // keyboardType: TextInputType.number,
-                    decoration: inputDecoration('OutPut'),
-                    controller: controller.output,
-                  ),
-                ),
-              ),
-              SizedBox(child: MapPicker(),height: 520,width: 520,)
+                  height: 200,
+                  child: fixedContainer(
+                    child: TextFormField(
+                      maxLines: null,
+                      minLines: null,
+                      expands: true,
+                      // keyboardType: TextInputType.number,
+                      decoration: inputDecoration('OutPut'),
+                      controller: controller.output,
+                    ),
+                  )),
             ],
           )),
         );
