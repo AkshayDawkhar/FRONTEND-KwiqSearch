@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+String HOSTNAME = 'http://192.168.1.43:8000';
 
 List<String> places = [
   'Mamurdi',
@@ -91,12 +92,7 @@ List<DropdownMenuItem<double>> bhks = const [
     child: Text('6 BHK'),
   ),
 ];
-List<String> amenities = [
-  'All Amenities',
-  'No Amenities',
-  'Basic Amenities',
-  'EV charging point'
-];
+List<String> amenities = ['All Amenities', 'No Amenities', 'Basic Amenities', 'EV charging point'];
 List<String> waterConnection = [
   'PCMC',
   'PMRDA',
@@ -117,23 +113,7 @@ List<String> projectType = [
   'N/A Plot',
   'Town Sheep',
 ];
-List<int> years = [
-  2023,
-  2024,
-  2025,
-  2026,
-  2027,
-  2028,
-  2029,
-  2030,
-  2031,
-  2032,
-  2033,
-  2034,
-  2035,
-  3036,
-  2037
-];
+List<int> years = [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 3036, 2037];
 final List<DropdownMenuItem<int>> months = [
   DropdownMenuItem(
     value: 1,
@@ -202,3 +182,35 @@ List<Locations> locations = [
   Locations(18.549689, 73.789972),
   Locations(18.549596, 73.791682),
 ];
+
+String dateToString(DateTime dateTime) {
+  return '${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}';
+}
+
+String formatTime(DateTime dateTime) {
+  String period = 'AM';
+  int hour = dateTime.hour;
+  int minute = dateTime.minute;
+
+  if (hour >= 12) {
+    period = 'PM';
+    if (hour > 12) {
+      hour -= 12;
+    }
+  }
+
+  String hourStr = hour.toString().padLeft(2, '0');
+  String minuteStr = minute.toString().padLeft(2, '0');
+
+  return '$hourStr:$minuteStr $period';
+}
+
+IconData getActionIcon(String action) {
+  if (action == 'call') {
+    return Icons.call;
+  } else if (action == 'message') {
+    return Icons.message;
+  } else {
+    return Icons.home_work;
+  }
+}
