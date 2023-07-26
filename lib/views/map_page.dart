@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:get/get.dart';
 import 'package:takeahome/constants.dart';
+
+import '../model/unit.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -19,25 +22,26 @@ class _MapPageState extends State<MapPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       mapController.listenerMapSingleTapping.addListener(() async {
         // print()
-      //   var position = mapController.listenerMapSingleTapping.value;
-      //   print(position!.latitude);
-      //   if (position != null) {
-      //     await mapController.addMarker(position,
-      //         markerIcon: MarkerIcon(
-      //           icon: Icon(
-      //             Icons.location_on,
-      //             color: Colors.black,
-      //             size: 148,
-      //           ),
-      //         ));
-      //   }
+        //   var position = mapController.listenerMapSingleTapping.value;
+        //   print(position!.latitude);
+        //   if (position != null) {
+        //     await mapController.addMarker(position,
+        //         markerIcon: MarkerIcon(
+        //           icon: Icon(
+        //             Icons.location_on,
+        //             color: Colors.black,
+        //             size: 148,
+        //           ),
+        //         ));
+        //   }
       });
     });
   }
-
+  List<Unit> units = Get.arguments['selected'];
   // @override
   @override
   Widget build(BuildContext context) {
+    print(units);
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
@@ -85,16 +89,20 @@ class _MapPageState extends State<MapPage> {
             onMapIsReady: (isR) async {
               if (isR) {
                 print('----------Ready---------');
-                locations.forEach((element) {
-                  mapController.addMarker(
-                      GeoPoint(
-                          latitude: element.latitude,
-                          longitude: element.longitude),
+                units.forEach((element) {
+                  mapController.addMarker(GeoPoint(latitude: element.latitude, longitude: element.longitude),
                       markerIcon: MarkerIcon(
-                        icon: Icon(
-                          Icons.home,
-                          color: Colors.black,
-                          size: 148,
+                        // icon: Icon(
+                        //   Icons.home,
+                        //   color: Colors.black,
+                        //   size: 148,
+                        // ),
+                        iconWidget: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.home,size: 140,),
+                            Text(element.projectName,style: TextStyle(fontSize: 30),)
+                          ],
                         ),
                       ));
                 });
