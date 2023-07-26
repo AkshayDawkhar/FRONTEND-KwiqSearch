@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:takeahome/constants.dart';
 import 'package:takeahome/model/unit.dart';
 
 import '../model/room.dart';
@@ -67,7 +68,7 @@ class UnitController extends GetxController {
 }
 class FilterController extends GetxController {
   List<String> selectedAreas = [];
-  List<String> selectedUnits = [];
+  List<double> selectedUnits = [];
   List<String> selectedDurations = [];
   List<String> selectedAmenities = [];
   RangeValues budgetRange = RangeValues(3500000, 30000000);
@@ -78,7 +79,7 @@ class FilterController extends GetxController {
     update(); // Manually notify the UI to update
   }
 
-  void updateSelectedUnits(List<String> selected) {
+  void updateSelectedUnits(List<double> selected) {
     selectedUnits = selected;
     update();
   }
@@ -102,4 +103,25 @@ class FilterController extends GetxController {
     carpetAreaRange = range;
     update();
   }
+  void search(){
+    print(selectedAreas.toString());
+    print(selectedUnits.toString());
+    print(selectedDurations);
+    print(selectedAmenities);
+    print(budgetRange);
+    print(carpetAreaRange);
+    Map ad = {
+      "area":selectedAreas,
+      "unit":selectedUnits,
+      "possession":selectedDurations,
+      "amenities": amenities,
+      "startingBudget": budgetRange.start,
+      "endingBudget": budgetRange.end,
+      "startingCarpetArea": carpetAreaRange.start,
+      "endingCarpetArea": carpetAreaRange.end,
+    };
+    String a = json.encode(ad);
+    print(a);
+  }
+
 }

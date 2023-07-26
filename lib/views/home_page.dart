@@ -133,7 +133,6 @@ class HomePage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-
               GetBuilder<FilterController>(
                 builder: (controller) {
                   return Column(
@@ -175,7 +174,7 @@ class HomePage extends StatelessWidget {
                                         items: bhks,
                                         initialValue: controller.selectedUnits,
                                         onConfirm: (values) {
-                                          controller.updateSelectedUnits(values as List<String>);
+                                          controller.updateSelectedUnits(values);
                                         },
                                       );
                                     },
@@ -336,17 +335,24 @@ class HomePage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          FloatingActionButton(heroTag: null,onPressed: (){Get.to(MapPage());},child: Icon(Icons.location_on),),
-          SizedBox(height: 10,),
+          FloatingActionButton(
+            heroTag: null,
+            onPressed: () {
+              Get.to(MapPage());
+            },
+            child: Icon(Icons.location_on),
+          ),
+          SizedBox(
+            height: 10,
+          ),
           FloatingActionButton.extended(
             heroTag: null,
             onPressed: () {
-
+              filterController.search();
             },
             icon: Icon(Icons.search),
             label: Text('Search'),
           ),
-
         ],
       ),
     );
