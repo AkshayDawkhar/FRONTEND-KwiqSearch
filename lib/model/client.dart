@@ -238,3 +238,43 @@ class Followup {
     "client": client,
   };
 }
+
+List<Clients> clientsFromJson(String str) => List<Clients>.from(json.decode(str).map((x) => Clients.fromJson(x)));
+
+String clientsToJson(List<Clients> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Clients {
+  int id;
+  String fname;
+  String lname;
+  int phoneNo;
+  int massageNo;
+  String email;
+
+  Clients({
+    required this.id,
+    required this.fname,
+    required this.lname,
+    required this.phoneNo,
+    required this.massageNo,
+    required this.email,
+  });
+
+  factory Clients.fromJson(Map<String, dynamic> json) => Clients(
+    id: json["id"],
+    fname: json["fname"],
+    lname: json["lname"],
+    phoneNo: json["phoneNO"],
+    massageNo: json["massageNO"],
+    email: json["email"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "fname": fname,
+    "lname": lname,
+    "phoneNO": phoneNo,
+    "massageNO": massageNo,
+    "email": email,
+  };
+}

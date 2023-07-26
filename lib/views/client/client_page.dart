@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:takeahome/controller/client_page.dart';
+import 'package:takeahome/controller/client.dart';
 
 import '../../constants.dart';
-import '../../model/client_page.dart';
+import '../../model/client.dart';
 
 class ClientPage extends StatelessWidget {
-  var clientController = Get.put(ClientController());
+  var clientController = Get.put(ClientController(id: int.tryParse(Get.parameters['client_id'] ?? '') ?? 0));
 
-  // var followUpController = Get.put(FollowUpController());
   var createFollowUPController = Get.put(CreateFollowUPController());
 
   @override
@@ -105,7 +104,7 @@ class ClientPage extends StatelessWidget {
                           height: 5,
                         ),
                         DropdownButtonFormField<String>(
-                          value: controller.action.text == ''? null : controller.action.text,
+                          value: controller.action.text == '' ? null : controller.action.text,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             // filled: true,
