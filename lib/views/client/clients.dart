@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import '../../controller/client.dart';
 import '../../model/client.dart';
 
@@ -14,10 +14,17 @@ class ClientsPage extends StatelessWidget {
         title: Text('Clients'),
       ),
       body: GetBuilder<ClientsController>(builder: (controller) {
-        if(controller.isLoad){
-        return ListView.builder(itemCount: controller.clients.length,itemBuilder: (BuildContext context, int index) {
-          return clientController(controller.clients.elementAt(index));
-        });}else{
+        if (controller.isLoad) {
+          return LiquidPullToRefresh(
+            showChildOpacityTransition: false,
+          onRefresh: () async{},
+          child: ListView.builder(
+                itemCount: controller.clients.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return clientController(controller.clients.elementAt(index));
+                }),
+          );
+        } else {
           return Center(child: CircularProgressIndicator());
         }
       }),
@@ -29,7 +36,8 @@ class ClientsPage extends StatelessWidget {
           icon: Icon(Icons.add)),
     );
   }
-  Widget clientController(Clients clients) =>Container(
+
+  Widget clientController(Clients clients) => Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.deepPurple[100],
@@ -37,7 +45,7 @@ class ClientsPage extends StatelessWidget {
       margin: EdgeInsets.all(6),
       child: ListTile(
         onTap: () {
-          Get.toNamed('/client',parameters: {"client_id":clients.id.toString()});
+          Get.toNamed('/client', parameters: {"client_id": clients.id.toString()});
         },
         leading: Icon(Icons.person),
         title: Text('${clients.fname} ${clients.lname}'),
