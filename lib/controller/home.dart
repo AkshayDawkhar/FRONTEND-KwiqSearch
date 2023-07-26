@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:takeahome/model/unit.dart';
 
 import '../model/room.dart';
@@ -61,6 +62,44 @@ class UnitController extends GetxController {
       // If an exception occurs, print the error message
       print('Error fetching units: $e');
     }
+    update();
+  }
+}
+class FilterController extends GetxController {
+  List<String> selectedAreas = [];
+  List<String> selectedUnits = [];
+  List<String> selectedDurations = [];
+  List<String> selectedAmenities = [];
+  RangeValues budgetRange = RangeValues(3500000, 30000000);
+  RangeValues carpetAreaRange = RangeValues(300, 5000);
+
+  void updateSelectedAreas(List<String> selected) {
+    selectedAreas = selected;
+    update(); // Manually notify the UI to update
+  }
+
+  void updateSelectedUnits(List<String> selected) {
+    selectedUnits = selected;
+    update();
+  }
+
+  void updateSelectedDurations(List<String> selected) {
+    selectedDurations = selected;
+    update();
+  }
+
+  void updateSelectedAmenities(List<String> selected) {
+    selectedAmenities = selected;
+    update();
+  }
+
+  void updateBudgetRange(RangeValues range) {
+    budgetRange = range;
+    update();
+  }
+
+  void updateCarpetAreaRange(RangeValues range) {
+    carpetAreaRange = range;
     update();
   }
 }

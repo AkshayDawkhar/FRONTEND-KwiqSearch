@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:get/get.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:takeahome/constants.dart';
 import 'package:takeahome/controller/home.dart';
 import 'package:takeahome/model/unit.dart';
 import 'package:takeahome/views/map_page.dart';
+
 import '../model/room.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class HomePage extends StatelessWidget {
   UnitController unitController = Get.put(UnitController());
+  FilterController filterController = Get.put(FilterController());
 
   // List<String> amenities = [
   List<String> places = [
@@ -130,194 +133,159 @@ class HomePage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                // margin: EdgeInsets.all(12),
-                margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                child: Row(
-                  children: [
-                    Expanded(
-                        flex: 3,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) {
-                                  return MultiSelectDialog(
-                                    items: places
-                                        .map((e) => MultiSelectItem(e, e))
-                                        .toList(),
-                                    initialValue: [],
-                                    onConfirm: (values) {},
+
+              GetBuilder<FilterController>(
+                builder: (controller) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (ctx) {
+                                      return MultiSelectDialog(
+                                        items: places.map((e) => MultiSelectItem(e, e)).toList(),
+                                        initialValue: controller.selectedAreas,
+                                        onConfirm: (values) {
+                                          controller.updateSelectedAreas(values);
+                                        },
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
-                            child: Text('Area'))),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                        flex: 2,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) {
-                                  return MultiSelectDialog(
-                                    items: bhks,
-                                    initialValue: [],
-                                    onConfirm: (values) {},
+                                child: Text('Area'),
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              flex: 2,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (ctx) {
+                                      return MultiSelectDialog(
+                                        items: bhks,
+                                        initialValue: controller.selectedUnits,
+                                        onConfirm: (values) {
+                                          controller.updateSelectedUnits(values as List<String>);
+                                        },
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
-                            child: Text('unit'))),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                // margin: EdgeInsets.all(12),
-                child: Row(
-                  children: [
-                    Expanded(
-                        flex: 3,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) {
-                                  return MultiSelectDialog(
-                                    items: durations,
-                                    initialValue: [],
-                                    onConfirm: (values) {},
+                                child: Text('unit'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Add the remaining parts of the form similarly
+                      // including RangeSliders for 'possession' and 'Amenities'
+                      // ...
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (ctx) {
+                                      return MultiSelectDialog(
+                                        items: durations,
+                                        initialValue: controller.selectedDurations,
+                                        onConfirm: (values) {
+                                          controller.updateSelectedDurations(values);
+                                        },
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
-                            child: Text('possession'))),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                        flex: 2,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) {
-                                  return MultiSelectDialog(
-                                    items: amenities,
-                                    initialValue: [],
-                                    onConfirm: (values) {},
+                                child: Text('possession'),
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              flex: 2,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (ctx) {
+                                      return MultiSelectDialog(
+                                        items: amenities,
+                                        initialValue: controller.selectedAmenities,
+                                        onConfirm: (values) {
+                                          controller.updateSelectedAmenities(values);
+                                        },
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
-                            child: Text(
-                                'Amenities')) /*InkWell(
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (q) {
-                                  return AlertDialog(
-                                    title: Text('name'),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text('1'),
-                                            RangeSlider(
-                                              values: v,
-                                              onChanged: (RangeValues value) {
-                                                v = value;
-                                                print(v);
-                                              },
-                                              min: 0,
-                                              max: 20,
-                                              labels: RangeLabels('0', '20'),
-                                            ),
-                                            Text('2')
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                });
-                          },
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                label: Text('Carpet Area'),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                )),
-                            enabled: false,
-                            initialValue: 'sq',
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (q) {
-                                    return AlertDialog(
-                                      title: Text('name'),
-                                    );
-                                  });
-                            },
-                            onChanged: (value) {
-                              showDialog(
-                                  context: context,
-                                  builder: (q) {
-                                    return AlertDialog(
-                                      title: Text('name'),
-                                    );
-                                  });
-                            },
+                                child: Text('Amenities'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Use the variables from the controller for displaying selected values
+                      Text('Budget ${numberToLCr(controller.budgetRange.start)}-${numberToLCr(controller.budgetRange.end)}'),
+                      Row(
+                        children: [
+                          Text(' 35 L'),
+                          Expanded(
+                            child: RangeSlider(
+                              divisions: 53,
+                              values: controller.budgetRange,
+                              onChanged: (RangeValues value) {
+                                controller.updateBudgetRange(value);
+                              },
+                              min: 3500000,
+                              max: 30000000,
+                              labels: RangeLabels(
+                                '${numberToLCr(controller.budgetRange.start)}',
+                                '${numberToLCr(controller.budgetRange.end)}',
+                              ),
+                            ),
                           ),
-                        )*/
-                        )
-                  ],
-                ),
-              ),
-              Text('Budget ${v.start.toInt()}-${v.end.toInt()}'),
-              Row(
-                children: [
-                  Text(' 35 L'),
-                  Expanded(
-                    child: RangeSlider(
-                      divisions: 53,
-                      values: v,
-                      onChanged: (RangeValues value) {
-                        v = value;
-                        // setState(() {});
-                      },
-                      min: 3500000,
-                      max: 30000000,
-                      labels: RangeLabels('${v.start}', '${v.end}'),
-                    ),
-                  ),
-                  Text('3 Cr')
-                ],
-              ),
-              Text('Carpet Area'),
-              Row(
-                children: [
-                  Text(' 300'),
-                  Expanded(
-                    child: RangeSlider(
-                      divisions: 188,
-                      values: cpv,
-                      onChanged: (RangeValues value) {
-                        cpv = value;
-                        // setState(() {});
-                      },
-                      min: 300,
-                      max: 5000,
-                      labels: RangeLabels(
-                          '${cpv.start.toInt()}', '${cpv.end.toInt()}'),
-                    ),
-                  ),
-                  Text('50000')
-                ],
+                          Text('3 Cr'),
+                        ],
+                      ),
+                      Text('Carpet Area'),
+                      Row(
+                        children: [
+                          Text(' 300'),
+                          Expanded(
+                            child: RangeSlider(
+                              divisions: 188,
+                              values: controller.carpetAreaRange,
+                              onChanged: (RangeValues value) {
+                                controller.updateCarpetAreaRange(value);
+                              },
+                              min: 300,
+                              max: 5000,
+                              labels: RangeLabels(
+                                '${controller.carpetAreaRange.start.toInt()}',
+                                '${controller.carpetAreaRange.end.toInt()}',
+                              ),
+                            ),
+                          ),
+                          Text('50000'),
+                        ],
+                      ),
+                    ],
+                  );
+                },
               ),
               GetBuilder<UnitController>(builder: (controller) {
                 // controller.fetchUnits();
@@ -348,8 +316,8 @@ class HomePage extends StatelessWidget {
                                 Text('${unit.area}'),
                               ],
                             ),
-                            subtitle: Text(
-                                '${unit.unit} BHK       ${unit.carpetArea} sqft\n${monthDate(unit.rera)}                     | ₹ ${unit.price}'),
+                            subtitle:
+                                Text('${unit.unit} BHK       ${unit.carpetArea} sqft\n${monthDate(unit.rera)}                     | ₹ ${unit.price}'),
                             isThreeLine: true,
 //                         trailing: Icon(
 //                           Icons.arrow_forward_ios_outlined,
@@ -363,17 +331,23 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Get.to(MapPage());
-// Get.to()
-          // List<Room> a = filterRooms(name: 'a', number: 19, loc: 'pune1', bhk: 1);
-          // a.forEach((element) {
-          //   print(element.name);
-          // });
-        },
-        icon: Icon(Icons.location_on),
-        label: Text('Map'),
+      floatingActionButton: Column(
+        // mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FloatingActionButton(heroTag: null,onPressed: (){Get.to(MapPage());},child: Icon(Icons.location_on),),
+          SizedBox(height: 10,),
+          FloatingActionButton.extended(
+            heroTag: null,
+            onPressed: () {
+
+            },
+            icon: Icon(Icons.search),
+            label: Text('Search'),
+          ),
+
+        ],
       ),
     );
   }

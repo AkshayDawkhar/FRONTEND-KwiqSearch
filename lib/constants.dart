@@ -199,12 +199,29 @@ String formatTime(DateTime dateTime) {
     }
   }
 
+
   String hourStr = hour.toString().padLeft(2, '0');
   String minuteStr = minute.toString().padLeft(2, '0');
 
   return '$hourStr:$minuteStr $period';
 }
+String formatTimeOfDay(TimeOfDay timeOfDay) {
+  String period = 'AM';
+  int hour = timeOfDay.hour;
+  int minute = timeOfDay.minute;
 
+  if (hour >= 12) {
+    period = 'PM';
+    if (hour > 12) {
+      hour -= 12;
+    }
+
+  }
+  String hourStr = hour.toString().padLeft(2, '0');
+  String minuteStr = minute.toString().padLeft(2, '0');
+
+  return '$hourStr:$minuteStr $period';
+}
 IconData getActionIcon(String action) {
   if (action == 'call') {
     return Icons.call;
@@ -212,5 +229,14 @@ IconData getActionIcon(String action) {
     return Icons.message;
   } else {
     return Icons.home_work;
+  }
+}
+String numberToLCr(double number) {
+  if (number < 100000) {
+    return '${(number / 1000).toStringAsFixed(0)}K';
+  } else if (number >= 100000 && number < 10000000) {
+    return '${(number / 100000).toStringAsFixed(1)}L';
+  } else {
+    return '${(number / 10000000).toStringAsFixed(2)}Cr';
   }
 }

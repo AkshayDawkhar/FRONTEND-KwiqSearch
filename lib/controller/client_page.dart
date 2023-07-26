@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:takeahome/model/client_page.dart';
@@ -72,22 +72,53 @@ class CreateFollowUPController extends GetxController {
   TextEditingController message = TextEditingController();
   TextEditingController action = TextEditingController();
 
-  // TextEditingController action = TextEditingController();
-  late DateTime dateTime;
+  // TextEditingController dateController = TextEditingController();
+  // TextEditingController timeController = TextEditingController();
 
-  void send(DateTime dateTime) {
-    // CreateFollowUP createFollowUP = CreateFollowUP(
-    //     message: message.text,
-    //     actions: action.text,
-    //     dateSent: dateTime,
-    //     client: 1);
-    // print('${createFollowUP.toMap()}');
+  // TextEditingController action = TextEditingController();
+  DateTime date = DateTime.now();
+  TimeOfDay time = TimeOfDay.now();
+
+  void getDate(DateTime dateTime) async {
+    date = dateTime;
+    // dateController.text = dateToString(dateTime);
+    update();
+  }
+
+  void send(int id) async {
+    final url = Uri.parse('$HOSTNAME/client/followups/');
+    final response = await http.post(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          "message": message.text,
+          "actions": action.text,
+          "date_sent": DateTime(date.year, date.month, date.day, time.hour, time.minute).toIso8601String(),
+          "client": id
+        }));
+    if (response.statusCode == 201) {
+      Get.defaultDialog(
+          title: 'Successful',
+          backgroundColor: Colors.greenAccent,
+          content: Text('Followup Created Successfully'),
+          cancel: TextButton(onPressed: () {Get.toNamed('client-page');}, child: Text('OK')));
+    }else{
+      Get.defaultDialog(
+          title: 'Error',
+          backgroundColor: Colors.redAccent,
+          content: Text('Something Went Wrong'),
+          cancel: TextButton(onPressed: () {Get.back();}, child: Text('OK')));
+    }
+    print(response.statusCode);
+    // Get.defaultDialog(title: responce.body);
   }
 }
 
 class ClientController extends GetxController {
   late Client client;
   bool isLoad = false;
+
   @override
   void onInit() {
     // TODO: implement onInit

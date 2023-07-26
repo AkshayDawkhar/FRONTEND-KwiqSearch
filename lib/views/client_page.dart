@@ -105,7 +105,7 @@ class ClientPage extends StatelessWidget {
                           height: 5,
                         ),
                         DropdownButtonFormField<String>(
-                          // value: selectedOption,
+                          value: controller.action.text == ''? null : controller.action.text,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             // filled: true,
@@ -113,6 +113,7 @@ class ClientPage extends StatelessWidget {
                             // prefixIcon: Icon(Icons.arrow_drop_down),
                           ),
                           onChanged: (newValue) {
+                            controller.action.text = newValue!;
                             // setState(() {
                             //   selectedOption = newValue;
                             // });
@@ -137,8 +138,11 @@ class ClientPage extends StatelessWidget {
                           height: 5,
                         ),
                         TextFormField(
-                          onTap: () {
-                            showDatePicker(context: context, initialDate: DateTime(2020), firstDate: DateTime(2019), lastDate: DateTime(2023));
+                          controller: TextEditingController(text: dateToString(controller.date)),
+                          onTap: () async {
+                            controller.getDate((await showDatePicker(
+                                context: context, initialDate: controller.date, firstDate: DateTime(2019), lastDate: DateTime(2030)))!);
+                            // controller.date = ;
                           },
                           decoration: InputDecoration(hintText: 'Date', border: OutlineInputBorder(), prefixIcon: Icon(Icons.date_range)),
                         ),
@@ -146,9 +150,10 @@ class ClientPage extends StatelessWidget {
                           height: 5,
                         ),
                         TextFormField(
+                          controller: TextEditingController(text: formatTimeOfDay(controller.time)),
                           onTap: () async {
-                            TimeOfDay? a = await showTimePicker(context: context, initialTime: TimeOfDay(hour: 12, minute: 1));
-                            print(a);
+                            controller.time = (await showTimePicker(context: context, initialTime: controller.time))!;
+                            // print(a);
                             // DateTime b = DateTime
                           },
                           decoration: InputDecoration(hintText: 'Time', border: OutlineInputBorder(), prefixIcon: Icon(Icons.timer)),
@@ -171,10 +176,10 @@ class ClientPage extends StatelessWidget {
                       onPressed: () {
                         Get.back();
                       },
-                      child: Text('cansel')),
+                      child: Text('cancel')),
                   TextButton(
                       onPressed: () {
-                        // createFollowUPController.send(DateTime.now());
+                        createFollowUPController.send(1);
                       },
                       child: Text('Add')),
                 ],
@@ -187,38 +192,38 @@ class ClientPage extends StatelessWidget {
   }
 
   Widget feedbackContainer(Feedbacks feedback) => Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12),
-      color: Colors.blue[200],
-    ),
-    margin: EdgeInsets.all(6),
-    padding: EdgeInsets.fromLTRB(6, 6, 20, 6),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          // margin: EdgeInsets.all(12),
-          decoration: BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(12)),
-          child: Container(
-            child: ListTile(
-              title: Text('12/12/2012'),
-              subtitle: Text('client meetup on fridayclient meetup on fridayclient meetup on friday'),
-              // trailing: Text('18/01'),
-              leading: Icon(Icons.call),
-              // trailing: Column(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios)),
-              //   ],
-              // ),
-              // style: ,
-            ),
-          ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.blue[200],
         ),
-        Text('${feedback.message}')
-      ],
-    ),
-  );
+        margin: EdgeInsets.all(6),
+        padding: EdgeInsets.fromLTRB(6, 6, 20, 6),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              // margin: EdgeInsets.all(12),
+              decoration: BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(12)),
+              child: Container(
+                child: ListTile(
+                  title: Text('12/12/2012'),
+                  subtitle: Text('client meetup on fridayclient meetup on fridayclient meetup on friday'),
+                  // trailing: Text('18/01'),
+                  leading: Icon(Icons.call),
+                  // trailing: Column(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios)),
+                  //   ],
+                  // ),
+                  // style: ,
+                ),
+              ),
+            ),
+            Text('${feedback.message}')
+          ],
+        ),
+      );
 
   Widget clientContainer(Client client) => Container(
       decoration: BoxDecoration(color: Colors.blue[50], borderRadius: BorderRadius.circular(12)),
