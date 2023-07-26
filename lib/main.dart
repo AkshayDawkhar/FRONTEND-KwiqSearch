@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:takeahome/views/add_project.dart';
+import 'package:takeahome/views/client_add.dart';
 import 'package:takeahome/views/client_page.dart';
+import 'package:takeahome/views/clients.dart';
 import 'package:takeahome/views/home_page.dart';
 
 void main() {
@@ -20,12 +22,14 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      // home: HomePage(),
       initialRoute: '/home',
       getPages: [
         GetPage(name: '/home', page: () => HomePage()),
         GetPage(name: '/add-project', page: () => AddProject()),
-        GetPage(name: '/client-page', page: () => ClientPage()),
+        GetPage(name: '/clients', page: () => ClientsPage()),
+        GetPage(name: '/clients/add', page: () => AddClientPage()),
+        GetPage(name: '/client', page: () => ClientPage()),
 
         // GetPage(name: '/about', page: () => AboutPage()),
       ],

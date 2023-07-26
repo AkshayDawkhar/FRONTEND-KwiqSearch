@@ -96,10 +96,10 @@ class HomePage extends StatelessWidget {
               PopupMenuItem<int>(
                 value: 0,
                 child: ListTile(
-                  leading: Icon(Icons.person_add_alt_1),
+                  leading: Icon(Icons.person),
                   // iconColor: Colors.blueAccent,
                   // textColor: Colors.blueAccent,
-                  title: Text('Add Client'),
+                  title: Text('Clients'),
                 ),
               ),
               PopupMenuItem<int>(
@@ -114,7 +114,7 @@ class HomePage extends StatelessWidget {
             ];
           }, onSelected: (value) {
             if (value == 0) {
-              Get.toNamed('/client-page');
+              Get.toNamed('/clients');
               // print("Done");
             } else if (value == 1) {
               Get.toNamed('/add-project');
