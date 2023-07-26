@@ -105,10 +105,10 @@ class HomePage extends StatelessWidget {
               PopupMenuItem<int>(
                 value: 1,
                 child: ListTile(
-                  leading: Icon(Icons.add_home_work_sharp),
+                  leading: Icon(Icons.home_work),
                   // iconColor: Colors.greenAccent,
                   // textColor: Colors.greenAccent,
-                  title: Text('Add project'),
+                  title: Text('Projects'),
                 ),
               ),
             ];
@@ -117,7 +117,7 @@ class HomePage extends StatelessWidget {
               Get.toNamed('/clients');
               // print("Done");
             } else if (value == 1) {
-              Get.toNamed('/add-project');
+              Get.toNamed('/projects');
               // print("Work");
             } else if (value == 2) {
               print("Delete");

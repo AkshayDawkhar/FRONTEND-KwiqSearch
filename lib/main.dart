@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:takeahome/views/add_project.dart';
 import 'package:takeahome/views/client/add.dart';
 import 'package:takeahome/views/client/client_page.dart';
 import 'package:takeahome/views/client/clients.dart';
 import 'package:takeahome/views/home_page.dart';
+import 'package:takeahome/views/project/add.dart';
+import 'package:takeahome/views/project/project_page.dart';
+import 'package:takeahome/views/project/projects.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,6 +32,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/clients', page: () => ClientsPage()),
         GetPage(name: '/clients/add', page: () => AddClientPage()),
         GetPage(name: '/client', page: () => ClientPage()),
+        GetPage(name: '/projects', page: () => ProjectsPage()),
+        GetPage(name: '/projects/add', page: () => AddProject()),
+        GetPage(name: '/project', page: () => ProjectPage()),
 
         // GetPage(name: '/about', page: () => AboutPage()),
       ],
