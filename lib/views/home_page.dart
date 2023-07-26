@@ -131,6 +131,7 @@ class HomePage extends StatelessWidget {
         showChildOpacityTransition: false,
         onRefresh: () => unitController.fetchUnits(),
         child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
               GetBuilder<FilterController>(
@@ -338,7 +339,7 @@ class HomePage extends StatelessWidget {
           FloatingActionButton(
             heroTag: null,
             onPressed: () {
-              Get.to(MapPage());
+              Get.to(MapPage(),arguments: {"selected":unitController.units});
             },
             child: Icon(Icons.location_on),
           ),
