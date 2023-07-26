@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:takeahome/controller/client_page.dart';
 
-import '../constants.dart';
-import '../model/client_page.dart';
+import '../../constants.dart';
+import '../../model/client_page.dart';
 
 class ClientPage extends StatelessWidget {
   var clientController = Get.put(ClientController());

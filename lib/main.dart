@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:takeahome/views/add_project.dart';
-import 'package:takeahome/views/client_add.dart';
-import 'package:takeahome/views/client_page.dart';
-import 'package:takeahome/views/clients.dart';
+import 'package:takeahome/views/client/add.dart';
+import 'package:takeahome/views/client/client_page.dart';
+import 'package:takeahome/views/client/clients.dart';
 import 'package:takeahome/views/home_page.dart';
 
 void main() {
