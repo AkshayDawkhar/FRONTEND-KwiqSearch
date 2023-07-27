@@ -10,6 +10,7 @@ class Unit {
   int price;
   double longitude;
   double latitude;
+  String amenities;
 
 
   Unit({
@@ -22,6 +23,7 @@ class Unit {
     required this.price,
     required this.longitude,
     required this.latitude,
+    required this.amenities,
   });
 
   factory Unit.fromJson(String str) => Unit.fromMap(json.decode(str));
@@ -38,6 +40,7 @@ class Unit {
     price: json["price"],
     longitude: json["longitude"],
     latitude: json["latitude"],
+    amenities: json["amenities"],
   );
 
   Map<String, dynamic> toMap() => {
@@ -50,5 +53,6 @@ class Unit {
     "price": price,
     "longitude": longitude,
     "latitude": latitude,
+    "amenities": amenities,
   };
 }
