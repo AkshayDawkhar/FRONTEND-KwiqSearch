@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:takeahome/constants.dart';
-import 'package:takeahome/helper.dart';
-import 'package:takeahome/views/home_page.dart';
 
 import '../model/add_project.dart';
 
@@ -55,6 +54,7 @@ class NewProductController extends GetxController {
 
   // Map<String,TextEditingController> unit = {'unit':TextEditingController(),'CarpetArea':TextEditingController(),'price':TextEditingController()};
   List<Map<String, TextEditingController>> units = [];
+  List<DropdownMenuItem> areas = [];
 
   void saveAndEdit() {
     // area.text = '';
@@ -78,8 +78,27 @@ class NewProductController extends GetxController {
   }
 
   void addName(String name) {
-    places.add(name);
+    // places.add(name);
     places.sort();
+    update();
+  }
+
+  void addNewArea(String name) async {
+    // places.add(name);
+    // places.sort();
+    final url = Uri.parse('$HOSTNAME/home/areas/');
+    final responce = await http.post(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({"name": name, "formatted_version": name}));
+    print(responce.body);
+    print(responce.statusCode);
+    // postNewArea({"name": name, "formatted_version": name});
+    if (responce.statusCode == 201) {
+      Get.back();
+      getAreas();
+    }
     update();
   }
 
@@ -110,7 +129,7 @@ class NewProductController extends GetxController {
     update();
   }
 
-  void getOutput() {
+  void getOutput() async {
     AddProject a = AddProject(
         area: area.text,
         projectName: projectName.text,
@@ -137,7 +156,7 @@ class NewProductController extends GetxController {
         possession: DateTime(developerYear, developerMonth),
         contactPerson: contactPerson.text,
         contactNumber: int.tryParse(contactNumber.text) ?? 0,
-        marketValue: int.tryParse(marketValue.text) ?? 0,
+        marketValue: ((double.tryParse(marketValue.text) ?? 0) * 10000000).toInt(),
         brokerage: double.tryParse(brokerage.text) ?? 0.0,
         incentive: int.tryParse(incentive.text) ?? 0,
         bhk: double.tryParse(bhk.text) ?? 0.0,
@@ -147,24 +166,65 @@ class NewProductController extends GetxController {
             .map((e) => {
                   'unit': e['unit']!.text,
                   'CarpetArea': e['CarpetArea']!.text,
-                  'price': e['price']!.text,
+                  'price': ((double.tryParse(e['price']!.text) ?? 0) * 100000).toString(),
                 })
             .toList());
     // return a.toString();
     print(a.toMap().toString());
     // json.encoder;
     // output.text = a.toMap().toString();
-    addProject(a.toMap());
+    // addProject(a.toMap());
+    final url = Uri.parse('$HOSTNAME/home/projects/');
+    final responce = await http.post(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(a.toMap()));
+    print(responce.body);
+    print(responce.statusCode);
     output.text = json.encode(a.toMap());
+
     update();
   }
 
-  void addUnit() {
-    units.add({
-      'unit': TextEditingController(),
-      'CarpetArea': TextEditingController(),
-      'price': TextEditingController()
-    });
+  void getAreas() async {
+    final url = Uri.parse('$HOSTNAME/home/areas/');
+    final responce = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    List a = json.decode(responce.body);
+    areas = a
+        .map((e) => DropdownMenuItem(
+              child: Text(e['name']),
+              value: e['formatted_version'],
+            ))
+        .toList();
+    print(areas);
     update();
+    // print(a.first[]);
+  }
+
+  void addUnit() {
+    units.add({'unit': TextEditingController(), 'CarpetArea': TextEditingController(), 'price': TextEditingController()});
+    update();
+  }
+
+  void removeUnit() {
+    int length = units.length;
+    if (length > 1) {
+      units.removeAt(length - 1);
+      update();
+    }
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    addUnit();
+    getAreas();
   }
 }
