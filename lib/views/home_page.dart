@@ -7,8 +7,6 @@ import 'package:takeahome/controller/home.dart';
 import 'package:takeahome/model/unit.dart';
 import 'package:takeahome/views/map_page.dart';
 
-import '../model/room.dart';
-
 class HomePage extends StatelessWidget {
   UnitController unitController = Get.put(UnitController());
   FilterController filterController = Get.put(FilterController());
@@ -151,6 +149,8 @@ class HomePage extends StatelessWidget {
                                     context: context,
                                     builder: (ctx) {
                                       return MultiSelectDialog(
+                                        height: 500,
+                                        searchable: true,
                                         items: places.map((e) => MultiSelectItem(e, e)).toList(),
                                         initialValue: controller.selectedAreas,
                                         onConfirm: (values) {
@@ -172,6 +172,7 @@ class HomePage extends StatelessWidget {
                                     context: context,
                                     builder: (ctx) {
                                       return MultiSelectDialog(
+                                        height: 500,
                                         items: bhks,
                                         initialValue: controller.selectedUnits,
                                         onConfirm: (values) {
@@ -196,7 +197,7 @@ class HomePage extends StatelessWidget {
                           children: [
                             Expanded(
                               flex: 3,
-                              child: ElevatedButton(
+                              child: /*ElevatedButton(
                                 onPressed: () {
                                   showDialog(
                                     context: context,
@@ -212,12 +213,25 @@ class HomePage extends StatelessWidget {
                                   );
                                 },
                                 child: Text('possession'),
-                              ),
+                              )*/
+                                  DropdownButtonFormField(
+                                      items: controller.durations,
+                                      decoration:
+                                          InputDecoration(labelText: 'Position', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                                      onChanged: (value) {
+                                        controller.updateSelectedDurations(value!);
+                                      }),
                             ),
                             SizedBox(width: 10),
                             Expanded(
                               flex: 2,
-                              child: ElevatedButton(
+                              child: DropdownButtonFormField(
+                                  items: controller.durations,
+                                  decoration:
+                                      InputDecoration(labelText: 'Amenities', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                                  onChanged: (value) {
+                                    controller.updateSelectedDurations(value!);
+                                  }) /*ElevatedButton(
                                 onPressed: () {
                                   showDialog(
                                     context: context,
@@ -233,7 +247,8 @@ class HomePage extends StatelessWidget {
                                   );
                                 },
                                 child: Text('Amenities'),
-                              ),
+                              )*/
+                              ,
                             ),
                           ],
                         ),
@@ -295,7 +310,7 @@ class HomePage extends StatelessWidget {
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       Unit unit = controller.units.elementAt(index);
-                      Flat flat = dummyFlats.elementAt(index);
+                      // print(unit.toMap());
                       return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
@@ -339,7 +354,7 @@ class HomePage extends StatelessWidget {
           FloatingActionButton(
             heroTag: null,
             onPressed: () {
-              Get.to(MapPage(),arguments: {"selected":unitController.units});
+              Get.to(MapPage(), arguments: {"selected": unitController.units});
             },
             child: Icon(Icons.location_on),
           ),
