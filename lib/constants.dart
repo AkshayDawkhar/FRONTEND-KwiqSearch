@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:takeahome/api/add_project.dart';
+
 String HOSTNAME = 'http://192.168.1.43:8000';
 
 List<String> places = [
@@ -199,12 +201,12 @@ String formatTime(DateTime dateTime) {
     }
   }
 
-
   String hourStr = hour.toString().padLeft(2, '0');
   String minuteStr = minute.toString().padLeft(2, '0');
 
   return '$hourStr:$minuteStr $period';
 }
+
 String formatTimeOfDay(TimeOfDay timeOfDay) {
   String period = 'AM';
   int hour = timeOfDay.hour;
@@ -215,13 +217,13 @@ String formatTimeOfDay(TimeOfDay timeOfDay) {
     if (hour > 12) {
       hour -= 12;
     }
-
   }
   String hourStr = hour.toString().padLeft(2, '0');
   String minuteStr = minute.toString().padLeft(2, '0');
 
   return '$hourStr:$minuteStr $period';
 }
+
 IconData getActionIcon(String action) {
   if (action == 'call') {
     return Icons.call;
@@ -231,6 +233,7 @@ IconData getActionIcon(String action) {
     return Icons.home_work;
   }
 }
+
 String numberToLCr(double number) {
   if (number < 100000) {
     return '${(number / 1000).toStringAsFixed(0)}K';
@@ -239,4 +242,32 @@ String numberToLCr(double number) {
   } else {
     return '${(number / 10000000).toStringAsFixed(2)}Cr';
   }
+}
+
+int getAmenitiesNumebr(String amenities) {
+  switch (amenities) {
+    case 'no amenities':
+      return 0;
+    case 'basic amenities':
+      return 1;
+    case 'all amenities':
+      return 2;
+  }
+  return 0;
+}
+final validPhoneNumberRegExp = RegExp(r'^\d{10}$'); // 10 digits, all numeric
+String unitToName(double unit){
+  if(unit < 1){
+    switch (unit) {
+      case 0.0:
+        return 'N/A Plot';
+      case 0.1:
+        return 'Custom Office';
+      case 0.2:
+        return 'Custom Shop';
+    }
+  }else{
+    return '$unit BHK';
+  }
+  return '';
 }

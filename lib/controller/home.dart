@@ -35,13 +35,19 @@ List<Room> filterRooms({String? name, int? number, String? loc, double? bhk}) {
 class UnitController extends GetxController {
   // RxList to store the list of units
   RxList<Unit> units = RxList<Unit>();
+  List<Unit> filteredList = [];
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    init();
+  }
+
+  Future<void> init() async {
     fetchUnits();
-    // wing = wings.first;
+    filteredList = units;
+    update();
   }
 
   // Function to fetch the JSON data and update the units list
@@ -64,18 +70,73 @@ class UnitController extends GetxController {
     update();
   }
 
-  void filterData(Map filter) async {
-    List<Unit> filteredUnits = units.where((unit) {
-      bool areaMatch = filter["area"].isEmpty || filter["area"].contains(unit.area);
-      bool unitMatch = filter["unit"].isEmpty || filter["unit"].contains(unit.unit);
-      bool possessionMatch = filter["possession"].isEmpty; // Add the possession matching logic if available
-      bool amenitiesMatch = filter["amenities"].isEmpty || filter["amenities"].contains(unit.amenities);
-      bool budgetMatch = unit.price >= filter["startingBudget"] && unit.price <= filter["endingBudget"];
-      bool carpetAreaMatch = unit.carpetArea >= filter["startingCarpetArea"] && unit.carpetArea <= filter["endingCarpetArea"];
-
-      return areaMatch && unitMatch && possessionMatch && amenitiesMatch && budgetMatch && carpetAreaMatch;
-    }).toList();
-    print(filteredUnits);
+  void filterData(
+      {var startingBudget,
+      var endingBudget,
+      var amenities,
+      var startingCA,
+      var endingCA,
+      required List<double> selectedUnits,
+      required List<String> selectedAreas,
+      var duration}) async {
+    filteredList = units;
+    if (startingBudget != null) {
+      filteredList = filteredList.where((p0) => p0.price >= startingBudget).toList();
+      print('starting ${filteredList.length}');
+      filteredList.forEach((element) {
+        print(element.toMap());
+      });
+    }
+    if (endingBudget != null) {
+      filteredList = filteredList.where((p0) => p0.price <= endingBudget).toList();
+      print('Ending ${filteredList.length}');
+      filteredList.forEach((element) {
+        print(element.toMap());
+      });
+    }
+    if (startingCA != null) {
+      filteredList = filteredList.where((p0) => p0.carpetArea >= startingCA).toList();
+      print('starting ${filteredList.length}');
+      filteredList.forEach((element) {
+        print(element.toMap());
+      });
+    }
+    if (endingCA != null) {
+      filteredList = filteredList.where((p0) => p0.carpetArea <= endingCA).toList();
+      print('Ending ${filteredList.length}');
+      filteredList.forEach((element) {
+        print(element.toMap());
+      });
+    }
+    if (amenities != null) {
+      filteredList = filteredList.where((p0) => getAmenitiesNumebr(p0.amenities) >= amenities).toList();
+      print('Amenities ${filteredList.length}');
+      filteredList.forEach((element) {
+        print(element.toMap());
+      });
+    }
+    if (selectedUnits.isNotEmpty) {
+      filteredList = filteredList.where((p0) => selectedUnits.contains(p0.unit)).toList();
+      print('Units ${filteredList.length}');
+      filteredList.forEach((element) {
+        print(element.toMap());
+      });
+    }
+    if (selectedAreas.isNotEmpty) {
+      filteredList = filteredList.where((p0) => selectedAreas.contains(p0.area)).toList();
+      print('Area ${filteredList.length}');
+      filteredList.forEach((element) {
+        print(element.toMap());
+      });
+    }
+    if (duration > 0) {
+      filteredList = filteredList.where((p0) => p0.rera.isBefore(DateTime.now().add(Duration(days: duration * 35)))).toList();
+      print('Date Time ${filteredList.length} $duration');
+      filteredList.forEach((element) {
+        print(element.rera.isBefore(DateTime.now().add(Duration(days: duration * 35))));
+      });
+    }
+    update();
   }
 }
 
@@ -83,51 +144,52 @@ class FilterController extends GetxController {
   List<String> selectedAreas = [];
   List<double> selectedUnits = [];
   int selectedDurations = 0;
-  List<String> selectedAmenities = [];
+  int selectedAmenities = 0;
+  DateTime dateTime = DateTime.now();
   RangeValues budgetRange = RangeValues(3500000, 30000000);
   RangeValues carpetAreaRange = RangeValues(300, 5000);
   List<DropdownMenuItem> durations = [
     DropdownMenuItem(
       child: Text('Ready To Move'),
-      value: 0,
-    ),
-    DropdownMenuItem(
-      child: Text('6 Month'),
-      value: 0.6,
-    ),
-    DropdownMenuItem(
-      child: Text('3 Month'),
-      value: 0.3,
-    ),
-    DropdownMenuItem(
-      child: Text('1 Year'),
       value: 1,
     ),
     DropdownMenuItem(
-      child: Text('1.5 Year'),
-      value: 1.5,
-    ),
-    DropdownMenuItem(
-      child: Text('2 Year'),
-      value: 2,
-    ),
-    DropdownMenuItem(
-      child: Text('2.5 Year'),
-      value: 2.5,
-    ),
-    DropdownMenuItem(
-      child: Text('3 Year'),
+      child: Text('3 Month'),
       value: 3,
     ),
     DropdownMenuItem(
-      child: Text('3+ Year'),
+      child: Text('6 Month'),
+      value: 6,
+    ),
+    DropdownMenuItem(
+      child: Text('1 Year'),
+      value: 12,
+    ),
+    DropdownMenuItem(
+      child: Text('1.5 Year'),
+      value: 18,
+    ),
+    DropdownMenuItem(
+      child: Text('2 Year'),
+      value: 24,
+    ),
+    DropdownMenuItem(
+      child: Text('2.5 Year'),
       value: 30,
     ),
+    DropdownMenuItem(
+      child: Text('3 Year'),
+      value: 36,
+    ),
+    DropdownMenuItem(
+      child: Text('3+ Year'),
+      value: 120,
+    ),
   ];
-  List<DropdownMenuItem> possessions = const [
-    DropdownMenuItem(child: Text('All Amenities'), value: 'All Amenities'),
-    DropdownMenuItem(child: Text('No Amenities'), value: 'No Amenities'),
-    DropdownMenuItem(child: Text('Basic Amenities'), value: 'Basic Amenities'),
+  List<DropdownMenuItem> amenities = const [
+    DropdownMenuItem(child: Text('All Amenities'), value: 2),
+    DropdownMenuItem(child: Text('Basic Amenities'), value: 1),
+    DropdownMenuItem(child: Text('No Amenities'), value: 0),
   ];
 
   void updateSelectedAreas(List<String> selected) {
@@ -145,7 +207,7 @@ class FilterController extends GetxController {
     update();
   }
 
-  void updateSelectedAmenities(List<String> selected) {
+  void updateSelectedAmenities(int selected) {
     selectedAmenities = selected;
     update();
   }
@@ -160,24 +222,34 @@ class FilterController extends GetxController {
     update();
   }
 
-  void search() {
+  void search() async {
     print(selectedAreas.toString());
     print(selectedUnits.toString());
     print(selectedDurations);
     print(selectedAmenities);
     print(budgetRange);
     print(carpetAreaRange);
+
+    dateTime.add(Duration(days: selectedDurations * 30));
     Map ad = {
-      "area": selectedAreas,
-      "unit": selectedUnits,
-      "possession": selectedDurations,
-      "amenities": amenities,
-      "startingBudget": budgetRange.start,
-      "endingBudget": budgetRange.end,
-      "startingCarpetArea": carpetAreaRange.start,
-      "endingCarpetArea": carpetAreaRange.end,
+      "Area": selectedAreas,
+      "units": selectedUnits,
+      "possession": dateTime.toIso8601String(),
+      "amenities": selectedAmenities,
+      "startBudget": budgetRange.start,
+      "stopBudget": budgetRange.end,
+      "startCarpetArea": carpetAreaRange.start,
+      "stopCarpetArea": carpetAreaRange.end,
     };
     String a = json.encode(ad);
+    final url = Uri.parse('$HOSTNAME/client/searchfilters/');
+    final responce = await http.post(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: a);
+    print(responce.body);
+    print(responce.statusCode);
     print(a);
   }
 }

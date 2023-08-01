@@ -5,7 +5,6 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:takeahome/constants.dart';
 import 'package:takeahome/controller/home.dart';
 import 'package:takeahome/model/unit.dart';
-import 'package:takeahome/views/map_page.dart';
 
 class HomePage extends StatelessWidget {
   UnitController unitController = Get.put(UnitController());
@@ -87,8 +86,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
+        title: Text('Home'),
         actions: [
+          IconButton(onPressed: () {
+            Get.toNamed('/clients/add');
+          }, icon: Icon(Icons.person_add_alt)),
+          IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
           PopupMenuButton(itemBuilder: (context) {
             return [
               PopupMenuItem<int>(
@@ -127,7 +130,7 @@ class HomePage extends StatelessWidget {
       ),
       body: LiquidPullToRefresh(
         showChildOpacityTransition: false,
-        onRefresh: () => unitController.fetchUnits(),
+        onRefresh: () => unitController.init(),
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Column(
@@ -151,7 +154,7 @@ class HomePage extends StatelessWidget {
                                       return MultiSelectDialog(
                                         height: 500,
                                         searchable: true,
-                                        items: places.map((e) => MultiSelectItem(e, e)).toList(),
+                                        items: places.map((e) => MultiSelectItem(e.toLowerCase(), e)).toList(),
                                         initialValue: controller.selectedAreas,
                                         onConfirm: (values) {
                                           controller.updateSelectedAreas(values);
@@ -196,7 +199,6 @@ class HomePage extends StatelessWidget {
                         child: Row(
                           children: [
                             Expanded(
-                              flex: 3,
                               child: /*ElevatedButton(
                                 onPressed: () {
                                   showDialog(
@@ -216,21 +218,20 @@ class HomePage extends StatelessWidget {
                               )*/
                                   DropdownButtonFormField(
                                       items: controller.durations,
-                                      decoration:
-                                          InputDecoration(labelText: 'Position', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                                      decoration: InputDecoration(
+                                          labelText: 'Possession', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
                                       onChanged: (value) {
                                         controller.updateSelectedDurations(value!);
                                       }),
                             ),
                             SizedBox(width: 10),
                             Expanded(
-                              flex: 2,
                               child: DropdownButtonFormField(
-                                  items: controller.durations,
+                                  items: controller.amenities,
                                   decoration:
                                       InputDecoration(labelText: 'Amenities', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
                                   onChanged: (value) {
-                                    controller.updateSelectedDurations(value!);
+                                    controller.updateSelectedAmenities(value!);
                                   }) /*ElevatedButton(
                                 onPressed: () {
                                   showDialog(
@@ -306,10 +307,10 @@ class HomePage extends StatelessWidget {
                 // controller.fetchUnits();
                 return ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: controller.units.length,
+                    itemCount: controller.filteredList.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
-                      Unit unit = controller.units.elementAt(index);
+                      Unit unit = controller.filteredList.elementAt(index);
                       // print(unit.toMap());
                       return Container(
                           decoration: BoxDecoration(
@@ -331,8 +332,8 @@ class HomePage extends StatelessWidget {
                                 Text('${unit.area}'),
                               ],
                             ),
-                            subtitle:
-                                Text('${unit.unit} BHK       ${unit.carpetArea} sqft\n${monthDate(unit.rera)}                     | ₹ ${unit.price}'),
+                            subtitle: Text(
+                                '${unitToName(unit.unit)}       ${unit.carpetArea} sqft\n${monthDate(unit.rera)}                     | ₹ ${numberToLCr(unit.price.toDouble())}'),
                             isThreeLine: true,
 //                         trailing: Icon(
 //                           Icons.arrow_forward_ios_outlined,
@@ -354,7 +355,7 @@ class HomePage extends StatelessWidget {
           FloatingActionButton(
             heroTag: null,
             onPressed: () {
-              Get.to(MapPage(), arguments: {"selected": unitController.units});
+              Get.toNamed('/map', arguments: {"filteredList": unitController.filteredList, "units": unitController.units});
             },
             child: Icon(Icons.location_on),
           ),
@@ -365,6 +366,16 @@ class HomePage extends StatelessWidget {
             heroTag: null,
             onPressed: () {
               filterController.search();
+              unitController.filterData(
+                selectedAreas: filterController.selectedAreas,
+                selectedUnits: filterController.selectedUnits,
+                startingBudget: filterController.budgetRange.start,
+                endingBudget: filterController.budgetRange.end,
+                startingCA: filterController.carpetAreaRange.start,
+                endingCA: filterController.carpetAreaRange.end,
+                amenities: filterController.selectedAmenities,
+                duration: filterController.selectedDurations,
+              );
             },
             icon: Icon(Icons.search),
             label: Text('Search'),

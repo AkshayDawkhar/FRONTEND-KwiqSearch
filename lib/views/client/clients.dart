@@ -21,7 +21,7 @@ class ClientsPage extends StatelessWidget {
           child: ListView.builder(
                 itemCount: controller.clients.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return clientController(controller.clients.elementAt(index));
+                  return clientContainer(controller.clients.elementAt(index));
                 }),
           );
         } else {
@@ -37,7 +37,7 @@ class ClientsPage extends StatelessWidget {
     );
   }
 
-  Widget clientController(Clients clients) => Container(
+  Widget clientContainer(Clients clients) => Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.deepPurple[100],

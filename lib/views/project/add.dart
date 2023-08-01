@@ -168,7 +168,7 @@ class AddProject extends StatelessWidget {
                           items: projectType
                               .map((e) => DropdownMenuItem(
                                     child: Text(e),
-                                    value: e,
+                                    value: e.toLowerCase(),
                                   ))
                               .toList(),
                           onChanged: (value) {
@@ -222,7 +222,7 @@ class AddProject extends StatelessWidget {
                           items: areaIn
                               .map((e) => DropdownMenuItem(
                                     child: Text(e),
-                                    value: e,
+                                    value: e.toLowerCase(),
                                   ))
                               .toList(),
                           onChanged: (value) {
@@ -242,7 +242,7 @@ class AddProject extends StatelessWidget {
                           items: waterConnection
                               .map((e) => DropdownMenuItem(
                                     child: Text(e),
-                                    value: e,
+                                    value: e.toLowerCase(),
                                   ))
                               .toList(),
                           onChanged: (value) {
@@ -430,7 +430,7 @@ class AddProject extends StatelessWidget {
                           decoration: inputDecoration('Amenities'),
                           value: controller.amenities.text == null ? null : null,
                           hint: const Text('Amenities'),
-                          items: amenities.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                          items: amenities.map((e) => DropdownMenuItem(value: e.toLowerCase(), child: Text(e))).toList(),
                           onChanged: (value) {
                             controller.amenities.text = value.toString();
                           }),
@@ -446,7 +446,7 @@ class AddProject extends StatelessWidget {
                           decoration: inputDecoration('Parking'),
                           value: controller.parking.text == null ? null : null,
                           hint: const Text('Parking'),
-                          items: parking.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                          items: parking.map((e) => DropdownMenuItem(value: e.toLowerCase(), child: Text(e))).toList(),
                           onChanged: (value) {
                             controller.parking.text = value.toString();
                           }),
@@ -625,12 +625,12 @@ class AddProject extends StatelessWidget {
                         height: 200,
                         child: fixedContainer(
                           child: TextFormField(
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Enter something";
-                              }
-                              return null;
-                            },
+                            // validator: (value) {
+                            //   if (value!.isEmpty) {
+                            //     return "Enter something";
+                            //   }
+                            //   return null;
+                            // },
                             maxLines: null,
                             minLines: null,
                             expands: true,

@@ -3,11 +3,42 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:takeahome/constants.dart';
 
+import '../constants.dart';
 import '../model/add_project.dart';
+import '../model/project.dart';
 
-class NewProductController extends GetxController {
+class ProjectsController extends GetxController {
+
+  List<Projects> projects = [];
+  bool isLoad = false;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    fetchProject();
+  }
+
+  void fetchProject() async {
+    final url = Uri.parse('$HOSTNAME/home/project/');
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    // Map<String, dynamic> a = json.decode(response.body);
+    projects = projectsFromJson(response.body);
+    // print(clients);
+    isLoad = true;
+    update();
+  }
+}
+
+class EditProductController extends GetxController {
+  int projectId;
+  EditProductController({required this.projectId});
   final fromKey = GlobalKey<FormState>();
   final fromKeyAdd = GlobalKey<FormState>();
   TextEditingController area = TextEditingController();
@@ -130,6 +161,155 @@ class NewProductController extends GetxController {
     update();
   }
 
+  void get() async {
+    // void updateFieldsFromModel(Map<String, dynamic> model) {
+    // Update fields for AddProject instance
+    final url = Uri.parse('$HOSTNAME/home/project/$projectId');
+    final responce = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    Map a = json.decode(responce.body);
+    AddProject model = AddProject(
+      area: a["area"],
+      projectName: a["projectName"],
+      projectType: a["projectType"],
+      developerName: a["developerName"],
+      landParcel: a["landParcel"],
+      landmark: a["landmark"],
+      areaIn: a["areaIn"],
+      waterSupply: a["waterSupply"],
+      floors: a["floors"],
+      flatsPerFloors: a["flatsPerFloors"],
+      totalUnit: a["totalUnit"],
+      availableUnit: a["availableUnit"],
+      amenities: a["amenities"],
+      parking: a["parking"],
+      longitude: a["longitude"],
+      latitude: a["latitude"],
+      transport: a["transport"],
+      readyToMove: a["readyToMove"],
+      power: a["power"],
+      goods: a["goods"],
+      rera: DateTime.parse(a["rera"]),
+      possession: DateTime.parse(a["possession"]),
+      contactPerson: a["contactPerson"],
+      contactNumber: a["contactNumber"],
+      marketValue: a["marketValue"],
+      lifts: a["lifts"],
+      brokerage: a["brokerage"],
+      incentive: a["incentive"],
+      units: a['units'].map((e) => Map<String, dynamic>.from(json.decode(json.encode(e).toString()))).toList(),
+
+      bhk: 0,
+      carpetArea: 0,
+      price: 1,
+    );
+    print(model.toMap());
+    AddProject model1 = AddProject(
+        area: '',
+        projectName: '2',
+        projectType: "N/A Plot",
+        developerName: '4',
+        landParcel: 2.4,
+        landmark: '5',
+        areaIn: 'pcmc',
+        waterSupply: 'PMRDA',
+        lifts: 1,
+        floors: 14,
+        flatsPerFloors: 13,
+        totalUnit: 13,
+        availableUnit: 13,
+        amenities: 'No Amenities',
+        parking: 'Open car park',
+        longitude: 12,
+        latitude: 31,
+        transport: true,
+        readyToMove: true,
+        power: true,
+        goods: true,
+        rera: DateTime(2024),
+        possession: DateTime(2024),
+        contactPerson: 'me',
+        contactNumber: 9730766511,
+        marketValue: 12,
+        brokerage: 2,
+        incentive: 15,
+        bhk: 1,
+        carpetArea: 123,
+        price: 13,
+        units: [
+          {
+            "project_id": 1,
+            "project_name": "1",
+            "area": "gahunje",
+            "rera": "2023-07-01T00:00:00Z",
+            "unit": 1.0,
+            "CarpetArea": 120,
+            "price": 111,
+            "longitude": -122.0,
+            "latitude": -123.0,
+            "amenities": "No Amenities"
+          },
+          {
+            "project_id": 2,
+            "project_name": "qww",
+            "area": "gahunje",
+            "rera": "2023-07-01T00:00:00Z",
+            "unit": 1.0,
+            "CarpetArea": 123,
+            "price": 1233,
+            "longitude": -122.0,
+            "latitude": -123.0,
+            "amenities": "No Amenities"
+          }
+        ]);
+    area.text = model.area;
+    projectName.text = model.projectName;
+    projectType.text = model.projectType;
+    developerName.text = model.developerName;
+    landParcel.text = model.landParcel.toString();
+    landmark.text = model.landmark;
+    areaIn.text = model.areaIn;
+    waterSupply.text = model.waterSupply;
+    lifts.text = model.lifts.toString();
+    floors.text = model.floors.toString();
+    flatsPerFloors.text = model.flatsPerFloors.toString();
+    totalUnit.text = model.totalUnit.toString();
+    availableUnit.text = model.availableUnit.toString();
+    amenities.text = model.amenities;
+    parking.text = model.parking;
+    longitude.text = model.longitude.toString();
+    latitude.text = model.latitude.toString();
+    transport = model.transport;
+    readyToMove = model.readyToMove;
+    power = model.power;
+    goods = model.goods;
+    reraYear = model.rera.year;
+    reraMonth = model.rera.month;
+    developerYear = model.possession.year;
+    developerMonth = model.possession.month;
+    contactPerson.text = model.contactPerson;
+    contactNumber.text = model.contactNumber.toString();
+    marketValue.text = model.marketValue.toString();
+    brokerage.text = model.brokerage.toString();
+    incentive.text = model.incentive.toString();
+    bhk.text = model.bhk.toString();
+    carpetArea.text = model.carpetArea.toString();
+    price.text = model.price.toString();
+
+    // Update fields for units list (assuming units is a list of maps)
+    units = model.units
+        .map((unit) => {
+              'unit': TextEditingController(text: unit['unit'].toString()),
+              'CarpetArea': TextEditingController(text: unit['CarpetArea'].toString()),
+              'price': TextEditingController(text: (unit['price'] / 100000).toString()),
+            })
+        .toList();
+  }
+
   void getOutput() async {
     AddProject a = AddProject(
         area: area.text,
@@ -227,5 +407,6 @@ class NewProductController extends GetxController {
     super.onInit();
     addUnit();
     getAreas();
+    get();
   }
 }
