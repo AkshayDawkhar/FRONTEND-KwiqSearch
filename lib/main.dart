@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
       ),
       // home: HomePage(),
       initialRoute: '/home',
+      debugShowCheckedModeBanner: false,
       getPages: [
         GetPage(name: '/home', page: () => HomePage()),
         GetPage(name: '/add-project', page: () => AddProject()),

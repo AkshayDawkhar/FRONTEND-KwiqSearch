@@ -54,15 +54,15 @@ class _MapPageState extends State<MapPage> {
     for (int i = 0; i < filteredList.length; i++) {
       Unit unit = filteredList.elementAt(i);
       _markers.add(Marker(
-          markerId: MarkerId('1'),
-          position: LatLng(unit.latitude, unit.longitude),
-          infoWindow: InfoWindow(
-              title: '${unit.projectName}}',
-              snippet: '${unitToName(unit.unit)}',
-              onTap: () {
-                Get.offNamed('/');
-              }),
-          ));
+        markerId: MarkerId('1'),
+        position: LatLng(unit.latitude, unit.longitude),
+        infoWindow: InfoWindow(
+            title: '${unit.projectName}}',
+            snippet: '${unitToName(unit.unit)}',
+            onTap: () {
+              Get.offNamed('/');
+            }),
+      ));
     }
   }
 

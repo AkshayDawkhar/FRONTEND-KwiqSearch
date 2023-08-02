@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:takeahome/api/add_project.dart';
 
 String HOSTNAME = 'http://192.168.1.43:8000';
 
@@ -255,9 +254,10 @@ int getAmenitiesNumebr(String amenities) {
   }
   return 0;
 }
+
 final validPhoneNumberRegExp = RegExp(r'^\d{10}$'); // 10 digits, all numeric
-String unitToName(double unit){
-  if(unit < 1){
+String unitToName(double unit) {
+  if (unit < 1) {
     switch (unit) {
       case 0.0:
         return 'N/A Plot';
@@ -266,7 +266,7 @@ String unitToName(double unit){
       case 0.2:
         return 'Custom Shop';
     }
-  }else{
+  } else {
     return '$unit BHK';
   }
   return '';

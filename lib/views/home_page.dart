@@ -154,7 +154,7 @@ class HomePage extends StatelessWidget {
                                       return MultiSelectDialog(
                                         height: 500,
                                         searchable: true,
-                                        items: places.map((e) => MultiSelectItem(e.toLowerCase(), e)).toList(),
+                                        items: controller.areas/*places.map((e) => MultiSelectItem(e.toLowerCase().replaceAll(" ", ''), e)).toList()*/,
                                         initialValue: controller.selectedAreas,
                                         onConfirm: (values) {
                                           controller.updateSelectedAreas(values);

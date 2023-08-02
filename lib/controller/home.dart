@@ -3,33 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http; // Import the http package
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:takeahome/constants.dart';
 import 'package:takeahome/model/unit.dart';
 
-import '../model/room.dart';
-
 // import 'unit.dart';
-List<Room> rooms = [
-  Room(name: 'name', number: 12, loc: 'pune', bhk: 0.5),
-  Room(name: 'name1', number: 13, loc: 'pune1', bhk: 2),
-  Room(name: 'name2', number: 14, loc: 'pune', bhk: 2),
-  Room(name: 'name3', number: 15, loc: 'pune1', bhk: 1),
-  Room(name: 'name4', number: 16, loc: 'pune', bhk: 3),
-  Room(name: 'name5', number: 17, loc: 'pune', bhk: 2),
-  Room(name: 'name6', number: 18, loc: 'pune1', bhk: 1),
-  Room(name: 'name7', number: 19, loc: 'pune', bhk: 1),
-  Room(name: 'name8', number: 90, loc: 'pune', bhk: 1),
-  Room(name: 'name9', number: 19, loc: 'pune1', bhk: 1.5),
-];
 
-List<Room> filterRooms({String? name, int? number, String? loc, double? bhk}) {
-  return rooms
-      .where((room) => room.number < number!)
-      .where((room) => loc == null || room.loc == loc)
-      .where((room) => bhk == null || room.bhk == bhk)
-      .toList();
-  // return [];
-}
 // Import the Unit model class
 
 class UnitController extends GetxController {
@@ -222,6 +201,41 @@ class FilterController extends GetxController {
     update();
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      "Area": selectedAreas,
+      "units": selectedUnits,
+      "possession": dateTime.toIso8601String(),
+      "amenities": selectedAmenities,
+      "startBudget": budgetRange.start,
+      "stopBudget": budgetRange.end,
+      "startCarpetArea": carpetAreaRange.start,
+      "stopCarpetArea": carpetAreaRange.end,
+    };
+  }
+
+  List<MultiSelectItem<String>> areas = [];
+
+  void getAreas() async {
+    final url = Uri.parse('$HOSTNAME/home/areas/');
+    final responce = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    List a = json.decode(responce.body);
+    areas = a
+        .map((e) => MultiSelectItem(
+              e['formatted_version'].toString(),
+              e['name'],
+            ))
+        .toList();
+    print(areas);
+    update();
+    // print(a.first[]);
+  }
+
   void search() async {
     print(selectedAreas.toString());
     print(selectedUnits.toString());
@@ -251,5 +265,11 @@ class FilterController extends GetxController {
     print(responce.body);
     print(responce.statusCode);
     print(a);
+  }
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    getAreas();
   }
 }

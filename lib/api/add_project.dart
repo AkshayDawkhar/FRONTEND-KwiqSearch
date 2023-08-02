@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-String HOSTNAME = 'http://192.168.1.43:8000';
+
+import '../constants.dart';
 Future<int> ret(Map data) async {
   final url = Uri.parse('$HOSTNAME/home/projects');
   final responce = await http.post(url,

@@ -197,7 +197,7 @@ class EditProductController extends GetxController {
       possession: DateTime.parse(a["possession"]),
       contactPerson: a["contactPerson"],
       contactNumber: a["contactNumber"],
-      marketValue: a["marketValue"],
+      marketValue: a["marketValue"] / 10000000,
       lifts: a["lifts"],
       brokerage: a["brokerage"],
       incentive: a["incentive"],
