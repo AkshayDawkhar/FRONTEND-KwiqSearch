@@ -11,34 +11,6 @@ class HomePage extends StatelessWidget {
   FilterController filterController = Get.put(FilterController());
 
   // List<String> amenities = [
-  List<String> places = [
-    'Mamurdi',
-    'Gahunje',
-    'Kiwale',
-    'Ravet',
-    'Akurdi',
-    'Punawale',
-    'Tathawade',
-    'Kasarsai',
-    'Wakad',
-    'Marunji',
-    'Hinjawadi Phase 1',
-    'Hinjawadi Phase 2',
-    'Hinjawadi Phase 3',
-    'Pimple Saudagar',
-    'Pimple Gurav',
-    'New Sanghavi',
-    'Pimple Nilakh',
-    'Balewadi',
-    'Baner',
-    'Sus',
-    'Mahalunge',
-    'Pashan',
-    'Bavdhan',
-    'Warje',
-    'Kothrud',
-    'Aundh'
-  ];
 
   List<MultiSelectItem<double>> bhks = [
     MultiSelectItem(0.5, 'RK'),
@@ -54,44 +26,22 @@ class HomePage extends StatelessWidget {
     MultiSelectItem(6, '6 BHK'),
   ];
 
-  List<MultiSelectItem<String>> durations = [
-    MultiSelectItem('0', 'Ready To Move'),
-    MultiSelectItem('0.6', '6 month'),
-    MultiSelectItem('1', '1 Year'),
-    MultiSelectItem('1.5', '1.5 Years'),
-    MultiSelectItem('2', '2 Year'),
-    MultiSelectItem('2.5', '2.5 Year'),
-    MultiSelectItem('3', '3 Year'),
-    MultiSelectItem('99999', '3+ Year'),
-  ];
-
-  List<MultiSelectItem<String>> amenities = [
-    MultiSelectItem('All Amenities', 'All Amenities'),
-    MultiSelectItem('No Amenities', 'No Amenities'),
-    MultiSelectItem('Basic Amenities', 'Basic Amenities'),
-    MultiSelectItem('EV charging point', 'EV charging point'),
-  ];
-
-  var sp;
-
-  int min = 3500000;
-
-  int max = 50000000;
-
-  RangeValues v = RangeValues(3500000, 30000000);
-
-  RangeValues cpv = RangeValues(300, 3000);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
         actions: [
-          IconButton(onPressed: () {
-            Get.toNamed('/clients/add');
-          }, icon: Icon(Icons.person_add_alt)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
+          IconButton(
+              onPressed: () {
+                Get.toNamed('/clients/add');
+              },
+              icon: Icon(Icons.person_add_alt)),
+          IconButton(
+              onPressed: () {
+                Get.toNamed('/notifications');
+              },
+              icon: Icon(Icons.notifications)),
           PopupMenuButton(itemBuilder: (context) {
             return [
               PopupMenuItem<int>(
@@ -154,7 +104,8 @@ class HomePage extends StatelessWidget {
                                       return MultiSelectDialog(
                                         height: 500,
                                         searchable: true,
-                                        items: controller.areas/*places.map((e) => MultiSelectItem(e.toLowerCase().replaceAll(" ", ''), e)).toList()*/,
+                                        items:
+                                            controller.areas /*places.map((e) => MultiSelectItem(e.toLowerCase().replaceAll(" ", ''), e)).toList()*/,
                                         initialValue: controller.selectedAreas,
                                         onConfirm: (values) {
                                           controller.updateSelectedAreas(values);
@@ -383,44 +334,5 @@ class HomePage extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-String dateToString(DateTime dateTime) {
-  return '${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}';
-}
-
-String monthDate(DateTime dateTime) {
-  return '${getMonthName(dateTime.month)} ${dateTime.year}';
-}
-
-String getMonthName(int monthNumber) {
-  switch (monthNumber) {
-    case 1:
-      return "January";
-    case 2:
-      return "February";
-    case 3:
-      return "March";
-    case 4:
-      return "April";
-    case 5:
-      return "May";
-    case 6:
-      return "June";
-    case 7:
-      return "July";
-    case 8:
-      return "August";
-    case 9:
-      return "September";
-    case 10:
-      return "October";
-    case 11:
-      return "November";
-    case 12:
-      return "December";
-    default:
-      return "-";
   }
 }

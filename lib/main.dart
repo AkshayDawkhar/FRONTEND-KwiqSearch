@@ -5,6 +5,7 @@ import 'package:takeahome/views/client/client_page.dart';
 import 'package:takeahome/views/client/clients.dart';
 import 'package:takeahome/views/home_page.dart';
 import 'package:takeahome/views/map_page.dart';
+import 'package:takeahome/views/notifications.dart';
 import 'package:takeahome/views/project/add.dart';
 import 'package:takeahome/views/project/project_page.dart';
 import 'package:takeahome/views/project/projects.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/projects/add', page: () => AddProject()),
         GetPage(name: '/project', page: () => ProjectPage()),
         GetPage(name: '/map', page: () => MapPage()),
+        GetPage(name: '/notifications', page: () => NotificationsPage()),
 
         // GetPage(name: '/about', page: () => AboutPage()),
       ],
