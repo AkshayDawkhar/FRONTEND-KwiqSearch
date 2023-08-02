@@ -178,7 +178,7 @@ class ClientPage extends StatelessWidget {
                       child: Text('cancel')),
                   TextButton(
                       onPressed: () {
-                        createFollowUPController.send(1);
+                        createFollowUPController.send(clientController.id);
                       },
                       child: Text('Add')),
                 ],
