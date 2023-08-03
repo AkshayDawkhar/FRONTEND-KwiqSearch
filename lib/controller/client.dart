@@ -40,7 +40,10 @@ class CreateFollowUPController extends GetxController {
           content: Text('Followup Created Successfully'),
           cancel: TextButton(
               onPressed: () {
-                Get.toNamed('client-page');
+                // Get.toNamed('client');
+                Get.back();
+                Get.back();
+
               },
               child: Text('OK')));
     } else {
@@ -121,6 +124,23 @@ class ClientController extends GetxController {
       print("Error during POST request.");
       print("Status code: ${apiResponse.statusCode}");
       print("Response body: ${apiResponse.body}");
+    }
+  }
+  void deleteClient() async {
+    final String url = '$HOSTNAME/client/client/$id/';
+
+    try {
+      final response = await http.delete(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        print('DELETE request successful!');
+        Get.offAllNamed('/home');
+        // Get.back();
+      } else {
+        print('DELETE request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error making DELETE request: $e');
     }
   }
 }
