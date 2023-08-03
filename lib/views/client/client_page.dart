@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:takeahome/controller/client.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
 import '../../model/client.dart';
@@ -26,6 +27,21 @@ class ClientPage extends StatelessWidget {
                 } else if (value == 'delete') {
                   // Handle delete action here
                   // For example, show a confirmation dialog
+                  // clientController.deleteClient();
+                  Get.defaultDialog(
+                    title: 'Confirmation',
+                    middleText: 'Sure delete?',
+                    // confirmTextColor: Colors.white,
+                    onConfirm: () {
+                      // Perform delete action here
+                      clientController.deleteClient();
+                      print('Delete action confirmed!');
+                    },
+                    onCancel: () {
+                      // Handle the cancel action here (if needed)
+                      print('Delete action canceled!');
+                    },
+                  );
                 }
               },
               itemBuilder: (BuildContext context) => [
@@ -179,6 +195,7 @@ class ClientPage extends StatelessWidget {
                   TextButton(
                       onPressed: () {
                         createFollowUPController.send(clientController.id);
+                        clientController.onInit();
                       },
                       child: Text('Add')),
                 ],
@@ -194,29 +211,31 @@ class ClientPage extends StatelessWidget {
     // Map data = createFollowUPController.getFollowUp(feedback.followUp);
     return FutureBuilder(
       builder: (context, snapshot) {
-
-        return snapshot.hasData? Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.blue[200],
-            ),
-            margin: EdgeInsets.all(6),
-            // padding: EdgeInsets.fromLTRB(6, 6, 20, 6),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  // margin: EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(12)),
-                  child: Container(
-                    child: feedbackFollowUpListTile(snapshot.data!),
-                  ),
+        return snapshot.hasData
+            ? Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.blue[200],
                 ),
-                Text(' ${feedback.response} - ${feedback.message}'),
-              ],
-            ),
-          ) : Center(child: CircularProgressIndicator());
-      }, future: createFollowUPController.getFollowUp(feedback.followUp),
+                margin: EdgeInsets.all(6),
+                // padding: EdgeInsets.fromLTRB(6, 6, 20, 6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      // margin: EdgeInsets.all(12),
+                      decoration: BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(12)),
+                      child: Container(
+                        child: feedbackFollowUpListTile(snapshot.data!),
+                      ),
+                    ),
+                    Text(' ${feedback.response} - ${feedback.message}'),
+                  ],
+                ),
+              )
+            : Center(child: CircularProgressIndicator());
+      },
+      future: createFollowUPController.getFollowUp(feedback.followUp),
     );
   }
 
@@ -233,50 +252,63 @@ class ClientPage extends StatelessWidget {
             children: [
               Text(
                 '${client.fname} ${client.lname}',
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(fontSize: ((client.fname.length + client.lname.length) < 16) ? 30 : 20, overflow: TextOverflow.ellipsis),
               ),
               Row(
                 children: [
                   IconButton(
-                      onPressed: () {
-                        Get.defaultDialog(
-                          title: 'message',
-                          content: Text('message : ${client.massageNo}'),
-                          confirm: TextButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Text('message')),
-                          cancel: TextButton(onPressed: () {}, child: Text('cancel')),
-                        );
+                      onPressed: () async {
+                        final Uri url =
+                            Uri.parse("whatsapp://send?phone=${'+91' + '${clientController.client.massageNo}'}" + "&text=${Uri.encodeComponent('')}");
+                        try {
+                          await launchUrl(url);
+                        } catch (e) {}
                       },
+                      // {
+                      //   Get.defaultDialog(
+                      //     title: 'message',
+                      //     content: Text('message : ${client.massageNo}'),
+                      //     confirm: TextButton(
+                      //         onPressed: () async {
+                      //           final Uri url = Uri.parse(
+                      //               "whatsapp://send?phone=${'+91' + '${clientController.client.massageNo}'}" + "&text=${Uri.encodeComponent('')}");
+                      //           try {
+                      //             // launch(whatsappUrl);
+                      //             await launchUrl(url);
+                      //           } catch (e) {
+                      //             //To handle error and display error message
+                      //             // Helper.errorSnackBar(
+                      //             //     context: context, message: "Unable to open whatsapp");
+                      //           }
+                      //         },
+                      //         child: Text('message')),
+                      //     cancel: TextButton(onPressed: () {}, child: Text('cancel')),
+                      //   );
+                      // },
                       icon: Icon(Icons.message)),
                   IconButton(
-                      onPressed: () {
-                        Get.defaultDialog(
-                          title: 'call',
-                          content: Text('call : ${client.phoneNo}'),
-                          confirm: TextButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Text('call')),
-                          cancel: TextButton(onPressed: () {}, child: Text('cancel')),
-                        );
+                      onPressed: () async {
+                        String phoneNumber = "${clientController.client.phoneNo}";
+
+                        // Use the 'tel' link to make a phone call.
+                        // String url = "tel:$phoneNumber";
+                        final Uri url = Uri(scheme: 'tel', path: phoneNumber);
+
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(url);
+                        } else {
+                          throw 'Could not launch phone call';
+                        }
                       },
                       icon: Icon(Icons.call)),
                 ],
               ),
             ],
           ),
-          Row(
-            children: [
-              Text('Area : banner, wakad'),
-            ],
-          ),
-          Text('Budget : 50L - 80L'),
-          Text('Unit : 2BHK, 3BHK'),
-          Text('Carpet Area : 800'),
+          Text('Area : ${clientController.client.searchFilter.area.join(', ')}',/*style: TextStyle(overflow: TextOverflow.ellipsis),*/),
+          Text('Budget : ${numberToLCr(clientController.client.searchFilter.startBudget)} - ${numberToLCr(clientController.client.searchFilter.stopBudget)} '),
+          Text('Unit : ${clientController.client.searchFilter.units.map((e) => unitToName(e)).toList().join(',')}'),
+          Text('Carpet Area : ${clientController.client.searchFilter.startCarpetArea} - ${clientController.client.searchFilter.stopCarpetArea} '),
         ],
       ));
 
@@ -363,8 +395,9 @@ class ClientPage extends StatelessWidget {
                             print('object');
                             if (formKey.currentState!.validate()) {
                               clientController.addFeedback(followUp: followup.id, message: message.text, response: response.text);
-                            print('valid');
-                            Get.back();
+                              print('valid');
+                              clientController.onInit();
+                              Get.back();
                             }
                           },
                           child: Text('ADD'))
@@ -376,6 +409,7 @@ class ClientPage extends StatelessWidget {
         ),
         // style: ,
       );
+
   Widget feedbackFollowUpListTile(Followup followup) => ListTile(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
