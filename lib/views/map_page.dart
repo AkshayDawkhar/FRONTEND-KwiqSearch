@@ -76,7 +76,7 @@ class _MapPageState extends State<MapPage> {
         title: Text('Map'),
       ),
       body: GoogleMap(
-        mapType: MapType.terrain,
+        mapType: MapType.hybrid,
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
