@@ -556,7 +556,7 @@ class AddProject extends StatelessWidget {
                       ),
                     ),
                     ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: controller.units.length,
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) {
@@ -614,7 +614,11 @@ class AddProject extends StatelessWidget {
                               controller: controller.longitude,
                             ),
                           ),
-                          IconButton(onPressed: () {}, icon: const Icon(Icons.location_searching))
+                          IconButton(
+                              onPressed: ()  {
+                                controller.setCurrentLocation();
+                              },
+                              icon: const Icon(Icons.location_searching))
                         ],
                       ),
                     ),
@@ -648,25 +652,26 @@ class AddProject extends StatelessWidget {
         backgroundColor: Colors.greenAccent,
         onPressed: () {
           if (newProductController.fromKey.currentState!.validate()) {
-          Get.dialog(AlertDialog(
-            title: const Text('Conform save'),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Get.back();
+            Get.dialog(AlertDialog(
+              title: const Text('Conform save'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Get.back();
 
-                    newProductController.saveAndEdit();
-                  },
-                  child: const Text('Save and Add Unit')),
-              TextButton(
-                  onPressed: () {
-                    newProductController.getOutput();
-                    Get.back();
-                    // Get.back();
-                  },
-                  child: const Text('Save'))
-            ],
-          ));}
+                      newProductController.saveAndEdit();
+                    },
+                    child: const Text('Save and Add Unit')),
+                TextButton(
+                    onPressed: () {
+                      newProductController.getOutput();
+                      Get.back();
+                      // Get.back();
+                    },
+                    child: const Text('Save'))
+              ],
+            ));
+          }
           // newProductController.saveAndEdit();
         },
         icon: const Icon(Icons.add),

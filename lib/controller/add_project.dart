@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:takeahome/constants.dart';
@@ -217,6 +218,22 @@ class NewProductController extends GetxController {
     int length = units.length;
     if (length > 1) {
       units.removeAt(length - 1);
+      update();
+    }
+  }
+
+  void setCurrentLocation() async {
+    // Permission
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+      LocationPermission asked = await Geolocator .requestPermission ();
+      print("Permissions not given");
+    } else {
+      Position currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+      // print(currentPosition.latitude);
+      // print(currentPosition.longitude);
+      latitude.text = currentPosition.latitude.toString();
+      longitude.text = currentPosition.longitude.toString();
       update();
     }
   }
