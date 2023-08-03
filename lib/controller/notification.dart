@@ -10,9 +10,12 @@ class FollowupController extends GetxController {
   List<FollowupNotification> followupNotifications = [];
   bool isLoad = false;
   DateTime targetDate = DateTime.now();
+  bool done = true;
+
   Future<void> fetchFollowupNotifications() async {
     try {
-      final response = await http.get(Uri.parse('$HOSTNAME/client/followups/?target_date=${targetDate.year}-${targetDate.month}-${targetDate.day}'));
+      final response = await http.get(
+          Uri.parse('$HOSTNAME/client/followups/?target_date=${targetDate.year}-${targetDate.month}-${targetDate.day}${done ? '&done=True' : ''}'));
 
       if (response.statusCode == 200) {
         List<dynamic> responseData = json.decode(response.body);
@@ -28,13 +31,16 @@ class FollowupController extends GetxController {
       isLoad = true;
       update();
     }
+  }
 
+  void switchDone() {
+    done = !done;
+    fetchFollowupNotifications();
   }
 
   @override
   void onInit() {
     super.onInit();
     fetchFollowupNotifications();
-
   }
 }
