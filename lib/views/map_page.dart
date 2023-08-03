@@ -76,7 +76,7 @@ class _MapPageState extends State<MapPage> {
         title: Text('Map'),
       ),
       body: GoogleMap(
-        mapType: MapType.normal,
+        mapType: MapType.terrain,
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
@@ -91,10 +91,7 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    // await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  } // OSMFlutter(
+   // OSMFlutter(
 //   controller: mapController,
 //   mapIsLoading: Center(
 //     child: CircularProgressIndicator(),

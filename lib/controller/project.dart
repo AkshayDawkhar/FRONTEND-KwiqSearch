@@ -197,7 +197,7 @@ class EditProductController extends GetxController {
       possession: DateTime.parse(a["possession"]),
       contactPerson: a["contactPerson"],
       contactNumber: a["contactNumber"],
-      marketValue: a["marketValue"] / 10000000,
+      marketValue: a["marketValue"],
       lifts: a["lifts"],
       brokerage: a["brokerage"],
       incentive: a["incentive"],
@@ -208,64 +208,7 @@ class EditProductController extends GetxController {
       price: 1,
     );
     print(model.toMap());
-    AddProject model1 = AddProject(
-        area: '',
-        projectName: '2',
-        projectType: "N/A Plot",
-        developerName: '4',
-        landParcel: 2.4,
-        landmark: '5',
-        areaIn: 'pcmc',
-        waterSupply: 'PMRDA',
-        lifts: 1,
-        floors: 14,
-        flatsPerFloors: 13,
-        totalUnit: 13,
-        availableUnit: 13,
-        amenities: 'No Amenities',
-        parking: 'Open car park',
-        longitude: 12,
-        latitude: 31,
-        transport: true,
-        readyToMove: true,
-        power: true,
-        goods: true,
-        rera: DateTime(2024),
-        possession: DateTime(2024),
-        contactPerson: 'me',
-        contactNumber: 9730766511,
-        marketValue: 12,
-        brokerage: 2,
-        incentive: 15,
-        bhk: 1,
-        carpetArea: 123,
-        price: 13,
-        units: [
-          {
-            "project_id": 1,
-            "project_name": "1",
-            "area": "gahunje",
-            "rera": "2023-07-01T00:00:00Z",
-            "unit": 1.0,
-            "CarpetArea": 120,
-            "price": 111,
-            "longitude": -122.0,
-            "latitude": -123.0,
-            "amenities": "No Amenities"
-          },
-          {
-            "project_id": 2,
-            "project_name": "qww",
-            "area": "gahunje",
-            "rera": "2023-07-01T00:00:00Z",
-            "unit": 1.0,
-            "CarpetArea": 123,
-            "price": 1233,
-            "longitude": -122.0,
-            "latitude": -123.0,
-            "amenities": "No Amenities"
-          }
-        ]);
+
     area.text = model.area;
     projectName.text = model.projectName;
     projectType.text = model.projectType;
@@ -293,7 +236,7 @@ class EditProductController extends GetxController {
     developerMonth = model.possession.month;
     contactPerson.text = model.contactPerson;
     contactNumber.text = model.contactNumber.toString();
-    marketValue.text = model.marketValue.toString();
+    marketValue.text = (model.marketValue / 10000000).toString();
     brokerage.text = model.brokerage.toString();
     incentive.text = model.incentive.toString();
     bhk.text = model.bhk.toString();
