@@ -10,7 +10,7 @@ class FollowupController extends GetxController {
   List<FollowupNotification> followupNotifications = [];
   bool isLoad = false;
   DateTime targetDate = DateTime.now();
-  bool done = true;
+  bool done = false;
 
   Future<void> fetchFollowupNotifications() async {
     try {
