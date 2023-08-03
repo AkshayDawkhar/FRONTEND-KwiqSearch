@@ -17,7 +17,9 @@ class ClientsPage extends StatelessWidget {
         if (controller.isLoad) {
           return LiquidPullToRefresh(
             showChildOpacityTransition: false,
-          onRefresh: () async{},
+          onRefresh: () async{
+              controller.onInit();
+          },
           child: ListView.builder(
                 itemCount: controller.clients.length,
                 itemBuilder: (BuildContext context, int index) {

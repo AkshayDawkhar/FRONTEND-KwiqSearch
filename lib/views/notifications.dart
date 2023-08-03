@@ -30,7 +30,9 @@ class NotificationsPage extends StatelessWidget {
         ),
         body: LiquidPullToRefresh(
           showChildOpacityTransition: false,
-          onRefresh: () async {} /* unitController.init()*/,
+          onRefresh: () async {
+            controller.onInit();
+          } /* unitController.init()*/,
           child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
               child: Column(

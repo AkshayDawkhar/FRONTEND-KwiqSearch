@@ -20,7 +20,9 @@ class ProjectsPage extends StatelessWidget {
         if (controller.isLoad) {
           return LiquidPullToRefresh(
             showChildOpacityTransition: false,
-            onRefresh: () async {},
+            onRefresh: () async {
+              controller.onInit();
+            },
             child: ListView.builder(
                 itemCount: controller.projects.length,
                 itemBuilder: (BuildContext context, int index) {

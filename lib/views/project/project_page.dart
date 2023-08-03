@@ -77,7 +77,9 @@ class ProjectPage extends StatelessWidget {
       body: GetBuilder<EditProjectController>(builder: (controller) {
         return LiquidPullToRefresh(
           showChildOpacityTransition: false,
-          onRefresh: () async {},
+          onRefresh: () async {
+            controller.onInit();
+          },
           child: SingleChildScrollView(
             child: Form(
                 key: controller.fromKey,
