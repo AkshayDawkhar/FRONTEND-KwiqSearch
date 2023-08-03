@@ -36,9 +36,9 @@ class ProjectsController extends GetxController {
   }
 }
 
-class EditProductController extends GetxController {
+class EditProjectController extends GetxController {
   int projectId;
-  EditProductController({required this.projectId});
+  EditProjectController({required this.projectId});
   final fromKey = GlobalKey<FormState>();
   final fromKeyAdd = GlobalKey<FormState>();
   TextEditingController area = TextEditingController();
@@ -308,6 +308,62 @@ class EditProductController extends GetxController {
     print(responce.statusCode);
     output.text = json.encode(a.toMap());
 
+    update();
+  }
+void editProject() async {
+    AddProject a = AddProject(
+        area: area.text,
+        projectName: projectName.text,
+        projectType: projectType.text,
+        developerName: developerName.text,
+        landParcel: double.tryParse(landParcel.text) ?? 0,
+        landmark: landmark.text,
+        areaIn: areaIn.text,
+        waterSupply: waterSupply.text,
+        lifts: int.tryParse(lifts.text) ?? 0,
+        floors: int.tryParse(floors.text) ?? 0,
+        flatsPerFloors: int.tryParse(flatsPerFloors.text) ?? 0,
+        totalUnit: int.tryParse(totalUnit.text) ?? 0,
+        availableUnit: int.tryParse(availableUnit.text) ?? 0,
+        amenities: amenities.text,
+        parking: parking.text,
+        longitude: double.tryParse(longitude.text) ?? 0,
+        latitude: double.tryParse(latitude.text) ?? 0,
+        transport: transport,
+        readyToMove: readyToMove,
+        power: power,
+        goods: goods,
+        rera: DateTime(reraYear, reraMonth),
+        possession: DateTime(developerYear, developerMonth),
+        contactPerson: contactPerson.text,
+        contactNumber: int.tryParse(contactNumber.text) ?? 0,
+        marketValue: ((double.tryParse(marketValue.text) ?? 0) * 10000000).toInt(),
+        brokerage: double.tryParse(brokerage.text) ?? 0.0,
+        incentive: int.tryParse(incentive.text) ?? 0,
+        bhk: double.tryParse(bhk.text) ?? 0.0,
+        carpetArea: int.tryParse(carpetArea.text) ?? 0,
+        price: int.tryParse(price.text) ?? 0,
+        units: units
+            .map((e) => {
+                  'unit': e['unit']!.text,
+                  'CarpetArea': e['CarpetArea']!.text,
+                  'price': ((double.tryParse(e['price']!.text) ?? 0) * 100000).toString(),
+                })
+            .toList());
+    // return a.toString();
+    print(a.toMap().toString());
+    // json.encoder;
+    // output.text = a.toMap().toString();
+    // addProject(a.toMap());
+    final url = Uri.parse('$HOSTNAME/home/project/$projectId');
+    final responce = await http.put(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(a.toMap()));
+    print(responce.body);
+    print(responce.statusCode);
+    output.text = json.encode(a.toMap());
     update();
   }
 
