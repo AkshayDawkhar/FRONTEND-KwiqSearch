@@ -185,7 +185,11 @@ class NewProductController extends GetxController {
     print(responce.body);
     print(responce.statusCode);
     output.text = json.encode(a.toMap());
-
+    if(responce.statusCode == 201){
+      Get.defaultDialog(title: 'Successful', content: const Text('Created successfully'), backgroundColor: Colors.greenAccent,textConfirm: 'OK');
+    }else{
+      getErrorDialog(responce.body);
+    }
     update();
   }
 

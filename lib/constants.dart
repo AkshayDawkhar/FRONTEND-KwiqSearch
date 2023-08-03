@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 String HOSTNAME = 'http://192.168.1.43:8000';
 
@@ -271,6 +274,7 @@ String unitToName(double unit) {
   }
   return '';
 }
+
 String monthDate(DateTime dateTime) {
   return '${getMonthName(dateTime.month)} ${dateTime.year}';
 }
@@ -304,4 +308,29 @@ String getMonthName(int monthNumber) {
     default:
       return "-";
   }
+}
+
+void getErrorDialog(String data) {
+  Map<String,dynamic> message= jsonDecode(data);
+  Get.dialog(AlertDialog(
+    backgroundColor: Colors.redAccent[100],
+    title: Text('Error'),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var entry in message.entries)
+          Text(
+            '${entry.key} ${entry.value.first}',
+            style: TextStyle(fontSize: 18),
+          ),
+      ],
+    ),
+    actions: [
+      TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: Text('OK'))
+    ],
+  ));
 }
