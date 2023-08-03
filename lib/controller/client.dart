@@ -12,10 +12,6 @@ class CreateFollowUPController extends GetxController {
   TextEditingController message = TextEditingController();
   TextEditingController action = TextEditingController();
 
-  // TextEditingController dateController = TextEditingController();
-  // TextEditingController timeController = TextEditingController();
-
-  // TextEditingController action = TextEditingController();
   DateTime date = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
 
@@ -61,13 +57,24 @@ class CreateFollowUPController extends GetxController {
     print(response.statusCode);
     // Get.defaultDialog(title: responce.body);
   }
+
+  Future<Followup> getFollowUp(int id) async {
+    final String apiUrl = "$HOSTNAME/client/followups/$id";
+    final response = await http.get(
+      Uri.parse(apiUrl),
+    );
+    Map<String, dynamic> data = jsonDecode(response.body);
+    return Followup.fromJson(data);
+  }
 }
 
 class ClientController extends GetxController {
   late Client client;
   bool isLoad = false;
   int id;
+
   ClientController({required this.id});
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -91,6 +98,30 @@ class ClientController extends GetxController {
     isLoad = true;
     update();
     // return 1;
+  }
+
+  void addFeedback({required int followUp, required String message, required String response}) async {
+    final Map<String, dynamic> data = {
+      "follow_up": followUp,
+      "message": message,
+      "response": response,
+    };
+    final apiResponse = await http.post(
+      Uri.parse('$HOSTNAME/client/feedbacks/'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(data),
+    );
+
+    if (apiResponse.statusCode == 200) {
+      print("POST request successful!");
+      print(apiResponse.body);
+    } else {
+      print("Error during POST request.");
+      print("Status code: ${apiResponse.statusCode}");
+      print("Response body: ${apiResponse.body}");
+    }
   }
 }
 

@@ -190,39 +190,35 @@ class ClientPage extends StatelessWidget {
     );
   }
 
-  Widget feedbackContainer(Feedbacks feedback) => Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.blue[200],
-        ),
-        margin: EdgeInsets.all(6),
-        padding: EdgeInsets.fromLTRB(6, 6, 20, 6),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              // margin: EdgeInsets.all(12),
-              decoration: BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(12)),
-              child: Container(
-                child: ListTile(
-                  title: Text('12/12/2012'),
-                  subtitle: Text('client meetup on fridayclient meetup on fridayclient meetup on friday'),
-                  // trailing: Text('18/01'),
-                  leading: Icon(Icons.call),
-                  // trailing: Column(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios)),
-                  //   ],
-                  // ),
-                  // style: ,
-                ),
-              ),
+  Widget feedbackContainer(Feedbacks feedback) {
+    // Map data = createFollowUPController.getFollowUp(feedback.followUp);
+    return FutureBuilder(
+      builder: (context, snapshot) {
+
+        return snapshot.hasData? Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.blue[200],
             ),
-            Text('${feedback.message}')
-          ],
-        ),
-      );
+            margin: EdgeInsets.all(6),
+            // padding: EdgeInsets.fromLTRB(6, 6, 20, 6),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  // margin: EdgeInsets.all(12),
+                  decoration: BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(12)),
+                  child: Container(
+                    child: feedbackFollowUpListTile(snapshot.data!),
+                  ),
+                ),
+                Text(' ${feedback.response} - ${feedback.message}'),
+              ],
+            ),
+          ) : Center(child: CircularProgressIndicator());
+      }, future: createFollowUPController.getFollowUp(feedback.followUp),
+    );
+  }
 
   Widget clientContainer(Client client) => Container(
       decoration: BoxDecoration(color: Colors.blue[50], borderRadius: BorderRadius.circular(12)),
@@ -300,56 +296,97 @@ class ClientPage extends StatelessWidget {
           children: [
             IconButton(
                 onPressed: () {
+                  TextEditingController message = TextEditingController();
+                  TextEditingController response = TextEditingController();
+                  final formKey = GlobalKey<FormState>();
                   Get.dialog(AlertDialog(
                     title: Text('Feed Back'),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        DropdownButtonFormField<String>(
-                          // value: selectedOption,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            // filled: true,
-                            labelText: 'Response',
-                            // prefixIcon: Icon(Icons.arrow_drop_down),
+                    content: Form(
+                      key: formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          DropdownButtonFormField<String>(
+                            value: response.text == '' ? null : response.text,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              // filled: true,
+                              labelText: 'Response',
+                              // prefixIcon: Icon(Icons.arrow_drop_down),
+                            ),
+                            onChanged: (newValue) {
+                              response.text = newValue!;
+                            },
+                            items: [
+                              DropdownMenuItem<String>(
+                                value: 'cold',
+                                child: Text('cold'),
+                              ),
+                              DropdownMenuItem<String>(
+                                value: 'neutral',
+                                child: Text('neutral'),
+                              ),
+                              DropdownMenuItem<String>(
+                                value: 'hot',
+                                child: Text('hot'),
+                              ),
+                            ],
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'provide this value';
+                              }
+                              return null;
+                            },
                           ),
-                          onChanged: (newValue) {
-                            // setState(() {
-                            //   selectedOption = newValue;
-                            // });
-                          },
-                          items: [
-                            DropdownMenuItem<String>(
-                              value: '-1',
-                              child: Text('Cold'),
-                            ),
-                            DropdownMenuItem<String>(
-                              value: '0',
-                              child: Text('Neutral'),
-                            ),
-                            DropdownMenuItem<String>(
-                              value: '1',
-                              child: Text('Hot'),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Feed Back',
-                            border: OutlineInputBorder(),
+                          SizedBox(
+                            height: 10,
                           ),
-                        ),
-                      ],
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'provide this value';
+                              }
+                              return null;
+                            },
+                            controller: message,
+                            decoration: InputDecoration(
+                              hintText: 'Feed Back',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    actions: [TextButton(onPressed: () {}, child: Text('ADD'))],
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            print('object');
+                            if (formKey.currentState!.validate()) {
+                              clientController.addFeedback(followUp: followup.id, message: message.text, response: response.text);
+                            print('valid');
+                            Get.back();
+                            }
+                          },
+                          child: Text('ADD'))
+                    ],
                   ));
                 },
                 icon: Icon(Icons.arrow_forward_ios)),
           ],
         ),
+        // style: ,
+      );
+  Widget feedbackFollowUpListTile(Followup followup) => ListTile(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(dateToString(followup.dateSent)),
+            Text(formatTime(followup.dateSent)),
+          ],
+        ),
+        subtitle: Text(followup.message),
+        // trailing: Text('18/01'),
+        leading: Icon(getActionIcon(followup.actions)),
         // style: ,
       );
 }
