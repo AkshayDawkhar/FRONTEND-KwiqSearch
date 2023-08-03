@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/projects/add', page: () => AddProject()),
         GetPage(name: '/project', page: () => ProjectPage()),
         GetPage(name: '/map', page: () => MapPage()),
-        GetPage(name: '/notifications', page: () => NotificationsPage()),
+        GetPage(name: '/notifications', page: () => NotificationsPage(),title:'notifications'),
 
         // GetPage(name: '/about', page: () => AboutPage()),
       ],
