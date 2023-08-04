@@ -77,6 +77,7 @@ class ProjectPage extends StatelessWidget {
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'interested') {
+                Get.toNamed('/interested');
                 // Handle edit action here
                 // For example, navigate to edit user screen
               } else if (value == 'delete') {
