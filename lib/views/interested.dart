@@ -56,7 +56,7 @@ class InterestedPage extends StatelessWidget {
 
   Widget interestedContainer(InterestedModel interestedModel) => Container(
         margin: EdgeInsets.all(12),
-        decoration: BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(12)),
+        decoration: BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(12),border: Border.all(color: Colors.blue)),
         child: ListTile(
           onTap:() {
             Get.toNamed('/client', parameters: {'client_id': interestedModel.client.toString()});
@@ -81,7 +81,7 @@ class InterestedPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('${interestedModel.startCarpetArea.toInt()} - ${interestedModel.stopCarpetArea.toInt()} SqFt'),
+                  Text('${interestedModel.startCarpetArea.round()} - ${interestedModel.stopCarpetArea.round()} Carpet'),
                   Text('${interestedModel.rating}'),
                 ],
               ),
@@ -94,6 +94,7 @@ class InterestedPage extends StatelessWidget {
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
+         border: Border.all(width:index == interestedController.selectedUnitIndex? 3 : 1),
           color: index == interestedController.selectedUnitIndex ? Colors.blue : Colors.blue[100],
         ),
         child: InkWell(
