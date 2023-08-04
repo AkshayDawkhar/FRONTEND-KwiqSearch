@@ -266,7 +266,7 @@ class HomePage extends StatelessWidget {
                       return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            color: Colors.deepPurple[100],
+                            color: primaryColor200,
                           ),
                           margin: EdgeInsets.all(6),
                           child: ListTile(

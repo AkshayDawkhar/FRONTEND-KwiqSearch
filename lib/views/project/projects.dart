@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:takeahome/constants.dart';
 import 'package:takeahome/model/project.dart';
 
 import '../../controller/client.dart';
@@ -45,7 +46,7 @@ class ProjectsPage extends StatelessWidget {
   Widget projectContainer(Projects project) => Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.deepPurple[100],
+        color: primaryColor200,
       ),
       margin: EdgeInsets.all(6),
       child: ListTile(

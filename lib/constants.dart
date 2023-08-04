@@ -309,7 +309,9 @@ String getMonthName(int monthNumber) {
       return "-";
   }
 }
-
+Color primaryColor = Colors.blue;
+Color primaryColor100 = Colors.blue[100]!;
+Color primaryColor200 = Colors.blue[200]!;
 void getErrorDialog(String data) {
   Map<String,dynamic> message= jsonDecode(data);
   Get.dialog(AlertDialog(
