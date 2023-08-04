@@ -104,97 +104,104 @@ class AddProject {
       'units': units
     };
   }
-  //
-  // factory AddProject.fromJson(Map<String, dynamic> json) => AddProject(
-  //   area: json["area"],
-  //   projectName: json["projectName"],
-  //   projectType: json["projectType"],
-  //   developerName: json["developerName"],
-  //   landParcel: json["landParcel"],
-  //   landmark: json["landmark"],
-  //   areaIn: json["areaIn"],
-  //   waterSupply: json["waterSupply"],
-  //   floors: json["floors"],
-  //   flatsPerFloors: json["flatsPerFloors"],
-  //   totalUnit: json["totalUnit"],
-  //   availableUnit: json["availableUnit"],
-  //   amenities: json["amenities"],
-  //   parking: json["parking"],
-  //   longitude: json["longitude"],
-  //   latitude: json["latitude"],
-  //   transport: json["transport"],
-  //   readyToMove: json["readyToMove"],
-  //   power: json["power"],
-  //   goods: json["goods"],
-  //   rera: DateTime.parse(json["rera"]),
-  //   possession: DateTime.parse(json["possession"]),
-  //   contactPerson: json["contactPerson"],
-  //   contactNumber: json["contactNumber"],
-  //   marketValue: json["marketValue"],
-  //   lifts: json["lifts"],
-  //   brokerage: json["brokerage"],
-  //   incentive: json["incentive"],
-  //   units: List<Unit>.from(json["units"].map((x) => Unit.fromJson(x).to)),
-  // );
+//
+// factory AddProject.fromJson(Map<String, dynamic> json) => AddProject(
+//   area: json["area"],
+//   projectName: json["projectName"],
+//   projectType: json["projectType"],
+//   developerName: json["developerName"],
+//   landParcel: json["landParcel"],
+//   landmark: json["landmark"],
+//   areaIn: json["areaIn"],
+//   waterSupply: json["waterSupply"],
+//   floors: json["floors"],
+//   flatsPerFloors: json["flatsPerFloors"],
+//   totalUnit: json["totalUnit"],
+//   availableUnit: json["availableUnit"],
+//   amenities: json["amenities"],
+//   parking: json["parking"],
+//   longitude: json["longitude"],
+//   latitude: json["latitude"],
+//   transport: json["transport"],
+//   readyToMove: json["readyToMove"],
+//   power: json["power"],
+//   goods: json["goods"],
+//   rera: DateTime.parse(json["rera"]),
+//   possession: DateTime.parse(json["possession"]),
+//   contactPerson: json["contactPerson"],
+//   contactNumber: json["contactNumber"],
+//   marketValue: json["marketValue"],
+//   lifts: json["lifts"],
+//   brokerage: json["brokerage"],
+//   incentive: json["incentive"],
+//   units: List<Unit>.from(json["units"].map((x) => Unit.fromJson(x).to)),
+// );
 
-  // Map<String, dynamic> toJson() => {
-  //   "area": area,
-  //   "projectName": projectName,
-  //   "projectType": projectType,
-  //   "developerName": developerName,
-  //   "landParcel": landParcel,
-  //   "landmark": landmark,
-  //   "areaIn": areaIn,
-  //   "waterSupply": waterSupply,
-  //   "floors": floors,
-  //   "flatsPerFloors": flatsPerFloors,
-  //   "totalUnit": totalUnit,
-  //   "availableUnit": availableUnit,
-  //   "amenities": amenities,
-  //   "parking": parking,
-  //   "longitude": longitude,
-  //   "latitude": latitude,
-  //   "transport": transport,
-  //   "readyToMove": readyToMove,
-  //   "power": power,
-  //   "goods": goods,
-  //   "rera": rera.toIso8601String(),
-  //   "possession": possession.toIso8601String(),
-  //   "contactPerson": contactPerson,
-  //   "contactNumber": contactNumber,
-  //   "marketValue": marketValue,
-  //   "lifts": lifts,
-  //   "brokerage": brokerage,
-  //   "incentive": incentive,
-  //   "unit": List<dynamic>.from(units.map((x) => x.toJson())),
-  // };
-
+// Map<String, dynamic> toJson() => {
+//   "area": area,
+//   "projectName": projectName,
+//   "projectType": projectType,
+//   "developerName": developerName,
+//   "landParcel": landParcel,
+//   "landmark": landmark,
+//   "areaIn": areaIn,
+//   "waterSupply": waterSupply,
+//   "floors": floors,
+//   "flatsPerFloors": flatsPerFloors,
+//   "totalUnit": totalUnit,
+//   "availableUnit": availableUnit,
+//   "amenities": amenities,
+//   "parking": parking,
+//   "longitude": longitude,
+//   "latitude": latitude,
+//   "transport": transport,
+//   "readyToMove": readyToMove,
+//   "power": power,
+//   "goods": goods,
+//   "rera": rera.toIso8601String(),
+//   "possession": possession.toIso8601String(),
+//   "contactPerson": contactPerson,
+//   "contactNumber": contactNumber,
+//   "marketValue": marketValue,
+//   "lifts": lifts,
+//   "brokerage": brokerage,
+//   "incentive": incentive,
+//   "unit": List<dynamic>.from(units.map((x) => x.toJson())),
+// };
 }
+List<Unit> unitFromJson(String str) => List<Unit>.from(json.decode(str).map((x) => Unit.fromJson(x)));
+
+String unitToJson(List<Unit> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
 class Unit {
-  int projectId;
-  int unit;
+  int id;
+  double unit;
   int carpetArea;
   int price;
+  int projectId;
 
   Unit({
-    required this.projectId,
+    required this.id,
     required this.unit,
     required this.carpetArea,
     required this.price,
+    required this.projectId,
   });
 
   factory Unit.fromJson(Map<String, dynamic> json) => Unit(
-    projectId: json["project_id"],
-    unit: json["unit"],
+    id: json["id"],
+    unit: json["unit"]?.toDouble(),
     carpetArea: json["CarpetArea"],
     price: json["price"],
+    projectId: json["project_id"],
   );
 
   Map<String, dynamic> toJson() => {
-    "project_id": projectId,
+    "id": id,
     "unit": unit,
     "CarpetArea": carpetArea,
     "price": price,
+    "project_id": projectId,
   };
 }
 
