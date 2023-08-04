@@ -54,20 +54,18 @@ class NotificationsPage extends StatelessWidget {
                     ),
                   ),
                   Divider(),
-                  GetBuilder<FollowupController>(builder: (controller) {
-                    return controller.isLoad
-                        ? ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: controller.followupNotifications.length,
-                            itemBuilder: (BuildContext buildContext, int index) {
-                              return Container(
-                                margin: EdgeInsets.all(12),
-                                decoration: BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(12)),
-                                child: followUpListTile(controller.followupNotifications.elementAt(index)),
-                              );
-                            })
-                        : Center(child: CircularProgressIndicator());
-                  }),
+                  controller.isLoad
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: controller.followupNotifications.length,
+                          itemBuilder: (BuildContext buildContext, int index) {
+                            return Container(
+                              margin: EdgeInsets.all(12),
+                              decoration: BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(12)),
+                              child: followUpListTile(controller.followupNotifications.elementAt(index)),
+                            );
+                          })
+                      : Center(child: CircularProgressIndicator()),
                 ],
               )),
         ),
