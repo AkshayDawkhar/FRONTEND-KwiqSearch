@@ -49,7 +49,7 @@ class NewClientController extends GetxController {
     // postNewArea({"name": name, "formatted_version": name});
     if (response.statusCode == 201) {
       Get.back();
-      Get.defaultDialog(title: 'Successful', content: const Text('Created successfully'), backgroundColor: Colors.greenAccent,textConfirm: 'OK');
+      Get.defaultDialog(title: 'Successful', content: const Text('Created successfully'), backgroundColor: Colors.greenAccent,textCancel: 'OK');
     } else {
       // Get.defaultDialog(title: 'Error', content: const Text('Something Went wrong'), backgroundColor: Colors.redAccent);
       getErrorDialog(response.body);

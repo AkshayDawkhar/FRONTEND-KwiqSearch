@@ -40,22 +40,16 @@ class CreateFollowUPController extends GetxController {
           content: Text('Followup Created Successfully'),
           cancel: TextButton(
               onPressed: () {
-                // Get.toNamed('client');
-                Get.back();
-                Get.back();
+                // Get.offNamedUntil('/client',RoutePredicate.(route) {
 
+                // });
+                Get.back();
+                Get.back();
+                onInit();
               },
               child: Text('OK')));
     } else {
-      Get.defaultDialog(
-          title: 'Error',
-          backgroundColor: Colors.redAccent,
-          content: Text('Something Went Wrong'),
-          cancel: TextButton(
-              onPressed: () {
-                Get.back();
-              },
-              child: Text('OK')));
+    getErrorDialog(response.body);
     }
     print(response.statusCode);
     // Get.defaultDialog(title: responce.body);
@@ -121,13 +115,13 @@ class ClientController extends GetxController {
       print("POST request successful!");
       print(apiResponse.body);
     } else {
-      print("Error during POST request.");
-      print("Status code: ${apiResponse.statusCode}");
-      print("Response body: ${apiResponse.body}");
+      // print("Error during POST request.");
+      // print("Status code: ${apiResponse.statusCode}");
+      getErrorDialog(apiResponse.body);
     }
   }
   void deleteClient() async {
-    final String url = '$HOSTNAME/client/client/$id/';
+    final String url = '$HOSTNAME/home/project/$id/';
 
     try {
       final response = await http.delete(Uri.parse(url));
