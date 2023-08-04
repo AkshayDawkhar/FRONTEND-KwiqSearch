@@ -6,12 +6,17 @@ import 'package:takeahome/constants.dart';
 import 'package:takeahome/controller/home.dart';
 import 'package:takeahome/model/unit.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   UnitController unitController = Get.put(UnitController());
+
   FilterController filterController = Get.put(FilterController());
 
   // List<String> amenities = [
-
   List<MultiSelectItem<double>> bhks = [
     MultiSelectItem(0.5, 'RK'),
     MultiSelectItem(1, '1 BHK'),
@@ -32,6 +37,21 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home'),
         actions: [
+          HOSTNAME == LOCAL
+              ? IconButton(
+                  onPressed: () {
+                    // Get.toNamed('/clients/add');
+                    HOSTNAME = DEPLOY;
+                    setState(() {});
+                  },
+                  icon: Icon(Icons.cloud))
+              : IconButton(
+                  onPressed: () {
+                    // Get.toNamed('/clients/add');
+                    HOSTNAME = LOCAL;
+                    setState(() {});
+                  },
+                  icon: Icon(Icons.wifi)),
           IconButton(
               onPressed: () {
                 Get.toNamed('/clients/add');

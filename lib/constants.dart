@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-String HOSTNAME = 'http://192.168.1.43:8000';
+String HOSTNAME = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
+String DEPLOY = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
+String LOCAL = 'http://192.168.1.43:8000';
 
 List<String> places = [
   'Mamurdi',
