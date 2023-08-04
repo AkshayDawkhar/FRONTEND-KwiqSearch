@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 String HOSTNAME = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
 String DEPLOY = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
-String LOCAL = 'http://192.168.1.43:8000';
+String LOCAL = 'http://192.168.1.36:8000';
 
 List<String> places = [
   'Mamurdi',
@@ -311,11 +311,13 @@ String getMonthName(int monthNumber) {
       return "-";
   }
 }
+
 Color primaryColor = Colors.blue;
 Color primaryColor100 = Colors.blue[100]!;
 Color primaryColor200 = Colors.blue[200]!;
+
 void getErrorDialog(String data) {
-  Map<String,dynamic> message= jsonDecode(data);
+  Map<String, dynamic> message = jsonDecode(data);
   Get.dialog(AlertDialog(
     backgroundColor: Colors.redAccent[100],
     title: Text('Error'),
