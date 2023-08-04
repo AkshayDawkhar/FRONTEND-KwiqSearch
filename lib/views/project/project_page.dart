@@ -5,7 +5,7 @@ import 'package:takeahome/constants.dart';
 import 'package:takeahome/controller/project.dart';
 
 class ProjectPage extends StatelessWidget {
-  var editPrjectController = Get.put(EditProjectController(projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
+  var editProjectController = Get.put(EditProjectController(projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +23,11 @@ class ProjectPage extends StatelessWidget {
                     return null;
                   },
                   decoration: inputDecoration('BHK'),
-                  value: double.tryParse(editPrjectController.units.elementAt(index)['unit']!.text),
+                  value: double.tryParse(editProjectController.units.elementAt(index)['unit']!.text),
                   hint: const Text('BHK'),
                   items: bhks,
                   onChanged: (value) {
-                    editPrjectController.units.elementAt(index)['unit']!.text = value.toString();
+                    editProjectController.units.elementAt(index)['unit']!.text = value.toString();
                   }),
             ),
             const SizedBox(
@@ -44,7 +44,7 @@ class ProjectPage extends StatelessWidget {
                 },
                 keyboardType: TextInputType.number,
                 decoration: inputDecoration('Carpet Area'),
-                controller: editPrjectController.units.elementAt(index)['CarpetArea'],
+                controller: editProjectController.units.elementAt(index)['CarpetArea'],
               ),
             ),
             const SizedBox(
@@ -62,7 +62,7 @@ class ProjectPage extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 // decoration: inputDecoration('Price ₹ in L'),
                 decoration: const InputDecoration(labelText: 'Price', border: OutlineInputBorder(), suffixText: 'L'),
-                controller: editPrjectController.units.elementAt(index)['price'],
+                controller: editProjectController.units.elementAt(index)['price'],
               ),
             ),
           ],
@@ -72,7 +72,45 @@ class ProjectPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${editPrjectController.projectName.text}'),
+        title: Text('Project'),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'interested') {
+                // Handle edit action here
+                // For example, navigate to edit user screen
+              } else if (value == 'delete') {
+                // Handle delete action here
+                // For example, show a confirmation dialog
+                // clientController.deleteClient();
+                Get.defaultDialog(
+                  title: 'Confirmation',
+                  middleText: 'Sure delete?',
+                  // confirmTextColor: Colors.white,
+                  onConfirm: () {
+                    // Perform delete action here
+                    // clientController.deleteClient();
+                    print('Delete action confirmed!');
+                  },
+                  onCancel: () {
+                    // Handle the cancel action here (if needed)
+                    print('Delete action canceled!');
+                  },
+                );
+              }
+            },
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem<String>(
+                value: 'interested',
+                child: ListTile(leading: Icon(Icons.person_search), iconColor: Colors.blueAccent, title: Text('Interested')),
+              ),
+              PopupMenuItem<String>(
+                value: 'delete',
+                child: ListTile(leading: Icon(Icons.delete), iconColor: Colors.red, title: Text('Delete')),
+              ),
+            ],
+          ),
+        ],
       ),
       body: GetBuilder<EditProjectController>(builder: (controller) {
         return LiquidPullToRefresh(
@@ -168,7 +206,7 @@ class ProjectPage extends StatelessWidget {
                           },
                           decoration: inputDecoration('Project Type'),
                           hint: const Text('Project Type'),
-                          value: controller.projectType.text==''?null:controller.projectType.text,
+                          value: controller.projectType.text == '' ? null : controller.projectType.text,
                           items: projectType
                               .map((e) => DropdownMenuItem(
                                     child: Text(e),
@@ -657,7 +695,7 @@ class ProjectPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.greenAccent,
         onPressed: () {
-          if (editPrjectController.fromKey.currentState!.validate()) {
+          if (editProjectController.fromKey.currentState!.validate()) {
             Get.dialog(AlertDialog(
               title: const Text('Conform save'),
               actions: [
@@ -665,13 +703,13 @@ class ProjectPage extends StatelessWidget {
                     onPressed: () {
                       Get.back();
 
-                      editPrjectController.saveAndEdit();
+                      editProjectController.saveAndEdit();
                     },
                     child: const Text('Save and Add Unit')),
                 TextButton(
                     onPressed: () {
                       // editProductController.getOutput();
-                      editPrjectController.editProject();
+                      editProjectController.editProject();
                       Get.back();
                       // Get.back();
                     },
