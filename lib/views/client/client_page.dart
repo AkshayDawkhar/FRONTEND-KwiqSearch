@@ -305,8 +305,11 @@ class ClientPage extends StatelessWidget {
               ),
             ],
           ),
-          Text('Area : ${clientController.client.searchFilter.area.join(', ')}',/*style: TextStyle(overflow: TextOverflow.ellipsis),*/),
-          Text('Budget : ${numberToLCr(clientController.client.searchFilter.startBudget)} - ${numberToLCr(clientController.client.searchFilter.stopBudget)} '),
+          Text(
+            'Area : ${clientController.client.searchFilter.area.join(', ')}', /*style: TextStyle(overflow: TextOverflow.ellipsis),*/
+          ),
+          Text(
+              'Budget : ${numberToLCr(clientController.client.searchFilter.startBudget)} - ${numberToLCr(clientController.client.searchFilter.stopBudget)} '),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -314,11 +317,15 @@ class ClientPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Unit : ${clientController.client.searchFilter.units.map((e) => unitToName(e)).toList().join(',')}'),
-                  Text('Carpet Area : ${clientController.client.searchFilter.startCarpetArea.round()} - ${clientController.client.searchFilter.stopCarpetArea.round()} '),
+                  Text(
+                      'Carpet Area : ${clientController.client.searchFilter.startCarpetArea.round()} - ${clientController.client.searchFilter.stopCarpetArea.round()} '),
                 ],
               ),
-              IconButton(onPressed: (){
-              }, icon: Icon(Icons.search))
+              IconButton(
+                  onPressed: () {
+                    Get.toNamed('/search',parameters: {'search_filter':clientController.client.searchFilter.id.toString()});
+                  },
+                  icon: Icon(Icons.search))
             ],
           ),
         ],

@@ -11,6 +11,7 @@ import 'package:takeahome/views/notifications.dart';
 import 'package:takeahome/views/project/add.dart';
 import 'package:takeahome/views/project/project_page.dart';
 import 'package:takeahome/views/project/projects.dart';
+import 'package:takeahome/views/search_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       getPages: [
         GetPage(name: '/home', page: () => HomePage()),
+        GetPage(name: '/search', page: () => SearchPage()),
         GetPage(name: '/add-project', page: () => AddProject()),
         GetPage(name: '/clients', page: () => ClientsPage()),
         GetPage(name: '/clients/add', page: () => AddClientPage()),
