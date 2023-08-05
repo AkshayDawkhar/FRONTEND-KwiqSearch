@@ -183,6 +183,7 @@ class FilterController extends GetxController {
 
   void updateSelectedDurations(int selected) {
     selectedDurations = selected;
+    dateTime = DateTime.now().add(Duration(days: selected * 31));
     update();
   }
 
