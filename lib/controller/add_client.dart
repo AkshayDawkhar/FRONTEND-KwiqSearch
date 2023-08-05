@@ -20,7 +20,10 @@ class NewClientController extends GetxController {
     return true;
   }
 
-  void getOutput(Map<String, dynamic> searchFilter) async {
+  void getOutput(Map<String, dynamic> searchFilter,int duration) async {
+    // DateTime possession = searchFilter['possession'];
+    // possession = possession.add(Duration(days: duration*31));
+    // print('-------->>>> ${possession.year}');
     final Map<String, dynamic> data = {
       "fname": firstNameController.text,
       "lname": lastNameController.text,
@@ -39,6 +42,7 @@ class NewClientController extends GetxController {
         "requirements": requirementsController.text
       }
     };
+    print(data);
     final url = Uri.parse('$HOSTNAME/client/client/');
     final response = await http.post(url,
         headers: <String, String>{

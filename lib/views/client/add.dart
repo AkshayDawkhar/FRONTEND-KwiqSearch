@@ -125,7 +125,7 @@ class _AddClientPageState extends State<AddClientPage> {
           if (newClientController.formKey.currentState?.validate() == true) {
             // Form is valid, perform save logic here
             // saveForm();
-          newClientController.getOutput(filterController.toMap());
+          newClientController.getOutput(filterController.toMap(),filterController.selectedDurations);
           }
         },
         label: Text('Save'),
