@@ -15,110 +15,152 @@ import '../model/client.dart';
 
 class SearchUnitController extends GetxController {
   // RxList to store the list of units
-  RxList<Unit> units = RxList<Unit>();
-  List<Unit> filteredList = [];
+  // RxList<Unit> units = RxList<Unit>();
+  // List<Unit> filteredList = [];
+  DateTime dateTime = DateTime.now();
 
   @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    init();
-  }
+  // void onInit() {
+  //   // TODO: implement onInit
+  //   super.onInit();
+  //   init();
+  // }
 
-  Future<void> init() async {
-    fetchUnits();
-    filteredList = units;
-    update();
-  }
+  // Future<void> init() async {
+  //   fetchUnits();
+  //   filteredList = units;
+  //   update();
+  // }
 
   // Function to fetch the JSON data and update the units list
-  Future<void> fetchUnits() async {
-    try {
-      // Replace the URL below with the actual API endpoint that provides the JSON data
-      final response = await http.get(Uri.parse('$HOSTNAME/home/projects/'));
-      if (response.statusCode == 200) {
-        // If the request is successful, parse the JSON data and update the units list
-        final List<dynamic> jsonData = json.decode(response.body);
-        units.value = jsonData.map((unitData) => Unit.fromMap(unitData)).toList();
-      } else {
-        // If the request fails, print the error message
-        print('Failed to fetch units: ${response.statusCode}');
-      }
-    } catch (e) {
-      // If an exception occurs, print the error message
-      print('Error fetching units: $e');
-    }
+  // Future<void> fetchUnits() async {
+  //   try {
+  //     // Replace the URL below with the actual API endpoint that provides the JSON data
+  //     final response = await http.get(Uri.parse('$HOSTNAME/home/projects/'));
+  //     if (response.statusCode == 200) {
+  //       // If the request is successful, parse the JSON data and update the units list
+  //       final List<dynamic> jsonData = json.decode(response.body);
+  //       units.value = jsonData.map((unitData) => Unit.fromMap(unitData)).toList();
+  //     } else {
+  //       // If the request fails, print the error message
+  //       print('Failed to fetch units: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     // If an exception occurs, print the error message
+  //     print('Error fetching units: $e');
+  //   }
+  //   update();
+  // }
+
+  List<RecommendedUnit> recommendedUnit = [];
+
+  void search({
+    required selectedAreas,
+    required selectedUnits,
+    required selectedDurations,
+    required selectedAmenities,
+    required budgetRange,
+    required carpetAreaRange,
+  }) async {
+
+
+    dateTime.add(Duration(days: selectedDurations * 30));
+    Map ad = {
+      "Area": selectedAreas,
+      "units": selectedUnits,
+      "possession": dateTime.toIso8601String(),
+      "amenities": selectedAmenities,
+      "startBudget": budgetRange.start,
+      "stopBudget": budgetRange.end,
+      "startCarpetArea": carpetAreaRange.start,
+      "stopCarpetArea": carpetAreaRange.end,
+    };
+    String a = json.encode(ad);
+    final url = Uri.parse('$HOSTNAME/home/filter/');
+    final responce = await http.post(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: a);
+    Get.defaultDialog(
+        content: TextField(
+      controller: TextEditingController(text: responce.body),
+    ));
+    recommendedUnit = recommendedUnitFromJson(responce.body);
+    // print(responce.body);
+    // print(responce.statusCode);
+    // print(a);
     update();
   }
 
-  void filterData(
-      {var startingBudget,
-      var endingBudget,
-      var amenities,
-      var startingCA,
-      var endingCA,
-      required List<double> selectedUnits,
-      required List<String> selectedAreas,
-      var duration}) async {
-    filteredList = units;
-    if (startingBudget != null) {
-      filteredList = filteredList.where((p0) => p0.price >= startingBudget).toList();
-      print('starting ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
-    }
-    if (endingBudget != null) {
-      filteredList = filteredList.where((p0) => p0.price <= endingBudget).toList();
-      print('Ending ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
-    }
-    if (startingCA != null) {
-      filteredList = filteredList.where((p0) => p0.carpetArea >= startingCA).toList();
-      print('starting ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
-    }
-    if (endingCA != null) {
-      filteredList = filteredList.where((p0) => p0.carpetArea <= endingCA).toList();
-      print('Ending ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
-    }
-    if (amenities != null) {
-      filteredList = filteredList.where((p0) => getAmenitiesNumebr(p0.amenities) >= amenities).toList();
-      print('Amenities ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
-    }
-    if (selectedUnits.isNotEmpty) {
-      filteredList = filteredList.where((p0) => selectedUnits.contains(p0.unit)).toList();
-      print('Units ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
-    }
-    if (selectedAreas.isNotEmpty) {
-      filteredList = filteredList.where((p0) => selectedAreas.contains(p0.area)).toList();
-      print('Area ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
-    }
-    if (duration > 0) {
-      filteredList = filteredList.where((p0) => p0.rera.isBefore(DateTime.now().add(Duration(days: duration * 35)))).toList();
-      print('Date Time ${filteredList.length} $duration');
-      filteredList.forEach((element) {
-        print(element.rera.isBefore(DateTime.now().add(Duration(days: duration * 35))));
-      });
-    }
-    update();
-  }
+  // void filterData(
+  //     {var startingBudget,
+  //     var endingBudget,
+  //     var amenities,
+  //     var startingCA,
+  //     var endingCA,
+  //     required List<double> selectedUnits,
+  //     required List<String> selectedAreas,
+  //     var duration}) async {
+  //   filteredList = units;
+  //   if (startingBudget != null) {
+  //     filteredList = filteredList.where((p0) => p0.price >= startingBudget).toList();
+  //     print('starting ${filteredList.length}');
+  //     filteredList.forEach((element) {
+  //       print(element.toMap());
+  //     });
+  //   }
+  //   if (endingBudget != null) {
+  //     filteredList = filteredList.where((p0) => p0.price <= endingBudget).toList();
+  //     print('Ending ${filteredList.length}');
+  //     filteredList.forEach((element) {
+  //       print(element.toMap());
+  //     });
+  //   }
+  //   if (startingCA != null) {
+  //     filteredList = filteredList.where((p0) => p0.carpetArea >= startingCA).toList();
+  //     print('starting ${filteredList.length}');
+  //     filteredList.forEach((element) {
+  //       print(element.toMap());
+  //     });
+  //   }
+  //   if (endingCA != null) {
+  //     filteredList = filteredList.where((p0) => p0.carpetArea <= endingCA).toList();
+  //     print('Ending ${filteredList.length}');
+  //     filteredList.forEach((element) {
+  //       print(element.toMap());
+  //     });
+  //   }
+  //   if (amenities != null) {
+  //     filteredList = filteredList.where((p0) => getAmenitiesNumebr(p0.amenities) >= amenities).toList();
+  //     print('Amenities ${filteredList.length}');
+  //     filteredList.forEach((element) {
+  //       print(element.toMap());
+  //     });
+  //   }
+  //   if (selectedUnits.isNotEmpty) {
+  //     filteredList = filteredList.where((p0) => selectedUnits.contains(p0.unit)).toList();
+  //     print('Units ${filteredList.length}');
+  //     filteredList.forEach((element) {
+  //       print(element.toMap());
+  //     });
+  //   }
+  //   if (selectedAreas.isNotEmpty) {
+  //     filteredList = filteredList.where((p0) => selectedAreas.contains(p0.area)).toList();
+  //     print('Area ${filteredList.length}');
+  //     filteredList.forEach((element) {
+  //       print(element.toMap());
+  //     });
+  //   }
+  //   if (duration > 0) {
+  //     filteredList = filteredList.where((p0) => p0.rera.isBefore(DateTime.now().add(Duration(days: duration * 35)))).toList();
+  //     print('Date Time ${filteredList.length} $duration');
+  //     filteredList.forEach((element) {
+  //       print(element.rera.isBefore(DateTime.now().add(Duration(days: duration * 35))));
+  //     });
+  //   }
+  //   update();
+  // }
 }
 
 class SearchFilterController extends GetxController {
@@ -133,6 +175,7 @@ class SearchFilterController extends GetxController {
   RangeValues budgetRange = RangeValues(3500000, 30000000);
   RangeValues carpetAreaRange = RangeValues(300, 5000);
   late SearchFilter searchFilter;
+  List<RecommendedUnit> recommendedUnit = [];
   List<DropdownMenuItem<int>> durations = [
     DropdownMenuItem(
       child: Text('Ready To Move'),
@@ -360,10 +403,15 @@ class SearchFilterController extends GetxController {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: a);
-    Get.defaultDialog(content: Text(responce.body));
-    print(responce.body);
-    print(responce.statusCode);
-    print(a);
+    Get.defaultDialog(
+        content: TextField(
+      controller: TextEditingController(text: responce.body),
+    ));
+    recommendedUnit = recommendedUnitFromJson(responce.body);
+    // print(responce.body);
+    // print(responce.statusCode);
+    // print(a);
+    update();
   }
 
   @override

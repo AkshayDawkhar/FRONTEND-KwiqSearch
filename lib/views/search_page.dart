@@ -43,7 +43,7 @@ class SearchPage extends StatelessWidget {
       ),
       body: LiquidPullToRefresh(
         showChildOpacityTransition: false,
-        onRefresh: () => SearchUnitController().init(),
+        onRefresh: () async => searchFilterController.onInit(),
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Column(
@@ -68,7 +68,7 @@ class SearchPage extends StatelessWidget {
                                         height: 500,
                                         searchable: true,
                                         items:
-                                            controller.areas /*places.map((e) => MultiSelectItem(e.toLowerCase().replaceAll(" ", ''), e)).toList()*/,
+                                        controller.areas /*places.map((e) => MultiSelectItem(e.toLowerCase().replaceAll(" ", ''), e)).toList()*/,
                                         initialValue: controller.selectedAreas,
                                         onConfirm: (values) {
                                           controller.updateSelectedAreas(values);
@@ -130,14 +130,14 @@ class SearchPage extends StatelessWidget {
                                 },
                                 child: Text('possession'),
                               )*/
-                                  DropdownButtonFormField(
-                                      value: controller.selectedDurations,
-                                      items: controller.durations,
-                                      decoration: InputDecoration(
-                                          labelText: 'Possession', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
-                                      onChanged: (value) {
-                                        controller.updateSelectedDurations(value!);
-                                      }),
+                              DropdownButtonFormField(
+                                  value: controller.selectedDurations,
+                                  items: controller.durations,
+                                  decoration: InputDecoration(
+                                      labelText: 'Possession', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                                  onChanged: (value) {
+                                    controller.updateSelectedDurations(value!);
+                                  }),
                             ),
                             SizedBox(width: 10),
                             Expanded(
@@ -145,7 +145,7 @@ class SearchPage extends StatelessWidget {
                                   value: controller.selectedAmenities,
                                   items: controller.amenities,
                                   decoration:
-                                      InputDecoration(labelText: 'Amenities', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                                  InputDecoration(labelText: 'Amenities', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
                                   onChanged: (value) {
                                     controller.updateSelectedAmenities(value!);
                                   }) /*ElevatedButton(
@@ -223,10 +223,10 @@ class SearchPage extends StatelessWidget {
                 // controller.fetchUnits();
                 return ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: controller.filteredList.length,
+                    itemCount: controller.recommendedUnit.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
-                      Unit unit = controller.filteredList.elementAt(index);
+                      RecommendedUnit unit = controller.recommendedUnit.elementAt(index);
                       // print(unit.toMap());
                       return Container(
                           decoration: BoxDecoration(
@@ -237,6 +237,7 @@ class SearchPage extends StatelessWidget {
                           child: ListTile(
                             onTap: () {
                               // Get.dialog(entryDialog(entry));
+                              Get.toNamed('/project', parameters: {"project_id": unit.projectId.toString()});
                             },
 // style: ListTileStyle.drawer,
 // dense: true,
@@ -249,7 +250,8 @@ class SearchPage extends StatelessWidget {
                               ],
                             ),
                             subtitle: Text(
-                                '${unitToName(unit.unit)}       ${unit.carpetArea} sqft\n${monthDate(unit.rera)}                     | ₹ ${numberToLCr(unit.price.toDouble())}'),
+                                '${unitToName(unit.unit)}       ${unit.carpetArea} sqft\n${monthDate(
+                                    unit.rera)}                     | ₹ ${numberToLCr(unit.price.toDouble())} - ${unit.rating}'),
                             isThreeLine: true,
 //                         trailing: Icon(
 //                           Icons.arrow_forward_ios_outlined,
@@ -271,7 +273,7 @@ class SearchPage extends StatelessWidget {
           FloatingActionButton(
             heroTag: null,
             onPressed: () {
-              Get.toNamed('/map', arguments: {"filteredList": searchUnitController.filteredList, "units": searchUnitController.units});
+              // Get.toNamed('/map', arguments: {"filteredList": searchUnitController.filteredList, "units": searchUnitController.units});
             },
             child: Icon(Icons.location_on),
           ),
@@ -281,17 +283,22 @@ class SearchPage extends StatelessWidget {
           FloatingActionButton.extended(
             heroTag: null,
             onPressed: () {
-              searchFilterController.search();
-              searchUnitController.filterData(
-                selectedAreas: searchFilterController.selectedAreas,
-                selectedUnits: searchFilterController.selectedUnits,
-                startingBudget: searchFilterController.budgetRange.start,
-                endingBudget: searchFilterController.budgetRange.end,
-                startingCA: searchFilterController.carpetAreaRange.start,
-                endingCA: searchFilterController.carpetAreaRange.end,
-                amenities: searchFilterController.selectedAmenities,
-                duration: searchFilterController.selectedDurations,
-              );
+              searchUnitController.search(selectedAreas: searchFilterController.selectedAreas,
+                  selectedUnits: searchFilterController.selectedUnits,
+                  selectedDurations: searchFilterController.selectedDurations,
+                  selectedAmenities: searchFilterController.selectedAmenities,
+                  budgetRange: searchFilterController.budgetRange,
+                  carpetAreaRange: searchFilterController.carpetAreaRange);
+              // searchUnitController.filterData(
+              //   selectedAreas: searchFilterController.selectedAreas,
+              //   selectedUnits: searchFilterController.selectedUnits,
+              //   startingBudget: searchFilterController.budgetRange.start,
+              //   endingBudget: searchFilterController.budgetRange.end,
+              //   startingCA: searchFilterController.carpetAreaRange.start,
+              //   endingCA: searchFilterController.carpetAreaRange.end,
+              //   amenities: searchFilterController.selectedAmenities,
+              //   duration: searchFilterController.selectedDurations,
+              // );
             },
             icon: Icon(Icons.search),
             label: Text('Search'),
