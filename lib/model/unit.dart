@@ -4,7 +4,7 @@ class Unit {
   int projectId;
   String projectName;
   String area;
-  DateTime rera;
+  DateTime possession;
   double unit;
   int carpetArea;
   int price;
@@ -16,7 +16,7 @@ class Unit {
     required this.projectId,
     required this.projectName,
     required this.area,
-    required this.rera,
+    required this.possession,
     required this.unit,
     required this.carpetArea,
     required this.price,
@@ -33,7 +33,7 @@ class Unit {
         projectId: json["project_id"],
         projectName: json["project_name"],
         area: json["area"],
-        rera: DateTime.parse(json["rera"]),
+        possession: DateTime.parse(json["possession"]),
         unit: json["unit"]?.toDouble(),
         carpetArea: json["CarpetArea"],
         price: json["price"],
@@ -46,7 +46,7 @@ class Unit {
         "project_id": projectId,
         "project_name": projectName,
         "area": area,
-        "rera": rera.toIso8601String(),
+        "possession": possession.toIso8601String(),
         "unit": unit,
         "CarpetArea": carpetArea,
         "price": price,
@@ -64,7 +64,7 @@ class RecommendedUnit {
   int projectId;
   String projectName;
   String area;
-  DateTime rera;
+  DateTime possession;
   double unit;
   int carpetArea;
   int price;
@@ -77,7 +77,7 @@ class RecommendedUnit {
     required this.projectId,
     required this.projectName,
     required this.area,
-    required this.rera,
+    required this.possession,
     required this.unit,
     required this.carpetArea,
     required this.price,
@@ -91,7 +91,7 @@ class RecommendedUnit {
         projectId: json["project_id"],
         projectName: json["project_name"],
         area: json["area"],
-        rera: DateTime.parse(json["rera"]),
+        possession: DateTime.parse(json["possession"]),
         unit: json["unit"]?.toDouble(),
         carpetArea: json["CarpetArea"],
         price: json["price"],
@@ -105,7 +105,7 @@ class RecommendedUnit {
         "project_id": projectId,
         "project_name": projectName,
         "area": area,
-        "rera": rera.toIso8601String(),
+        "possession": possession.toIso8601String(),
         "unit": unit,
         "CarpetArea": carpetArea,
         "price": price,

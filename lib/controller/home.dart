@@ -109,10 +109,10 @@ class UnitController extends GetxController {
       });
     }
     if (duration > 0) {
-      filteredList = filteredList.where((p0) => p0.rera.isBefore(DateTime.now().add(Duration(days: duration * 35)))).toList();
+      filteredList = filteredList.where((p0) => p0.possession.isBefore(DateTime.now().add(Duration(days: duration * 35)))).toList();
       print('Date Time ${filteredList.length} $duration');
       filteredList.forEach((element) {
-        print(element.rera.isBefore(DateTime.now().add(Duration(days: duration * 35))));
+        print(element.possession.isBefore(DateTime.now().add(Duration(days: duration * 35))));
       });
     }
     update();
