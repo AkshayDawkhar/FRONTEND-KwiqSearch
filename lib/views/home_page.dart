@@ -6,12 +6,7 @@ import 'package:takeahome/constants.dart';
 import 'package:takeahome/controller/home.dart';
 import 'package:takeahome/model/unit.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
+class HomePage extends StatelessWidget {
   UnitController unitController = Get.put(UnitController());
 
   FilterController filterController = Get.put(FilterController());
@@ -37,7 +32,6 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Home'),
         actions: [
-          
           IconButton(
               onPressed: () {
                 Get.toNamed('/clients/add');
@@ -48,9 +42,11 @@ class _HomePageState extends State<HomePage> {
                 Get.toNamed('/notifications');
               },
               icon: Icon(Icons.notifications)),
-          IconButton(onPressed: (){
-            filterController.setDefault();
-          }, icon: Icon(Icons.close))
+          IconButton(
+              onPressed: () {
+                filterController.setDefault();
+              },
+              icon: Icon(Icons.close))
           // PopupMenuButton(itemBuilder: (context) {
           //   return [
           //     PopupMenuItem<int>(
@@ -90,8 +86,8 @@ class _HomePageState extends State<HomePage> {
       body: LiquidPullToRefresh(
         showChildOpacityTransition: false,
         onRefresh: () async {
-           unitController.init();
-           filterController.onInit();
+          unitController.init();
+          filterController.onInit();
         },
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
@@ -268,49 +264,52 @@ class _HomePageState extends State<HomePage> {
               ),
               GetBuilder<UnitController>(builder: (controller) {
                 // controller.fetchUnits();
-                return ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: controller.filteredList.length,
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      Unit unit = controller.filteredList.elementAt(index);
-                      // print(unit.toMap());
-                      return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: primaryColor200,
-                          ),
-                          margin: EdgeInsets.all(6),
-                          child: ListTile(
-                            onTap: () {
-                              // Get.dialog(entryDialog(entry));
-                            },
+                print(controller.isLoad);
+                return controller.isLoad
+                    ? ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.filteredList.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          Unit unit = controller.filteredList.elementAt(index);
+                          // print(unit.toMap());
+                          return Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: primaryColor200,
+                              ),
+                              margin: EdgeInsets.all(6),
+                              child: ListTile(
+                                onTap: () {
+                                  // Get.dialog(entryDialog(entry));
+                                },
 // style: ListTileStyle.drawer,
 // dense: true,
-                            leading: Icon(Icons.location_on),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('${unit.projectName}'),
-                                Text('${unit.area}'),
-                              ],
-                            ),
-                            subtitle: Text(
-                                '${unitToName(unit.unit)}       ${unit.carpetArea} sqft\n${monthDate(unit.possession)}                     | ₹ ${numberToLCr(unit.price.toDouble())}'),
-                            isThreeLine: true,
+                                leading: Icon(Icons.location_on),
+                                title: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${unit.projectName}'),
+                                    Text('${unit.area}'),
+                                  ],
+                                ),
+                                subtitle: Text(
+                                    '${unitToName(unit.unit)}       ${unit.carpetArea} sqft\n${monthDate(unit.possession)}                     | ₹ ${numberToLCr(unit.price.toDouble())}'),
+                                isThreeLine: true,
 //                         trailing: Icon(
 //                           Icons.arrow_forward_ios_outlined,
 // // color: Colors.redAccent,
 //                         ),
-                          ));
-                      // return Text(dummyFlats.elementAt(index).name);
-                    });
+                              ));
+                          // return Text(dummyFlats.elementAt(index).name);
+                        })
+                    : CircularProgressIndicator();
               })
             ],
           ),
         ),
       ),
-      bottomNavigationBar: bottomNavigationBar(index: 0,off: false),
+      bottomNavigationBar: bottomNavigationBar(index: 0, off: false),
       floatingActionButton: Column(
         // mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
@@ -346,7 +345,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-
     );
   }
 }

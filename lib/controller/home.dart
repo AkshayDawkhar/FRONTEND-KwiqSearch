@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,7 @@ class UnitController extends GetxController {
   // RxList to store the list of units
   RxList<Unit> units = RxList<Unit>();
   List<Unit> filteredList = [];
+  bool isLoad = false;
 
   @override
   void onInit() {
@@ -31,6 +33,8 @@ class UnitController extends GetxController {
 
   // Function to fetch the JSON data and update the units list
   Future<void> fetchUnits() async {
+    isLoad = false;
+    update();
     try {
       // Replace the URL below with the actual API endpoint that provides the JSON data
       final response = await http.get(Uri.parse('$HOSTNAME/home/projects/'));
@@ -46,18 +50,30 @@ class UnitController extends GetxController {
       // If an exception occurs, print the error message
       print('Error fetching units: $e');
     }
+    isLoad = true;
     update();
   }
 
-  void filterData(
-      {var startingBudget,
-      var endingBudget,
-      var amenities,
-      var startingCA,
-      var endingCA,
-      required List<double> selectedUnits,
-      required List<String> selectedAreas,
-      var duration}) async {
+  // forLoops() async {
+  //   final ReceivePort receivePort = ReceivePort();
+  //   try {
+  //     await Isolate.spawn((message) {
+  //       for (int i = 0; i < 9999999999; i++) {}
+  //       print("done")
+  //     }, message)
+  //   } catch (Ex) {
+  //
+  //   }
+  // }
+
+  void filterData({var startingBudget,
+    var endingBudget,
+    var amenities,
+    var startingCA,
+    var endingCA,
+    required List<double> selectedUnits,
+    required List<String> selectedAreas,
+    var duration}) async {
     filteredList = units;
     if (startingBudget != null) {
       filteredList = filteredList.where((p0) => p0.price >= startingBudget).toList();
@@ -170,7 +186,8 @@ class FilterController extends GetxController {
     DropdownMenuItem(child: Text('Basic Amenities'), value: 1),
     DropdownMenuItem(child: Text('No Amenities'), value: 0),
   ];
-  void setDefault(){
+
+  void setDefault() {
     selectedAreas = [];
     selectedUnits = [];
     selectedDurations = 0;
@@ -180,6 +197,7 @@ class FilterController extends GetxController {
     carpetAreaRange = RangeValues(300, 5000);
     update();
   }
+
   void updateSelectedAreas(List<String> selected) {
     selectedAreas = selected;
     update(); // Manually notify the UI to update
@@ -236,10 +254,11 @@ class FilterController extends GetxController {
     );
     List a = json.decode(responce.body);
     areas = a
-        .map((e) => MultiSelectItem(
-              e['formatted_version'].toString(),
-              e['name'],
-            ))
+        .map((e) =>
+        MultiSelectItem(
+          e['formatted_version'].toString(),
+          e['name'],
+        ))
         .toList();
     print(areas);
     update();
@@ -276,6 +295,7 @@ class FilterController extends GetxController {
     print(responce.statusCode);
     print(a);
   }
+
   @override
   void onInit() {
     // TODO: implement onInit

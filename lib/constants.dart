@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-String HOSTNAME = 'http://192.168.1.36:8000';
+String HOSTNAME = 'http://192.168.1.34:8000';
 String DEPLOY = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
 String LOCAL = 'http://192.168.1.36:8000';
 
