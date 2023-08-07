@@ -5,13 +5,13 @@ import 'package:takeahome/views/client/add.dart';
 import 'package:takeahome/views/client/client_page.dart';
 import 'package:takeahome/views/client/clients.dart';
 import 'package:takeahome/views/home_page.dart';
-import 'package:takeahome/views/interested.dart';
+import 'package:takeahome/views/project/interested.dart';
 import 'package:takeahome/views/map_page.dart';
 import 'package:takeahome/views/notifications.dart';
 import 'package:takeahome/views/project/add.dart';
 import 'package:takeahome/views/project/project_page.dart';
 import 'package:takeahome/views/project/projects.dart';
-import 'package:takeahome/views/search_page.dart';
+import 'package:takeahome/views/client/search_page.dart';
 
 void main() {
   runApp(const MyApp());
