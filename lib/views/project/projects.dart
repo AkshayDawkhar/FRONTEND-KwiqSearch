@@ -40,6 +40,8 @@ class ProjectsPage extends StatelessWidget {
           },
           label: Text('Project'),
           icon: Icon(Icons.add)),
+      bottomNavigationBar: bottomNavigationBar(index: 1,off: false),
+
     );
   }
 

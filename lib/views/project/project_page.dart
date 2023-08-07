@@ -723,6 +723,8 @@ class ProjectPage extends StatelessWidget {
         icon: const Icon(Icons.save),
         label: const Text('Save'),
       ),
+      bottomNavigationBar: bottomNavigationBar(index: 1,off: true),
+
     );
   }
 }

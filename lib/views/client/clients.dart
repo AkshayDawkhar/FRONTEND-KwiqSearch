@@ -37,6 +37,8 @@ class ClientsPage extends StatelessWidget {
           },
           label: Text('Client'),
           icon: Icon(Icons.add)),
+      bottomNavigationBar: bottomNavigationBar(index: 2,off: false),
+
     );
   }
 

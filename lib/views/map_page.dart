@@ -44,10 +44,16 @@ class _MapPageState extends State<MapPage> {
           markerId: MarkerId('2'),
           position: LatLng(unit.latitude, unit.longitude),
           infoWindow: InfoWindow(
-              title: '${unit.projectName}',
-              snippet: '${unitToName(unit.unit)}',
+              title: '${unit.projectName}hii',
+              snippet: '${unitToName(unit.unit)}name name name name name ',
               onTap: () {
-                Get.offNamed('/');
+                // Get.offNamed('/home');
+                Get.dialog(AlertDialog(title: Text('name'),));
+                // showBottomSheet(
+                //     context: context,
+                //     builder: (q) {
+                //       return Text('name');
+                //     });
               }),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan)));
     }
@@ -57,10 +63,15 @@ class _MapPageState extends State<MapPage> {
         markerId: MarkerId('1'),
         position: LatLng(unit.latitude, unit.longitude),
         infoWindow: InfoWindow(
-            title: '${unit.projectName}}',
-            snippet: '${unitToName(unit.unit)}',
+            title: '${unit.projectName}',
+            snippet: '${unitToName(unit.unit)}name name name name',
             onTap: () {
-              Get.offNamed('/');
+              // Get.offNamed('/home');
+              showBottomSheet(
+                  context: context,
+                  builder: (q) {
+                    return Text('name');
+                  });
             }),
       ));
     }
@@ -88,10 +99,12 @@ class _MapPageState extends State<MapPage> {
       //   label: const Text('To the lake!'),
       //   icon: const Icon(Icons.directions_boat),
       // ),
+      bottomNavigationBar: bottomNavigationBar(index: 0,off: true),
+
     );
   }
 
-   // OSMFlutter(
+// OSMFlutter(
 //   controller: mapController,
 //   mapIsLoading: Center(
 //     child: CircularProgressIndicator(),
@@ -275,3 +288,11 @@ class _MapPageState extends State<MapPage> {
 //     );
 //   }
 // }
+class MapDialog extends StatelessWidget {
+  const MapDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(title: Text('projectname'),);
+  }
+}

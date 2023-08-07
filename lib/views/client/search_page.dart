@@ -251,7 +251,7 @@ class SearchPage extends StatelessWidget {
                             ),
                             subtitle: Text(
                                 '${unitToName(unit.unit)}       ${unit.carpetArea} sqft\n${monthDate(
-                                    unit.rera)}                     | ₹ ${numberToLCr(unit.price.toDouble())} - ${unit.rating}'),
+                                    unit.possession)}                     | ₹ ${numberToLCr(unit.price.toDouble())} - ${unit.rating}'),
                             isThreeLine: true,
 //                         trailing: Icon(
 //                           Icons.arrow_forward_ios_outlined,
@@ -305,7 +305,7 @@ class SearchPage extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: bottomNavigationBar(index: 0,off: true),
+      bottomNavigationBar: bottomNavigationBar(index: 2,off: true),
 
     );
   }

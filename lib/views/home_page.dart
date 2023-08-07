@@ -304,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                             subtitle: Text(
-                                '${unitToName(unit.unit)}       ${unit.carpetArea} sqft\n${monthDate(unit.rera)}                     | ₹ ${numberToLCr(unit.price.toDouble())}'),
+                                '${unitToName(unit.unit)}       ${unit.carpetArea} sqft\n${monthDate(unit.possession)}                     | ₹ ${numberToLCr(unit.price.toDouble())}'),
                             isThreeLine: true,
 //                         trailing: Icon(
 //                           Icons.arrow_forward_ios_outlined,
@@ -318,6 +318,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+      bottomNavigationBar: bottomNavigationBar(index: 0,off: false),
       floatingActionButton: Column(
         // mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
@@ -353,6 +354,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+
     );
   }
 }

@@ -5,13 +5,9 @@ import 'package:takeahome/controller/home.dart';
 import '../../constants.dart';
 import '../../controller/add_client.dart';
 
-class AddClientPage extends StatefulWidget {
-  @override
-  _AddClientPageState createState() => _AddClientPageState();
-}
-
-class _AddClientPageState extends State<AddClientPage> {
+class AddClientPage extends StatelessWidget {
   var newClientController = Get.put(NewClientController());
+
   var filterController= Get.put(FilterController());
 
   @override
@@ -88,7 +84,7 @@ class _AddClientPageState extends State<AddClientPage> {
                 fixedContainer(
                   child: TextFormField(
                       controller: controller.messageController,
-                      decoration: inputDecoration('Phone Number'),
+                      decoration: inputDecoration('WhatsApp Number'),
                       validator: (value) {
                         if (!validPhoneNumberRegExp.hasMatch(value!)) {
                           return 'Please enter a valid 10-digit phone number';
@@ -131,21 +127,10 @@ class _AddClientPageState extends State<AddClientPage> {
         label: Text('Save'),
         icon: Icon(Icons.done),
       ),
+      bottomNavigationBar: bottomNavigationBar(index: 2,off: true),
+
     );
   }
-
-// void saveForm() {
-//   // Implement your save logic here
-//   // Access form field values using the respective controllers:
-//   final firstName = controller.firstNameController.text;
-//   final lastName = controller.lastNameController.text;
-//   final email = controller.emailController.text;
-//   final phone = controller.phoneController.text;
-//   final message = controller.messageController.text;
-//
-//   // Save data or navigate back
-//   // ...
-// }
 }
 
 Container fixedContainer({required Widget child}) => Container(

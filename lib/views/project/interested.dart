@@ -4,8 +4,8 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:takeahome/constants.dart';
 import 'package:takeahome/model/intrested.dart';
 
-import '../controller/interested.dart';
-import '../model/add_project.dart';
+import '../../controller/interested.dart';
+import '../../model/add_project.dart';
 
 class InterestedPage extends StatelessWidget {
   var interestedController = Get.put(InterestedController(projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
@@ -50,7 +50,7 @@ class InterestedPage extends StatelessWidget {
                 ],
               )),
         ),
-        bottomNavigationBar: bottomNavigationBar(index: 0,off: true),
+        bottomNavigationBar: bottomNavigationBar(index: 1,off: true),
 
       );
     });
