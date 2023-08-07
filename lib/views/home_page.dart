@@ -37,21 +37,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Home'),
         actions: [
-          HOSTNAME == LOCAL
-              ? IconButton(
-                  onPressed: () {
-                    // Get.toNamed('/clients/add');
-                    HOSTNAME = DEPLOY;
-                    setState(() {});
-                  },
-                  icon: Icon(Icons.cloud))
-              : IconButton(
-                  onPressed: () {
-                    // Get.toNamed('/clients/add');
-                    HOSTNAME = LOCAL;
-                    setState(() {});
-                  },
-                  icon: Icon(Icons.wifi)),
+          
           IconButton(
               onPressed: () {
                 Get.toNamed('/clients/add');
@@ -62,45 +48,51 @@ class _HomePageState extends State<HomePage> {
                 Get.toNamed('/notifications');
               },
               icon: Icon(Icons.notifications)),
-          PopupMenuButton(itemBuilder: (context) {
-            return [
-              PopupMenuItem<int>(
-                value: 0,
-                child: ListTile(
-                  leading: Icon(Icons.person),
-                  // iconColor: Colors.blueAccent,
-                  // textColor: Colors.blueAccent,
-                  title: Text('Clients'),
-                ),
-              ),
-              PopupMenuItem<int>(
-                value: 1,
-                child: ListTile(
-                  leading: Icon(Icons.home_work),
-                  // iconColor: Colors.greenAccent,
-                  // textColor: Colors.greenAccent,
-                  title: Text('Projects'),
-                ),
-              ),
-            ];
-          }, onSelected: (value) {
-            if (value == 0) {
-              Get.toNamed('/clients');
-              // print("Done");
-            } else if (value == 1) {
-              Get.toNamed('/projects');
-              // print("Work");
-            } else if (value == 2) {
-              print("Delete");
-            }
-          })
+          IconButton(onPressed: (){
+            filterController.setDefault();
+          }, icon: Icon(Icons.close))
+          // PopupMenuButton(itemBuilder: (context) {
+          //   return [
+          //     PopupMenuItem<int>(
+          //       value: 0,
+          //       child: ListTile(
+          //         leading: Icon(Icons.person),
+          //         // iconColor: Colors.blueAccent,
+          //         // textColor: Colors.blueAccent,
+          //         title: Text('Clients'),
+          //       ),
+          //     ),
+          //     PopupMenuItem<int>(
+          //       value: 1,
+          //       child: ListTile(
+          //         leading: Icon(Icons.home_work),
+          //         // iconColor: Colors.greenAccent,
+          //         // textColor: Colors.greenAccent,
+          //         title: Text('Projects'),
+          //       ),
+          //     ),
+          //   ];
+          // }, onSelected: (value) {
+          //   if (value == 0) {
+          //     Get.toNamed('/clients');
+          //     // print("Done");
+          //   } else if (value == 1) {
+          //     Get.toNamed('/projects');
+          //     // print("Work");
+          //   } else if (value == 2) {
+          //     print("Delete");
+          //   }
+          // })
         ],
         // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // backgroundColor: Colors.,
       ),
       body: LiquidPullToRefresh(
         showChildOpacityTransition: false,
-        onRefresh: () => unitController.init(),
+        onRefresh: () async {
+           unitController.init();
+           filterController.onInit();
+        },
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Column(

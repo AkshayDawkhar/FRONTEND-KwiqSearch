@@ -170,7 +170,16 @@ class FilterController extends GetxController {
     DropdownMenuItem(child: Text('Basic Amenities'), value: 1),
     DropdownMenuItem(child: Text('No Amenities'), value: 0),
   ];
-
+  void setDefault(){
+    selectedAreas = [];
+    selectedUnits = [];
+    selectedDurations = 0;
+    selectedAmenities = 0;
+    dateTime = DateTime.now();
+    budgetRange = RangeValues(3500000, 30000000);
+    carpetAreaRange = RangeValues(300, 5000);
+    update();
+  }
   void updateSelectedAreas(List<String> selected) {
     selectedAreas = selected;
     update(); // Manually notify the UI to update
