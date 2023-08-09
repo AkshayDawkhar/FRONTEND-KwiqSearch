@@ -10,7 +10,8 @@ class AddProject extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget myContainer(int index) {
-      return fixedContainer(
+      return Container(
+        margin: EdgeInsets.symmetric(vertical: 12, horizontal: 3),
         child: Row(
           children: [
             Expanded(
@@ -26,6 +27,7 @@ class AddProject extends StatelessWidget {
                   value: newProductController.bhk.text == null ? null : null,
                   hint: const Text('BHK'),
                   items: bhks,
+                  style: TextStyle(overflow: TextOverflow.fade, color: Colors.black),
                   onChanged: (value) {
                     newProductController.units.elementAt(index)['unit']!.text = value.toString();
                   }),
@@ -154,6 +156,17 @@ class AddProject extends StatelessWidget {
                         }
                         return null;
                       },
+                      decoration: inputDecoration('Nearing Landmark'),
+                      controller: controller.landmark,
+                    )),
+                    fixedContainer(
+                        child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Enter something";
+                        }
+                        return null;
+                      },
                       decoration: inputDecoration('Project Name'),
                       controller: controller.projectName,
                     )),
@@ -201,17 +214,6 @@ class AddProject extends StatelessWidget {
                       controller: controller.landParcel,
                     )),
                     fixedContainer(
-                        child: TextFormField(
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Enter something";
-                        }
-                        return null;
-                      },
-                      decoration: inputDecoration('Nearing Landmark'),
-                      controller: controller.landmark,
-                    )),
-                    fixedContainer(
                       child: DropdownButtonFormField(
                           validator: (value) {
                             if (value == null) {
@@ -231,38 +233,6 @@ class AddProject extends StatelessWidget {
                             controller.areaIn.text = value!;
                           }),
                     ),
-                    fixedContainer(
-                      child: DropdownButtonFormField(
-                          validator: (value) {
-                            if (value == null) {
-                              return "Enter something";
-                            }
-                            return null;
-                          },
-                          decoration: inputDecoration('Water Supply'),
-                          hint: const Text('Water Supply'),
-                          items: waterConnection
-                              .map((e) => DropdownMenuItem(
-                                    child: Text(e),
-                                    value: e.toLowerCase(),
-                                  ))
-                              .toList(),
-                          onChanged: (value) {
-                            controller.waterSupply.text = value!;
-                          }),
-                    ),
-                    fixedContainer(
-                        child: TextFormField(
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Enter something";
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: inputDecoration('Lifts'),
-                      controller: controller.lifts,
-                    )),
                     fixedContainer(
                         child: TextFormField(
                       validator: (value) {
@@ -322,6 +292,151 @@ class AddProject extends StatelessWidget {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    Divider(),
+                    Text('Unit configurations'),
+                    Container(
+                      decoration: BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(12)),
+                      margin: EdgeInsets.all(4),
+                      child: Column(
+                        children: [
+                          ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: controller.units.length,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                return myContainer(index);
+                              }),
+                          fixedContainer(
+                              child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Add units'),
+                              Row(
+                                // mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        controller.removeUnit();
+                                      },
+                                      icon: const Icon(Icons.remove)),
+                                  IconButton(
+                                      onPressed: () {
+                                        controller.addUnit();
+                                      },
+                                      icon: const Icon(Icons.add)),
+                                ],
+                              ),
+                            ],
+                          )),
+                        ],
+                      ),
+                    ),
+                    Divider(),
+                    fixedContainer(
+                        child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Enter something";
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: inputDecoration('Lifts'),
+                      controller: controller.lifts,
+                    )),
+                    fixedContainer(
+                      child: DropdownButtonFormField(
+                          validator: (value) {
+                            if (value == null) {
+                              return "Enter something";
+                            }
+                            return null;
+                          },
+                          decoration: inputDecoration('Amenities'),
+                          value: controller.amenities.text == null ? null : null,
+                          hint: const Text('Amenities'),
+                          items: amenities.map((e) => DropdownMenuItem(value: e.toLowerCase(), child: Text(e))).toList(),
+                          onChanged: (value) {
+                            controller.amenities.text = value.toString();
+                          }),
+                    ),
+                    fixedContainer(
+                      child: DropdownButtonFormField(
+                          validator: (value) {
+                            if (value == null) {
+                              return "Enter something";
+                            }
+                            return null;
+                          },
+                          decoration: inputDecoration('Parking'),
+                          value: controller.parking.text == null ? null : null,
+                          hint: const Text('Parking'),
+                          items: parking.map((e) => DropdownMenuItem(value: e.toLowerCase(), child: Text(e))).toList(),
+                          onChanged: (value) {
+                            controller.parking.text = value.toString();
+                          }),
+                    ),
+                    CheckboxListTile(
+                      value: controller.transport,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged: (value) {
+                        controller.setTransport(value!);
+                      },
+                      secondary: const Icon(Icons.directions_bus_sharp),
+                      title: const Text('Public Transport'),
+                    ),
+                    CheckboxListTile(
+                      value: controller.power,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged: (value) {
+                        controller.setPower(value!);
+                      },
+                      secondary: const Icon(Icons.power),
+                      title: const Text('Power Backup (Full Building Back up)'),
+                    ),
+                    CheckboxListTile(
+                      value: controller.goods,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      secondary: const Icon(Icons.grid_on_outlined),
+                      onChanged: (value) {
+                        controller.setGoods(value!);
+                      },
+                      // secondary: Icon(Icons.),
+                      title: const Text('White Goods'),
+                    ),
+                    fixedContainer(
+                      child: DropdownButtonFormField(
+                          validator: (value) {
+                            if (value == null) {
+                              return "Enter something";
+                            }
+                            return null;
+                          },
+                          decoration: inputDecoration('Water Supply'),
+                          hint: const Text('Water Supply'),
+                          items: waterConnection
+                              .map((e) => DropdownMenuItem(
+                                    child: Text(e),
+                                    value: e.toLowerCase(),
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            controller.waterSupply.text = value!;
+                          }),
+                    ),
+                    fixedContainer(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Enter something";
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(labelText: 'Market Value', border: OutlineInputBorder(), suffixText: 'Cr'),
+                        controller: controller.marketValue,
                       ),
                     ),
                     CheckboxListTile(
@@ -422,64 +537,30 @@ class AddProject extends StatelessWidget {
                             ),
                           ),
                     fixedContainer(
-                      child: DropdownButtonFormField(
-                          validator: (value) {
-                            if (value == null) {
-                              return "Enter something";
-                            }
-                            return null;
-                          },
-                          decoration: inputDecoration('Amenities'),
-                          value: controller.amenities.text == null ? null : null,
-                          hint: const Text('Amenities'),
-                          items: amenities.map((e) => DropdownMenuItem(value: e.toLowerCase(), child: Text(e))).toList(),
-                          onChanged: (value) {
-                            controller.amenities.text = value.toString();
-                          }),
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Enter something";
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                        decoration: inputDecoration('CP brokerage '),
+                        controller: controller.brokerage,
+                      ),
                     ),
                     fixedContainer(
-                      child: DropdownButtonFormField(
-                          validator: (value) {
-                            if (value == null) {
-                              return "Enter something";
-                            }
-                            return null;
-                          },
-                          decoration: inputDecoration('Parking'),
-                          value: controller.parking.text == null ? null : null,
-                          hint: const Text('Parking'),
-                          items: parking.map((e) => DropdownMenuItem(value: e.toLowerCase(), child: Text(e))).toList(),
-                          onChanged: (value) {
-                            controller.parking.text = value.toString();
-                          }),
-                    ),
-                    CheckboxListTile(
-                      value: controller.transport,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      onChanged: (value) {
-                        controller.setTransport(value!);
-                      },
-                      secondary: const Icon(Icons.directions_bus_sharp),
-                      title: const Text('Public Transport'),
-                    ),
-                    CheckboxListTile(
-                      value: controller.power,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      onChanged: (value) {
-                        controller.setPower(value!);
-                      },
-                      secondary: const Icon(Icons.power),
-                      title: const Text('Power Backup (Full Building Back up)'),
-                    ),
-                    CheckboxListTile(
-                      value: controller.goods,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      secondary: const Icon(Icons.grid_on_outlined),
-                      onChanged: (value) {
-                        controller.setGoods(value!);
-                      },
-                      // secondary: Icon(Icons.),
-                      title: const Text('White Goods'),
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Enter something";
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                        decoration: inputDecoration('executive incentive'),
+                        controller: controller.incentive,
+                      ),
                     ),
                     fixedContainer(
                       child: Row(
@@ -518,75 +599,7 @@ class AddProject extends StatelessWidget {
                         ],
                       ),
                     ),
-                    fixedContainer(
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Enter something";
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(labelText: 'Market Value', border: OutlineInputBorder(), suffixText: 'Cr'),
-                        controller: controller.marketValue,
-                      ),
-                    ),
-                    fixedContainer(
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Enter something";
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.number,
-                        decoration: inputDecoration('CP brokerage '),
-                        controller: controller.brokerage,
-                      ),
-                    ),
-                    fixedContainer(
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Enter something";
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.number,
-                        decoration: inputDecoration('executive incentive'),
-                        controller: controller.incentive,
-                      ),
-                    ),
-                    ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: controller.units.length,
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          return myContainer(index);
-                        }),
                     const Divider(),
-                    fixedContainer(
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Add units'),
-                        Row(
-                          // mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                                onPressed: () {
-                                  controller.removeUnit();
-                                },
-                                icon: const Icon(Icons.remove)),
-                            IconButton(
-                                onPressed: () {
-                                  controller.addUnit();
-                                },
-                                icon: const Icon(Icons.add)),
-                          ],
-                        ),
-                      ],
-                    )),
                     fixedContainer(
                       child: Row(
                         children: [
@@ -617,7 +630,7 @@ class AddProject extends StatelessWidget {
                             ),
                           ),
                           IconButton(
-                              onPressed: ()  {
+                              onPressed: () {
                                 controller.setCurrentLocation();
                               },
                               icon: const Icon(Icons.location_searching))
@@ -679,8 +692,7 @@ class AddProject extends StatelessWidget {
         icon: const Icon(Icons.add),
         label: const Text('save'),
       ),
-      bottomNavigationBar: bottomNavigationBar(index: 1,off: true),
-
+      bottomNavigationBar: bottomNavigationBar(index: 1, off: true),
     );
   }
 }
