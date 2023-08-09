@@ -176,6 +176,22 @@ class SearchFilterController extends GetxController {
   RangeValues carpetAreaRange = RangeValues(300, 5000);
   late SearchFilter searchFilter;
   List<RecommendedUnit> recommendedUnit = [];
+  List<MultiSelectItem<double>> bhks = [
+    MultiSelectItem(0.0, 'Plot'),
+    MultiSelectItem(0.1, 'Custom office'),
+    MultiSelectItem(0.2, 'Custom shop'),
+    MultiSelectItem(0.5, 'RK'),
+    MultiSelectItem(1, '1 BHK'),
+    MultiSelectItem(1.5, '1.5 BHK'),
+    MultiSelectItem(2, '2 BHK'),
+    MultiSelectItem(2.5, '2.5 BHK'),
+    MultiSelectItem(3, '3 BHK'),
+    MultiSelectItem(3.5, '3.5 BHK'),
+    MultiSelectItem(4, '4 BHK'),
+    MultiSelectItem(4.5, '4.5 BHK'),
+    MultiSelectItem(5, '5 BHK'),
+    MultiSelectItem(6, '6 BHK'),
+  ];
   List<DropdownMenuItem<int>> durations = [
     DropdownMenuItem(
       child: Text('Ready To Move'),

@@ -12,19 +12,6 @@ class SearchPage extends StatelessWidget {
   SearchFilterController searchFilterController = Get.put(SearchFilterController(id: int.tryParse(Get.parameters['search_filter'] ?? '') ?? 0));
 
   // List<String> amenities = [
-  List<MultiSelectItem<double>> bhks = [
-    MultiSelectItem(0.5, 'RK'),
-    MultiSelectItem(1, '1 BHK'),
-    MultiSelectItem(1.5, '1.5 BHK'),
-    MultiSelectItem(2, '2 BHK'),
-    MultiSelectItem(2.5, '2.5 BHK'),
-    MultiSelectItem(3, '3 BHK'),
-    MultiSelectItem(3.5, '3.5 BHK'),
-    MultiSelectItem(4, '4 BHK'),
-    MultiSelectItem(4.5, '4.5 BHK'),
-    MultiSelectItem(5, '5 BHK'),
-    MultiSelectItem(6, '6 BHK'),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +77,7 @@ class SearchPage extends StatelessWidget {
                                     builder: (ctx) {
                                       return MultiSelectDialog(
                                         height: 500,
-                                        items: bhks,
+                                        items: controller.bhks,
                                         initialValue: controller.selectedUnits,
                                         onConfirm: (values) {
                                           controller.updateSelectedUnits(values);
