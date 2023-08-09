@@ -135,7 +135,7 @@ class HomePage extends StatelessWidget {
                                     builder: (ctx) {
                                       return MultiSelectDialog(
                                         height: 500,
-                                        items: bhks,
+                                        items: controller.bhks,
                                         initialValue: controller.selectedUnits,
                                         onConfirm: (values) {
                                           controller.updateSelectedUnits(values);
