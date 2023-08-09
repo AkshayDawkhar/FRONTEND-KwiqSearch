@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-String HOSTNAME = 'http://192.168.1.34:8000';
+String HOSTNAME = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
 String DEPLOY = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
 String LOCAL = 'http://192.168.1.36:8000';
 
@@ -340,6 +340,7 @@ void getErrorDialog(String data) {
     ],
   ));
 }
+
 class MyRout {
   MyRout({required this.name, required this.url});
 
@@ -354,72 +355,72 @@ List<MyRout> routs = [
 ];
 
 BottomNavigationBar bottomNavigationBar({required int index, required bool off}) => BottomNavigationBar(
-  // type: BottomNavigationBarType.fixed,
-  items: const <BottomNavigationBarItem>[
-    BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: 'Home',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.home_work),
-      label: 'Project',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.person),
-      label: 'Client',
-    ),
-  ],
-  currentIndex: index,
-  // selectedItemColor: Colors.blue,
-  onTap: (index) {
-    if (off) {
-      Get.offAllNamed(routs.elementAt(index).url);
-      // switch (index) {
-      //   case 0:
-      //     Get.offAllNamed(
-      //       '/home',
-      //     );
-      //     break;
-      //   case 1:
-      //     Get.offAllNamed('/service');
-      //     break;
-      //   case 2:
-      //     Get.offAllNamed('/gate');
-      //     break;
-      //   case 3:
-      //     Get.offAllNamed('/water');
-      //     break;
-      //   default:
-      //     print('default');
-      //     break;
-      // }
-    } else {
-      Get.offNamed(routs.elementAt(index).url);
-      //   case 0:
-      //     Get.offNamed(
-      //       '/home',
-      //     );
-      //     break;
-      //   case 1:
-      //     Get.offNamed('/service');
-      //     break;
-      //   case 2:
-      //     Get.offNamed('/gate');
-      //     break;
-      //   case 3:
-      //     Get.offNamed('/water');
-      //     break;
-      //   default:
-      //     print('default');
-      // }
-    }
-  },
-  // onTap: _onItemTapped,
+      // type: BottomNavigationBarType.fixed,
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home_work),
+          label: 'Project',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Client',
+        ),
+      ],
+      currentIndex: index,
+      // selectedItemColor: Colors.blue,
+      onTap: (index) {
+        if (off) {
+          Get.offAllNamed(routs.elementAt(index).url);
+          // switch (index) {
+          //   case 0:
+          //     Get.offAllNamed(
+          //       '/home',
+          //     );
+          //     break;
+          //   case 1:
+          //     Get.offAllNamed('/service');
+          //     break;
+          //   case 2:
+          //     Get.offAllNamed('/gate');
+          //     break;
+          //   case 3:
+          //     Get.offAllNamed('/water');
+          //     break;
+          //   default:
+          //     print('default');
+          //     break;
+          // }
+        } else {
+          Get.offNamed(routs.elementAt(index).url);
+          //   case 0:
+          //     Get.offNamed(
+          //       '/home',
+          //     );
+          //     break;
+          //   case 1:
+          //     Get.offNamed('/service');
+          //     break;
+          //   case 2:
+          //     Get.offNamed('/gate');
+          //     break;
+          //   case 3:
+          //     Get.offNamed('/water');
+          //     break;
+          //   default:
+          //     print('default');
+          // }
+        }
+      },
+      // onTap: _onItemTapped,
 
-  //   items: [
-  // BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-  // // BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
-  // BottomNavigationBarItem(icon: Icon(Icons.handyman_outlined), label: 'Profile'),
-  // BottomNavigationBarItem(icon: Icon(Icons.battery_6_bar_rounded), label: 'Water'),
-  // ]
-);
+      //   items: [
+      // BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+      // // BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
+      // BottomNavigationBarItem(icon: Icon(Icons.handyman_outlined), label: 'Profile'),
+      // BottomNavigationBarItem(icon: Icon(Icons.battery_6_bar_rounded), label: 'Water'),
+      // ]
+    );

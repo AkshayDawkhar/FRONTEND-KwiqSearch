@@ -251,6 +251,7 @@ class EditProjectController extends GetxController {
               'price': TextEditingController(text: (unit['price'] / 100000).toString()),
             })
         .toList();
+    update();
   }
   void deleteClient() async {
     final String url = '$HOSTNAME/client/client/$projectId/';
