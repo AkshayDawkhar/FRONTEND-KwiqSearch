@@ -121,7 +121,7 @@ class ClientController extends GetxController {
     }
   }
   void deleteClient() async {
-    final String url = '$HOSTNAME/home/project/$id/';
+    final String url = '$HOSTNAME/client/client/$id/';
 
     try {
       final response = await http.delete(Uri.parse(url));

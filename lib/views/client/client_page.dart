@@ -22,6 +22,7 @@ class ClientPage extends StatelessWidget {
             PopupMenuButton<String>(
               onSelected: (value) {
                 if (value == 'edit') {
+                  // Get.toNamed('/interested',parameters: {'project_id':editProjectController.projectId.toString()});
                   // Handle edit action here
                   // For example, navigate to edit user screen
                 } else if (value == 'delete') {
@@ -47,11 +48,11 @@ class ClientPage extends StatelessWidget {
               itemBuilder: (BuildContext context) => [
                 PopupMenuItem<String>(
                   value: 'edit',
-                  child: Text('Edit User'),
+                  child: ListTile(leading: Icon(Icons.edit), iconColor: Colors.blueAccent, title: Text('Edit')),
                 ),
                 PopupMenuItem<String>(
                   value: 'delete',
-                  child: Text('Delete User'),
+                  child: ListTile(leading: Icon(Icons.delete), iconColor: Colors.red, title: Text('Delete')),
                 ),
               ],
             ),
