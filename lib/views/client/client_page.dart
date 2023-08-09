@@ -168,7 +168,7 @@ class ClientPage extends StatelessWidget {
                         TextFormField(
                           controller: TextEditingController(text: formatTimeOfDay(controller.time)),
                           onTap: () async {
-                            controller.time = (await showTimePicker(context: context, initialTime: controller.time))!;
+                            controller.getTime((await showTimePicker(context: context, initialTime: controller.time))!);
                             // print(a);
                             // DateTime b = DateTime
                           },
@@ -204,8 +204,7 @@ class ClientPage extends StatelessWidget {
             },
             icon: Icon(Icons.add),
             label: Text('Follow Up')),
-        bottomNavigationBar: bottomNavigationBar(index: 2,off: true),
-
+        bottomNavigationBar: bottomNavigationBar(index: 2, off: true),
       ),
     );
   }
@@ -326,7 +325,7 @@ class ClientPage extends StatelessWidget {
               ),
               IconButton(
                   onPressed: () {
-                    Get.toNamed('/search',parameters: {'search_filter':clientController.client.searchFilter.id.toString()});
+                    Get.toNamed('/search', parameters: {'search_filter': clientController.client.searchFilter.id.toString()});
                   },
                   icon: Icon(Icons.search))
             ],

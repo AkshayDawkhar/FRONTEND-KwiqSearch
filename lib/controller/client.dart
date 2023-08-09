@@ -20,6 +20,10 @@ class CreateFollowUPController extends GetxController {
     // dateController.text = dateToString(dateTime);
     update();
   }
+void getTime(TimeOfDay timeOfDay) async {
+    time = timeOfDay;
+    update();
+  }
 
   void send(int id) async {
     final url = Uri.parse('$HOSTNAME/client/followups/');
