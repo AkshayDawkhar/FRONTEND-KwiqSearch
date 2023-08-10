@@ -79,6 +79,7 @@ class TabControllerExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    HomePage homePage = HomePage();
     return DefaultTabController(
       length: tabs.length,
       // The Builder widget is used to have a different BuildContext to access
@@ -153,11 +154,19 @@ class TabControllerExample extends StatelessWidget {
           // ),
           body: TabBarView(
             children: [
-              HomePage(),
+              homePage,
               ProjectsPage(),
               ClientsPage(),
             ]
           ),
+          floatingActionButton:homePage.floatingActionButton(),
+              // FloatingActionButton(
+              //   heroTag: null,
+              //   onPressed: () {
+              //     Get.toNamed('/map', arguments: {"filteredList": [] , "units": []});
+              //   },
+              //   child: Icon(Icons.location_on),
+              // ),
           bottomNavigationBar: TabBar(
             enableFeedback: true,
             indicatorSize: TabBarIndicatorSize.label,

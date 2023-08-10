@@ -10,7 +10,13 @@ class HomePage extends StatelessWidget {
   UnitController unitController = Get.put(UnitController());
 
   FilterController filterController = Get.put(FilterController());
-
+  FloatingActionButton floatingActionButton() => FloatingActionButton(
+    //         heroTag: null,
+            onPressed: () {
+              Get.toNamed('/map', arguments: {"filteredList": unitController.filteredList, "units": unitController.units});
+            },
+            child: Icon(Icons.location_on),
+          );
   @override
   Widget build(BuildContext context) {
     return Column(
