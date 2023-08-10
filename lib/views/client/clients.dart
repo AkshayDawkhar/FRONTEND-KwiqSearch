@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:takeahome/constants.dart';
+
 import '../../controller/client.dart';
 import '../../model/client.dart';
 
@@ -10,36 +11,23 @@ class ClientsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Clients'),
-      ),
-      body: GetBuilder<ClientsController>(builder: (controller) {
-        if (controller.isLoad) {
-          return LiquidPullToRefresh(
-            showChildOpacityTransition: false,
-          onRefresh: () async{
-              controller.onInit();
+    return GetBuilder<ClientsController>(builder: (controller) {
+      if (controller.isLoad) {
+        return LiquidPullToRefresh(
+          showChildOpacityTransition: false,
+          onRefresh: () async {
+            controller.onInit();
           },
           child: ListView.builder(
-                itemCount: controller.clients.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return clientContainer(controller.clients.elementAt(index));
-                }),
-          );
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      }),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            Get.toNamed('/clients/add');
-          },
-          label: Text('Client'),
-          icon: Icon(Icons.add)),
-      bottomNavigationBar: bottomNavigationBar(index: 2,off: false),
-
-    );
+              itemCount: controller.clients.length,
+              itemBuilder: (BuildContext context, int index) {
+                return clientContainer(controller.clients.elementAt(index));
+              }),
+        );
+      } else {
+        return Center(child: CircularProgressIndicator());
+      }
+    });
   }
 
   Widget clientContainer(Clients clients) => Container(
@@ -61,3 +49,10 @@ class ClientsPage extends StatelessWidget {
 //                         ),
       ));
 }
+// floatingActionButton: FloatingActionButton.extended(
+// onPressed: () {
+// Get.toNamed('/clients/add');
+// },
+// label: Text('Client'),
+// icon: Icon(Icons.add)),
+// bottomNavigationBar: bottomNavigationBar(index: 2,off: false),

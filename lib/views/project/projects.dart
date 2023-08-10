@@ -13,11 +13,7 @@ class ProjectsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Clients'),
-      ),
-      body: GetBuilder<ProjectsController>(builder: (controller) {
+    return  GetBuilder<ProjectsController>(builder: (controller) {
         if (controller.isLoad) {
           return LiquidPullToRefresh(
             showChildOpacityTransition: false,
@@ -33,14 +29,14 @@ class ProjectsPage extends StatelessWidget {
         } else {
           return Center(child: CircularProgressIndicator());
         }
-      }),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            Get.toNamed('/projects/add');
-          },
-          label: Text('Project'),
-          icon: Icon(Icons.add)),
-      bottomNavigationBar: bottomNavigationBar(index: 1,off: false),
+      },
+      // floatingActionButton: FloatingActionButton.extended(
+      //     onPressed: () {
+      //       Get.toNamed('/projects/add');
+      //     },
+      //     label: Text('Project'),
+      //     icon: Icon(Icons.add)),
+      // bottomNavigationBar: bottomNavigationBar(index: 1,off: false),
 
     );
   }
@@ -64,3 +60,9 @@ class ProjectsPage extends StatelessWidget {
 //                         ),
       ));
 }
+// floatingActionButton: FloatingActionButton.extended(
+//     onPressed: () {
+//       Get.toNamed('/projects/add');
+//     },
+//     label: Text('Project'),
+//     icon: Icon(Icons.add)),

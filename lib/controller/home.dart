@@ -64,66 +64,79 @@ class UnitController extends GetxController {
   //
   //   }
   // }
+  Set<String> filters = {};
 
-  void filterData({var startingBudget,
-    var endingBudget,
-    var amenities,
-    var startingCA,
-    var endingCA,
-    required List<double> selectedUnits,
-    required List<String> selectedAreas,
-    var duration}) async {
+  void filterData(
+      {var startingBudget,
+      var endingBudget,
+      var amenities,
+      var startingCA,
+      var endingCA,
+      required List<double> selectedUnits,
+      required List<String> selectedAreas,
+      var duration}) async {
     filteredList = units;
-    if (startingBudget != null) {
-      filteredList = filteredList.where((p0) => p0.price >= startingBudget).toList();
-      print('starting ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
-    }
-    if (endingBudget != null) {
-      filteredList = filteredList.where((p0) => p0.price <= endingBudget).toList();
-      print('Ending ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
-    }
-    if (startingCA != null) {
-      filteredList = filteredList.where((p0) => p0.carpetArea >= startingCA).toList();
-      print('starting ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
-    }
-    if (endingCA != null) {
-      filteredList = filteredList.where((p0) => p0.carpetArea <= endingCA).toList();
-      print('Ending ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
-    }
-    if (amenities != null) {
-      filteredList = filteredList.where((p0) => getAmenitiesNumebr(p0.amenities) >= amenities).toList();
-      print('Amenities ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
-    }
-    if (selectedUnits.isNotEmpty) {
-      filteredList = filteredList.where((p0) => selectedUnits.contains(p0.unit)).toList();
-      print('Units ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
-    }
+    filters = {};
     if (selectedAreas.isNotEmpty) {
+      filters.add('Areas');
       filteredList = filteredList.where((p0) => selectedAreas.contains(p0.area)).toList();
       print('Area ${filteredList.length}');
-      filteredList.forEach((element) {
-        print(element.toMap());
-      });
+      // filteredList.forEach((element) {
+      //   print(element.toMap());
+      // });
+    }
+    if (selectedUnits.isNotEmpty) {
+      filters.add('Units');
+      filteredList = filteredList.where((p0) => selectedUnits.contains(p0.unit)).toList();
+      print('Units ${filteredList.length}');
+      // filteredList.forEach((element) {
+      //   print(element.toMap());
+      // });
+    }
+    if (startingBudget != null && startingBudget != 3500000) {
+      filters.add('Budget');
+      filteredList = filteredList.where((p0) => p0.price >= startingBudget).toList();
+      print('starting ${filteredList.length}');
+      // filteredList.forEach((element) {
+      //   print(element.toMap());
+      // });
+    }
+    if (endingBudget != null&& endingBudget != 30000000) {
+      filters.add('Budget');
+      filteredList = filteredList.where((p0) => p0.price <= endingBudget).toList();
+      print('Ending ${filteredList.length}');
+      // filteredList.forEach((element) {
+      //   print(element.toMap());
+      // });
+    }
+    if (startingCA != null && startingCA != 300) {
+      filters.add('Carpet Area');
+
+      filteredList = filteredList.where((p0) => p0.carpetArea >= startingCA).toList();
+      print('starting ${filteredList.length}');
+      // filteredList.forEach((element) {
+      //   print(element.toMap());
+      // });
+    }
+    if (endingCA != null && endingCA != 5000) {
+      filters.add('Carpet Area');
+      filteredList = filteredList.where((p0) => p0.carpetArea <= endingCA).toList();
+      print('Ending ${filteredList.length}');
+      // filteredList.forEach((element) {
+      //   print(element.toMap());
+      // });
+    }
+    if (amenities != null&&amenities != 0) {
+      filters.add('Amenities');
+      // print(amenities);
+      filteredList = filteredList.where((p0) => getAmenitiesNumebr(p0.amenities) >= amenities).toList();
+      print('Amenities ${filteredList.length}');
+      // filteredList.forEach((element) {
+        // print(element.toMap());
+      // });
     }
     if (duration > 0) {
+      filters.add('Duration');
       filteredList = filteredList.where((p0) => p0.possession.isBefore(DateTime.now().add(Duration(days: duration * 35)))).toList();
       print('Date Time ${filteredList.length} $duration');
       filteredList.forEach((element) {
@@ -202,6 +215,8 @@ class FilterController extends GetxController {
     DropdownMenuItem(child: Text('Basic Amenities'), value: 1),
     DropdownMenuItem(child: Text('No Amenities'), value: 0),
   ];
+  var amenity = null;
+  var duration = null;
 
   void setDefault() {
     selectedAreas = [];
@@ -211,6 +226,8 @@ class FilterController extends GetxController {
     dateTime = DateTime.now();
     budgetRange = RangeValues(3500000, 30000000);
     carpetAreaRange = RangeValues(300, 5000);
+    amenity = null;
+    duration = null;
     update();
   }
 
@@ -226,11 +243,13 @@ class FilterController extends GetxController {
 
   void updateSelectedDurations(int selected) {
     selectedDurations = selected;
+    duration = selected;
     dateTime = DateTime.now().add(Duration(days: selected * 31));
     update();
   }
 
   void updateSelectedAmenities(int selected) {
+    amenity = selected;
     selectedAmenities = selected;
     update();
   }
@@ -270,11 +289,10 @@ class FilterController extends GetxController {
     );
     List a = json.decode(responce.body);
     areas = a
-        .map((e) =>
-        MultiSelectItem(
-          e['formatted_version'].toString(),
-          e['name'],
-        ))
+        .map((e) => MultiSelectItem(
+              e['formatted_version'].toString(),
+              e['name'],
+            ))
         .toList();
     print(areas);
     update();
