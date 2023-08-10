@@ -468,16 +468,20 @@ class HomePage extends StatelessWidget {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Image.network('https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w='),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.network(
+                                      'https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w='),
+                                ),
                                 // NetworkImage(
                                 //     'https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w='),
                                 ListTile(
                                   onTap: () {
                                     // Get.dialog(entryDialog(entry));
+                                    Get.toNamed('/project', parameters: {"project_id": unit.projectId.toString()});
                                   },
 // style: ListTileStyle.drawer,
 // dense: true,
-                                  leading: Icon(Icons.location_on),
                                   title: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -485,8 +489,27 @@ class HomePage extends StatelessWidget {
                                       Text('${unit.area}'),
                                     ],
                                   ),
-                                  subtitle: Text(
-                                      '${unitToName(unit.unit)}       ${unit.carpetArea} sqft\n${monthDate(unit.possession)}                     | ₹ ${numberToLCr(unit.price.toDouble())}'),
+                                  subtitle: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('${unitToName(unit.unit)}'),
+                                          Text('${unit.carpetArea} CA'),
+                                          // Text(
+                                              // '${unitToName(unit.unit)}       \n${monthDate(unit.possession)}                     | ₹ ${numberToLCr(unit.price.toDouble())}'),
+                                        ],
+                                      ),Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('${monthDate(unit.possession)} '),
+                                          Text('₹ ${numberToLCr(unit.price.toDouble())}'),
+                                          // Text(
+                                              // '${unitToName(unit.unit)}       \n${monthDate(unit.possession)}                     | ₹ ${numberToLCr(unit.price.toDouble())}'),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                   isThreeLine: true,
 //                         trailing: Icon(
 //                           Icons.arrow_forward_ios_outlined,
