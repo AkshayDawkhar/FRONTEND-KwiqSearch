@@ -10,7 +10,7 @@ import 'package:takeahome/views/map_page.dart';
 import 'package:takeahome/views/notifications.dart';
 import 'package:takeahome/views/project/add.dart';
 import 'package:takeahome/views/project/interested.dart';
-import 'package:takeahome/views/project/project_page.dart';
+import 'package:takeahome/views/project/edit_project.dart';
 import 'package:takeahome/views/project/projects.dart';
 
 void main() {
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/client', page: () => ClientPage()),
         GetPage(name: '/projects', page: () => ProjectsPage()),
         GetPage(name: '/projects/add', page: () => AddProject()),
-        GetPage(name: '/project', page: () => ProjectPage()),
+        GetPage(name: '/project', page: () => EditProject()),
         GetPage(name: '/map', page: () => MapPage()),
         GetPage(name: '/notifications', page: () => NotificationsPage(), title: 'notifications'),
         GetPage(name: '/interested', page: () => InterestedPage(), title: 'interested'),
