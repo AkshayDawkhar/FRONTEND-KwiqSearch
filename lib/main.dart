@@ -64,22 +64,55 @@ class MyApp extends StatelessWidget {
 //   Room({required this.name, required this.bhk, required this.cp, required this.amn, required this.price, required this.location});
 // }
 
-
-
 const List<Tab> tabs = <Tab>[
-  Tab(icon: Icon(Icons.home),iconMargin: EdgeInsets.all(0),),
-  Tab(icon: Icon(Icons.home_work),iconMargin: EdgeInsets.all(2),),
-  Tab(icon: Icon(Icons.person),iconMargin: EdgeInsets.all(2),),
+  Tab(
+    icon: Icon(Icons.home),
+    iconMargin: EdgeInsets.all(0),
+  ),
+  Tab(
+    icon: Icon(Icons.home_work),
+    iconMargin: EdgeInsets.all(2),
+  ),
+  Tab(
+    icon: Icon(Icons.person),
+    iconMargin: EdgeInsets.all(2),
+  ),
   // Tab(text: 'First'),
   // Tab(text: 'Second'),
 ];
 
-class TabControllerExample extends StatelessWidget {
-  const TabControllerExample({super.key});
+class TabControllerExample extends StatefulWidget {
+  @override
+  State<TabControllerExample> createState() => _TabControllerExampleState();
+}
+
+class _TabControllerExampleState extends State<TabControllerExample> {
+  HomePage homePage = HomePage();
+
+  ProjectsPage projectsPage = ProjectsPage();
+
+  ClientsPage clientsPage = ClientsPage();
+
+  Widget _getFabForTab(int tabIndex) {
+    switch (tabIndex) {
+      case 0:
+        return homePage.floatingActionButton();
+      case 1:
+        return FloatingActionButton.extended(
+            onPressed: () {
+              Get.toNamed('/projects/add');
+            },
+            label: Text('Project'),
+            icon: Icon(Icons.add));
+      case 2:
+        return clientsPage.floatingActionButton();
+      default:
+        return FloatingActionButton(onPressed: () {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    HomePage homePage = HomePage();
     return DefaultTabController(
       length: tabs.length,
       // The Builder widget is used to have a different BuildContext to access
@@ -88,13 +121,14 @@ class TabControllerExample extends StatelessWidget {
         final TabController tabController = DefaultTabController.of(context);
         tabController.addListener(() {
           if (!tabController.indexIsChanging) {
+            setState(() {});
             // Your code goes here.
             // To get index of current tab use tabController.index
           }
         });
         return Scaffold(
           appBar: AppBar(
-            title: Text('Home'),
+            title: Text(['Home','Projects','Clients'].elementAt(tabController.index)),
             actions: [
               IconButton(
                   onPressed: () {
@@ -152,21 +186,15 @@ class TabControllerExample extends StatelessWidget {
           //     tabs: tabs,
           //   ),
           // ),
-          body: TabBarView(
-            children: [
-              homePage,
-              ProjectsPage(),
-              ClientsPage(),
-            ]
-          ),
-          floatingActionButton:homePage.floatingActionButton(),
-              // FloatingActionButton(
-              //   heroTag: null,
-              //   onPressed: () {
-              //     Get.toNamed('/map', arguments: {"filteredList": [] , "units": []});
-              //   },
-              //   child: Icon(Icons.location_on),
-              // ),
+          body: TabBarView(children: [homePage, projectsPage, clientsPage]),
+          floatingActionButton: _getFabForTab(tabController.index),
+          // FloatingActionButton(
+          //   heroTag: null,
+          //   onPressed: () {
+          //     Get.toNamed('/map', arguments: {"filteredList": [] , "units": []});
+          //   },
+          //   child: Icon(Icons.location_on),
+          // ),
           bottomNavigationBar: TabBar(
             enableFeedback: true,
             indicatorSize: TabBarIndicatorSize.label,

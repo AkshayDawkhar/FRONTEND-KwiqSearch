@@ -446,7 +446,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
         // Text('data'),
-        Divider(),
+        // Divider(),
         Expanded(
           child: LiquidPullToRefresh(
             showChildOpacityTransition: false,

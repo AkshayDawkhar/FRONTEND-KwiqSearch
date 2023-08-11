@@ -9,6 +9,13 @@ import '../../model/client.dart';
 class ClientsPage extends StatelessWidget {
   var clientsPage = Get.put(ClientsController());
 
+  FloatingActionButton floatingActionButton() => FloatingActionButton.extended(
+      onPressed: () {
+        Get.toNamed('/clients/add');
+      },
+      label: Text('Client'),
+      icon: Icon(Icons.add));
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ClientsController>(builder: (controller) {
