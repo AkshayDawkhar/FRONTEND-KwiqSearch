@@ -82,10 +82,7 @@ class SearchUnitController extends GetxController {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: a);
-    Get.defaultDialog(
-        content: TextField(
-      controller: TextEditingController(text: responce.body),
-    ));
+
     recommendedUnit = recommendedUnitFromJson(responce.body);
     // print(responce.body);
     // print(responce.statusCode);

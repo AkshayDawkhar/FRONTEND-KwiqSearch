@@ -65,17 +65,27 @@ class ProjectsPage extends StatelessWidget {
         color: primaryColor200,
       ),
       margin: EdgeInsets.all(6),
-      child: ListTile(
-        onTap: () {
-          Get.toNamed('/project', parameters: {"project_id": project.id.toString()});
-        },
-        leading: Icon(Icons.home_work),
-        title: Text('${project.projectName} - ${project.developerName}'),
-        trailing: Icon(Icons.arrow_forward_ios),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.network(
+                'https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w='),
+          ),
+          ListTile(
+            onTap: () {
+              Get.toNamed('/project', parameters: {"project_id": project.id.toString()});
+            },
+            leading: Icon(Icons.home_work),
+            title: Text('${project.projectName} - ${project.developerName}'),
+            trailing: Icon(Icons.arrow_forward_ios),
 //                         trailing: Icon(
 //                           Icons.arrow_forward_ios_outlined,
 // // color: Colors.redAccent,
 //                         ),
+          ),
+        ],
       ));
 }
 // floatingActionButton: FloatingActionButton.extended(

@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
 //   Room({required this.name, required this.bhk, required this.cp, required this.amn, required this.price, required this.location});
 // }
 
-List<Tab> tabs = <Tab>[
+const List<Tab> tabs = <Tab>[
   Tab(
 
     child: Column(
