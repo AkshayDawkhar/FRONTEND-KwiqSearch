@@ -292,7 +292,7 @@ class SearchPage extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: bottomNavigationBar(index: 2,off: true),
+      // bottomNavigationBar: bottomNavigationBar(index: 2,off: true),
 
     );
   }

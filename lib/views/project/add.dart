@@ -692,7 +692,7 @@ class AddProject extends StatelessWidget {
         icon: const Icon(Icons.add),
         label: const Text('save'),
       ),
-      bottomNavigationBar: bottomNavigationBar(index: 1, off: true),
+      // bottomNavigationBar: bottomNavigationBar(index: 1, off: true),
     );
   }
 }

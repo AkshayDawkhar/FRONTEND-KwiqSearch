@@ -204,7 +204,7 @@ class ClientPage extends StatelessWidget {
             },
             icon: Icon(Icons.add),
             label: Text('Follow Up')),
-        bottomNavigationBar: bottomNavigationBar(index: 2, off: true),
+        // bottomNavigationBar: bottomNavigationBar(index: 2, off: true),
       ),
     );
   }

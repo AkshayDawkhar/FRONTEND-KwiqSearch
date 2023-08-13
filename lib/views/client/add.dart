@@ -127,7 +127,7 @@ class AddClientPage extends StatelessWidget {
         label: Text('Save'),
         icon: Icon(Icons.done),
       ),
-      bottomNavigationBar: bottomNavigationBar(index: 2,off: true),
+      // bottomNavigationBar: bottomNavigationBar(index: 2,off: true),
 
     );
   }

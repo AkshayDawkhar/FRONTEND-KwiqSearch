@@ -99,7 +99,7 @@ class _MapPageState extends State<MapPage> {
       //   label: const Text('To the lake!'),
       //   icon: const Icon(Icons.directions_boat),
       // ),
-      bottomNavigationBar: bottomNavigationBar(index: 0,off: true),
+      // bottomNavigationBar: bottomNavigationBar(index: 0,off: true),
 
     );
   }

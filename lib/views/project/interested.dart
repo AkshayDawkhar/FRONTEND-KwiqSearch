@@ -50,7 +50,7 @@ class InterestedPage extends StatelessWidget {
                 ],
               )),
         ),
-        bottomNavigationBar: bottomNavigationBar(index: 1,off: true),
+        // bottomNavigationBar: bottomNavigationBar(index: 1,off: true),
 
       );
     });
