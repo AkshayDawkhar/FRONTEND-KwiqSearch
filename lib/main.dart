@@ -66,18 +66,39 @@ class MyApp extends StatelessWidget {
 //   Room({required this.name, required this.bhk, required this.cp, required this.amn, required this.price, required this.location});
 // }
 
-const List<Tab> tabs = <Tab>[
+List<Tab> tabs = <Tab>[
   Tab(
-    icon: Icon(Icons.home),
-    iconMargin: EdgeInsets.all(0),
+
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(Icons.home),
+        SizedBox(height: 2,),
+        Text('Home')
+      ],
+    ),
   ),
   Tab(
-    icon: Icon(Icons.home_work),
-    iconMargin: EdgeInsets.all(2),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(Icons.home_work),
+        SizedBox(height: 2,),
+        Text('Project')
+      ],
+    ),
   ),
-  Tab(
-    icon: Icon(Icons.person),
-    iconMargin: EdgeInsets.all(2),
+  Tab( child: Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Icon(Icons.person),
+      SizedBox(height: 2,),
+      Text('Client')
+    ],
+  ),
   ),
   // Tab(text: 'First'),
   // Tab(text: 'Second'),
