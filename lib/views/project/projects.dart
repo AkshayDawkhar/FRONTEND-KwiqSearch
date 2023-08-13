@@ -4,27 +4,46 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:takeahome/constants.dart';
 import 'package:takeahome/model/project.dart';
 
-import '../../controller/client.dart';
 import '../../controller/project.dart';
-import '../../model/client.dart';
 
 class ProjectsPage extends StatelessWidget {
   var clientsPage = Get.put(ProjectsController());
 
   @override
   Widget build(BuildContext context) {
-    return  GetBuilder<ProjectsController>(builder: (controller) {
+    return GetBuilder<ProjectsController>(
+      builder: (controller) {
         if (controller.isLoad) {
           return LiquidPullToRefresh(
             showChildOpacityTransition: false,
             onRefresh: () async {
               controller.onInit();
             },
-            child: ListView.builder(
-                itemCount: controller.projects.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return projectContainer(controller.projects.elementAt(index));
-                }),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SearchBar(
+                          hintText: 'Search',
+                        ),
+                      ),
+                      TextButton.icon(onPressed: () {}, icon: Icon(Icons.search), label: Text('Search'))
+                    ],
+                  ),
+                ),
+                Divider(),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: controller.projects.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return projectContainer(controller.projects.elementAt(index));
+                      }),
+                ),
+              ],
+            ),
           );
         } else {
           return Center(child: CircularProgressIndicator());
@@ -37,7 +56,6 @@ class ProjectsPage extends StatelessWidget {
       //     label: Text('Project'),
       //     icon: Icon(Icons.add)),
       // bottomNavigationBar: bottomNavigationBar(index: 1,off: false),
-
     );
   }
 

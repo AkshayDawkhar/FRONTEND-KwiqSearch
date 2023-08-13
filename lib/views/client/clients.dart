@@ -25,11 +25,31 @@ class ClientsPage extends StatelessWidget {
           onRefresh: () async {
             controller.onInit();
           },
-          child: ListView.builder(
-              itemCount: controller.clients.length,
-              itemBuilder: (BuildContext context, int index) {
-                return clientContainer(controller.clients.elementAt(index));
-              }),
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SearchBar(
+                        hintText: 'Search',
+                      ),
+                    ),
+                    TextButton.icon(onPressed: (){}, icon: Icon(Icons.search), label: Text('Search'))
+                  ],
+                ),
+              ),
+              Divider(),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: controller.clients.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return clientContainer(controller.clients.elementAt(index));
+                    }),
+              ),
+            ],
+          ),
         );
       } else {
         return Center(child: CircularProgressIndicator());
