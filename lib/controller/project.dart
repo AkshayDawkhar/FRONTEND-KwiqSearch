@@ -87,7 +87,7 @@ class EditProjectController extends GetxController {
   List<Map<String, TextEditingController>> units = [];
   List<DropdownMenuItem> areas = [];
   List<DropdownMenuItem> unitsChoose = [];
-
+  List a = [];
   void saveAndEdit() {
     // area.text = '';
     // projectName.text = '';
@@ -397,7 +397,7 @@ void editProject() async {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    List a = json.decode(responce.body);
+    a = json.decode(responce.body);
     areas = a
         .map((e) => DropdownMenuItem(
               child: Text(e['name']),

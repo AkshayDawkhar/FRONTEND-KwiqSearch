@@ -9,8 +9,9 @@ import 'package:takeahome/views/home_page.dart';
 import 'package:takeahome/views/map_page.dart';
 import 'package:takeahome/views/notifications.dart';
 import 'package:takeahome/views/project/add.dart';
-import 'package:takeahome/views/project/interested.dart';
 import 'package:takeahome/views/project/edit_project.dart';
+import 'package:takeahome/views/project/interested.dart';
+import 'package:takeahome/views/project/project_page.dart';
 import 'package:takeahome/views/project/projects.dart';
 
 void main() {
@@ -42,7 +43,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/client', page: () => ClientPage()),
         GetPage(name: '/projects', page: () => ProjectsPage()),
         GetPage(name: '/projects/add', page: () => AddProject()),
-        GetPage(name: '/project', page: () => EditProject()),
+        GetPage(name: '/project/edit', page: () => EditProject()),
+        GetPage(name: '/project', page: () => ProjectPage()),
         GetPage(name: '/map', page: () => MapPage()),
         GetPage(name: '/notifications', page: () => NotificationsPage(), title: 'notifications'),
         GetPage(name: '/interested', page: () => InterestedPage(), title: 'interested'),
@@ -128,7 +130,7 @@ class _TabControllerExampleState extends State<TabControllerExample> {
         });
         return Scaffold(
           appBar: AppBar(
-            title: Text(['Home','Projects','Clients'].elementAt(tabController.index)),
+            title: Text(['Home', 'Projects', 'Clients'].elementAt(tabController.index)),
             actions: [
               IconButton(
                   onPressed: () {
@@ -140,43 +142,6 @@ class _TabControllerExampleState extends State<TabControllerExample> {
                     Get.toNamed('/notifications');
                   },
                   icon: Icon(Icons.notifications)),
-              // IconButton(
-              //     onPressed: () {
-              //       // filterController.setDefault();
-              //     },
-              //     icon: Icon(Icons.close))
-              // PopupMenuButton(itemBuilder: (context) {
-              //   return [
-              //     PopupMenuItem<int>(
-              //       value: 0,
-              //       child: ListTile(
-              //         leading: Icon(Icons.person),
-              //         // iconColor: Colors.blueAccent,
-              //         // textColor: Colors.blueAccent,
-              //         title: Text('Clients'),
-              //       ),
-              //     ),
-              //     PopupMenuItem<int>(
-              //       value: 1,
-              //       child: ListTile(
-              //         leading: Icon(Icons.home_work),
-              //         // iconColor: Colors.greenAccent,
-              //         // textColor: Colors.greenAccent,
-              //         title: Text('Projects'),
-              //       ),
-              //     ),
-              //   ];
-              // }, onSelected: (value) {
-              //   if (value == 0) {
-              //     Get.toNamed('/clients');
-              //     // print("Done");
-              //   } else if (value == 1) {
-              //     Get.toNamed('/projects');
-              //     // print("Work");
-              //   } else if (value == 2) {
-              //     print("Delete");
-              //   }
-              // })
             ],
             // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             // backgroundColor: Colors.,
