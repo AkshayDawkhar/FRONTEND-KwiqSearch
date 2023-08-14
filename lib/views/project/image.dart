@@ -36,13 +36,13 @@ class ImagePage extends StatelessWidget {
                     child: Image.network(
                       'https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w=',
                       width: double.infinity,
-                      height: 200, // Adjust the height as needed
+                      // height: 200, // Adjust the height as needed
                       fit: BoxFit.cover,
                     ),
                   ),
                   Positioned(
-                    bottom: 5, // Adjust the position as needed
-                    right: 5, // Adjust the position as needed
+                    bottom: 1, // Adjust the position as needed
+                    right: 1,// Adjust the position as needed
                     child: Row(
                       children: [
                         ElevatedButton(
@@ -92,7 +92,7 @@ class ImagePage extends StatelessWidget {
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(width: 1),
+          border: Border.all(width: 2),
           color: Colors.blue[200],
         ),
         child: InkWell(
@@ -117,13 +117,13 @@ class ImagePage extends StatelessWidget {
                     child: Image.network(
                       'https://upload.wikimedia.org/wikipedia/commons/9/9a/Sample_Floorplan.jpg',
                       width: double.infinity,
-                      height: 200, // Adjust the height as needed
+                      // height: 200, // Adjust the height as needed
                       fit: BoxFit.cover,
                     ),
                   ),
                   Positioned(
-                    bottom: 5, // Adjust the position as needed
-                    right: 5, // Adjust the position as needed
+                    bottom: 1, // Adjust the position as needed
+                    right: 1, // Adjust the position as needed
                     child: Row(
                       children: [
                         ElevatedButton(
