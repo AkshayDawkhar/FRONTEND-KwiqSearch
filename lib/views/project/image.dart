@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:takeahome/constants.dart';
 import 'package:takeahome/controller/project.dart';
@@ -42,7 +45,7 @@ class ImagePage extends StatelessWidget {
                   ),
                   Positioned(
                     bottom: 1, // Adjust the position as needed
-                    right: 1,// Adjust the position as needed
+                    right: 1, // Adjust the position as needed
                     child: Row(
                       children: [
                         ElevatedButton(
@@ -69,6 +72,7 @@ class ImagePage extends StatelessWidget {
                 return ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: controller.units.length,
                     itemBuilder: (BuildContext context, int index) {
                       return unitContainer(controller.units.elementAt(index), index);
@@ -129,6 +133,30 @@ class ImagePage extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {
                             // Handle edit button press
+                            Get.dialog(AlertDialog(
+                              title: Text('Change Image'),
+                              actions: [
+                                IconButton(
+                                    onPressed: () async {
+                                      final pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
+                                    },
+                                    icon: Icon(Icons.camera)),
+                                IconButton(
+                                    onPressed: () async {
+                                      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+                                      if (pickedImage != null) {
+                                        File _pickedImage = File(pickedImage.path);
+                                        Get.dialog(AlertDialog(
+                                          content: Image.file(_pickedImage),
+                                          actions: [TextButton(onPressed: () {}, child: Text('child'))],
+                                        ));
+                                      }
+                                      print(pickedImage.runtimeType);
+                                      // Get.dialog();
+                                    },
+                                    icon: Icon(Icons.folder)),
+                              ],
+                            ));
                           },
                           child: Icon(Icons.edit),
                         ),
