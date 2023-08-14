@@ -13,8 +13,8 @@ import 'package:takeahome/model/unit.dart';
 
 class UnitController extends GetxController {
   // RxList to store the list of units
-  RxList<Unit> units = RxList<Unit>();
-  List<Unit> filteredList = [];
+  RxList<UnitDetails> units = RxList<UnitDetails>();
+  List<UnitDetails> filteredList = [];
   bool isLoad = false;
 
   @override
@@ -40,7 +40,7 @@ class UnitController extends GetxController {
       if (response.statusCode == 200) {
         // If the request is successful, parse the JSON data and update the units list
         final List<dynamic> jsonData = json.decode(response.body);
-        units.value = jsonData.map((unitData) => Unit.fromMap(unitData)).toList();
+        units.value = jsonData.map((unitData) => UnitDetails.fromMap(unitData)).toList();
       } else {
         // If the request fails, print the error message
         print('Failed to fetch units: ${response.statusCode}');

@@ -463,7 +463,7 @@ class HomePage extends StatelessWidget {
                       itemCount: controller.filteredList.length,
                       // shrinkWrap: true,
                       itemBuilder: (BuildContext context, int index) {
-                        Unit unit = controller.filteredList.elementAt(index);
+                        UnitDetails unit = controller.filteredList.elementAt(index);
                         // print(unit.toMap());
                         return Container(
                             decoration: BoxDecoration(
