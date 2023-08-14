@@ -10,6 +10,7 @@ import 'package:takeahome/views/map_page.dart';
 import 'package:takeahome/views/notifications.dart';
 import 'package:takeahome/views/project/add.dart';
 import 'package:takeahome/views/project/edit_project.dart';
+import 'package:takeahome/views/project/image.dart';
 import 'package:takeahome/views/project/interested.dart';
 import 'package:takeahome/views/project/project_page.dart';
 import 'package:takeahome/views/project/projects.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/map', page: () => MapPage()),
         GetPage(name: '/notifications', page: () => NotificationsPage(), title: 'notifications'),
         GetPage(name: '/interested', page: () => InterestedPage(), title: 'interested'),
+        GetPage(name: '/image', page: () => ImagePage(), title: 'interested'),
 
         // GetPage(name: '/about', page: () => AboutPage()),
       ],

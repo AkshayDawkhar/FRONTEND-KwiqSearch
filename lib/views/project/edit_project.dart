@@ -80,6 +80,10 @@ class EditProject extends StatelessWidget {
                 Get.toNamed('/interested',parameters: {'project_id':editProjectController.projectId.toString()});
                 // Handle edit action here
                 // For example, navigate to edit user screen
+              }else if (value == 'image') {
+                Get.toNamed('/image',parameters: {'project_id':editProjectController.projectId.toString()});
+                // Handle edit action here
+                // For example, navigate to edit user screen
               } else if (value == 'delete') {
                 // Handle delete action here
                 // For example, show a confirmation dialog
@@ -104,6 +108,10 @@ class EditProject extends StatelessWidget {
               PopupMenuItem<String>(
                 value: 'interested',
                 child: ListTile(leading: Icon(Icons.person_search), iconColor: Colors.blueAccent, title: Text('Interested')),
+              ),
+              PopupMenuItem<String>(
+                value: 'image',
+                child: ListTile(leading: Icon(Icons.image), iconColor: Colors.blueAccent, title: Text('Images')),
               ),
               PopupMenuItem<String>(
                 value: 'delete',
