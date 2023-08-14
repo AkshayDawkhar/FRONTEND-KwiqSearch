@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
-// import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:takeahome/constants.dart';
@@ -19,8 +17,8 @@ class _MapPageState extends State<MapPage> {
   //   initMapWithUserPosition: UserTrackingOption(),
   // );
 
-  List<Unit> filteredList = Get.arguments['filteredList'];
-  List<Unit> units = Get.arguments['units'];
+  List<UnitDetails> filteredList = Get.arguments['filteredList'];
+  List<UnitDetails> units = Get.arguments['units'];
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
 
   static const CameraPosition _kGooglePlex = CameraPosition(
@@ -39,16 +37,18 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     for (int i = 0; i < units.length; i++) {
-      Unit unit = units.elementAt(i);
+      UnitDetails unit = units.elementAt(i);
       _markers.add(Marker(
-          markerId: MarkerId('2'),
+          markerId: MarkerId(unit.projectId.toString()),
           position: LatLng(unit.latitude, unit.longitude),
           infoWindow: InfoWindow(
-              title: '${unit.projectName}hii',
-              snippet: '${unitToName(unit.unit)}name name name name name ',
+              title: '${unit.projectName}',
+              snippet: '${unit.projectUnits.map((e) => unitToName(e.unit)).toList().join(',')}',
               onTap: () {
                 // Get.offNamed('/home');
-                Get.dialog(AlertDialog(title: Text('name'),));
+                // Get.dialog(AlertDialog(title: Text(units.elementAt(i).projectId.toString()),));
+                // Get.dialog(AlertDialog(title: Text(unit.projectId.toString()),));
+                Get.toNamed('/project', parameters: {"project_id": unit.projectId.toString()});
                 // showBottomSheet(
                 //     context: context,
                 //     builder: (q) {
@@ -58,20 +58,18 @@ class _MapPageState extends State<MapPage> {
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan)));
     }
     for (int i = 0; i < filteredList.length; i++) {
-      Unit unit = filteredList.elementAt(i);
+      UnitDetails unit = filteredList.elementAt(i);
       _markers.add(Marker(
-        markerId: MarkerId('1'),
+        markerId: MarkerId(unit.projectId.toString()),
         position: LatLng(unit.latitude, unit.longitude),
         infoWindow: InfoWindow(
             title: '${unit.projectName}',
-            snippet: '${unitToName(unit.unit)}name name name name',
+            snippet: '${unit.projectUnits.map((e) => unitToName(e.unit)).toList().join(',')}',
             onTap: () {
               // Get.offNamed('/home');
-              showBottomSheet(
-                  context: context,
-                  builder: (q) {
-                    return Text('name');
-                  });
+              // Get.dialog(AlertDialog(title: Text(units.elementAt(i).projectId.toString()),));
+              // Get.dialog(AlertDialog(title: Text(unit.projectId.toString()),));
+              Get.toNamed('/project', parameters: {"project_id": unit.projectId.toString()});
             }),
       ));
     }
