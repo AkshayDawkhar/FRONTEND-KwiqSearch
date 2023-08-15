@@ -7,11 +7,19 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:takeahome/constants.dart';
 import 'package:takeahome/controller/project.dart';
 
+import '../../controller/image.dart';
 import '../../controller/interested.dart';
 import '../../model/add_project.dart';
 
-class ImagePage extends StatelessWidget {
+class ImagePage extends StatefulWidget {
+  @override
+  State<ImagePage> createState() => _ImagePageState();
+}
+
+class _ImagePageState extends State<ImagePage> {
   var editProjectController = Get.put(EditProjectController(projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
+  var imageController = Get.put(ImageController(projectID: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
+
   var interestedController = Get.put(InterestedController(projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
 
   @override
@@ -148,7 +156,39 @@ class ImagePage extends StatelessWidget {
                                         File _pickedImage = File(pickedImage.path);
                                         Get.dialog(AlertDialog(
                                           content: Image.file(_pickedImage),
-                                          actions: [TextButton(onPressed: () {}, child: Text('child'))],
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () async {
+                                                  imageController.uploadImage(_pickedImage);
+                                                  // CroppedFile? cropped = await ImageCropper().cropImage(
+                                                  //     sourcePath: _pickedImage.path,
+                                                  //     aspectRatioPresets:
+                                                  //     [
+                                                  //       CropAspectRatioPreset.square,
+                                                  //       CropAspectRatioPreset.ratio3x2,
+                                                  //       CropAspectRatioPreset.original,
+                                                  //       CropAspectRatioPreset.ratio4x3,
+                                                  //       CropAspectRatioPreset.ratio16x9
+                                                  //     ],
+                                                  //
+                                                  //     uiSettings: [
+                                                  //     AndroidUiSettings(
+                                                  //     toolbarTitle: 'Crop',
+                                                  //     cropGridColor: Colors.black,
+                                                  //     initAspectRatio: CropAspectRatioPreset.original,
+                                                  //     lockAspectRatio: false),
+                                                  //     IOSUiSettings
+                                                  // (title: 'Crop')]);
+
+                                                  // if (cropped != null) {
+                                                  // setState(() {
+                                                  // imageFile = File(cropped.path);
+                                                  // }
+                                                  // );
+                                                  // }
+                                                },
+                                                child: Text('Save'))
+                                          ],
                                         ));
                                       }
                                       print(pickedImage.runtimeType);
