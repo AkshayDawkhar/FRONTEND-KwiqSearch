@@ -59,6 +59,8 @@ class _ImagePageState extends State<ImagePage> {
                         ElevatedButton(
                           onPressed: () {
                             // Handle edit button press
+                          // imagePickerDialog();
+                        uploadProjectImage(89);
                           },
                           child: Icon(Icons.edit),
                         ),
@@ -86,18 +88,117 @@ class _ImagePageState extends State<ImagePage> {
                       return unitContainer(controller.units.elementAt(index), index);
                     });
               }),
-              // hint: const Text('Area'),
-              // items: controller.areas,
-              // value: controller.area.text == '' ? null : controller.area.text,
-              // onChanged: (value) {
-              //   controller.area.text = value!;
-              // }
-              // controller.areas.where((element) => element.value == controller.area.text ? element.child: Container()).first,
             ],
           )),
         );
       }),
     );
+  }
+
+  void cropImage() {
+    //CroppedFile? cropped = await ImageCropper().cropImage(
+    //     sourcePath: _pickedImage.path,
+    //     aspectRatioPresets:
+    //     [
+    //       CropAspectRatioPreset.square,
+    //       CropAspectRatioPreset.ratio3x2,
+    //       CropAspectRatioPreset.original,
+    //       CropAspectRatioPreset.ratio4x3,
+    //       CropAspectRatioPreset.ratio16x9
+    //     ],
+    //
+    //     uiSettings: [
+    //     AndroidUiSettings(
+    //     toolbarTitle: 'Crop',
+    //     cropGridColor: Colors.black,
+    //     initAspectRatio: CropAspectRatioPreset.original,
+    //     lockAspectRatio: false),
+    //     IOSUiSettings
+    // (title: 'Crop')]);
+
+    // if (cropped != null) {
+    // setState(() {
+    // imageFile = File(cropped.path);
+    // }
+    // );
+    // }
+  }
+
+  void uploadProjectImage(int id) async {
+    File? pickedImage = await imagePickerDialog();
+    print(pickedImage);
+    if (pickedImage != null) {
+      Get.dialog(AlertDialog(
+        content: Image.file(pickedImage),
+        actions: [
+          TextButton(
+              onPressed: () async {
+                int i = await imageController.uploadImage(pickedImage);
+                if (i == 201) {
+                  Get.back();
+                  setState(() {
+                    print('setting state');
+                  });
+                }
+                //
+              },
+              child: Text('Save'))
+        ],
+      ));
+    }
+  }
+
+  void uploadUnitImage(Unit unit) async {
+    File? pickedImage = await imagePickerDialog();
+    if (pickedImage != null) {
+      Get.dialog(AlertDialog(
+        content: Image.file(pickedImage),
+        actions: [
+          TextButton(
+              onPressed: () async {
+                int i = await imageController.uploadUnitImage(pickedImage, unit.id);
+                if (i == 201) {
+                  Get.back();
+                  setState(() {
+                    print('setting state');
+                  });
+                }
+              },
+              child: Text('Save'))
+        ],
+      ));
+    }
+  }
+
+  Future<File?> imagePickerDialog() async{
+    var pickedImage;
+    await Get.dialog(AlertDialog(
+      title: Text('Change Image'),
+      actions: [
+        IconButton(
+            onPressed: () async {
+              pickedImage = pickImage(ImageSource.camera);
+            Get.back();
+              },
+            icon: Icon(Icons.camera)),
+        IconButton(
+            onPressed: () {
+              pickedImage = pickImage(ImageSource.gallery);
+              Get.back();
+            },
+            icon: Icon(Icons.folder)),
+      ],
+    ));
+    return pickedImage;
+  }
+
+  Future<File?> pickImage(ImageSource source) async {
+    final pickedImage = await ImagePicker().pickImage(source: source);
+    if (pickedImage != null) {
+      File _pickedImage = File(pickedImage.path);
+      return _pickedImage;
+    }
+    return null;
   }
 
   Widget unitContainer(Unit unit, int index) => Container(
@@ -141,62 +242,7 @@ class _ImagePageState extends State<ImagePage> {
                         ElevatedButton(
                           onPressed: () {
                             // Handle edit button press
-                            Get.dialog(AlertDialog(
-                              title: Text('Change Image'),
-                              actions: [
-                                IconButton(
-                                    onPressed: () async {
-                                      final pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
-                                    },
-                                    icon: Icon(Icons.camera)),
-                                IconButton(
-                                    onPressed: () async {
-                                      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-                                      if (pickedImage != null) {
-                                        File _pickedImage = File(pickedImage.path);
-                                        Get.dialog(AlertDialog(
-                                          content: Image.file(_pickedImage),
-                                          actions: [
-                                            TextButton(
-                                                onPressed: () async {
-                                                  imageController.uploadImage(_pickedImage);
-                                                  // CroppedFile? cropped = await ImageCropper().cropImage(
-                                                  //     sourcePath: _pickedImage.path,
-                                                  //     aspectRatioPresets:
-                                                  //     [
-                                                  //       CropAspectRatioPreset.square,
-                                                  //       CropAspectRatioPreset.ratio3x2,
-                                                  //       CropAspectRatioPreset.original,
-                                                  //       CropAspectRatioPreset.ratio4x3,
-                                                  //       CropAspectRatioPreset.ratio16x9
-                                                  //     ],
-                                                  //
-                                                  //     uiSettings: [
-                                                  //     AndroidUiSettings(
-                                                  //     toolbarTitle: 'Crop',
-                                                  //     cropGridColor: Colors.black,
-                                                  //     initAspectRatio: CropAspectRatioPreset.original,
-                                                  //     lockAspectRatio: false),
-                                                  //     IOSUiSettings
-                                                  // (title: 'Crop')]);
-
-                                                  // if (cropped != null) {
-                                                  // setState(() {
-                                                  // imageFile = File(cropped.path);
-                                                  // }
-                                                  // );
-                                                  // }
-                                                },
-                                                child: Text('Save'))
-                                          ],
-                                        ));
-                                      }
-                                      print(pickedImage.runtimeType);
-                                      // Get.dialog();
-                                    },
-                                    icon: Icon(Icons.folder)),
-                              ],
-                            ));
+                            uploadUnitImage(unit);
                           },
                           child: Icon(Icons.edit),
                         ),
@@ -218,34 +264,3 @@ class _ImagePageState extends State<ImagePage> {
         ),
       );
 }
-
-String getFormat(List<dynamic> fields, String value) {
-  String a = '';
-  fields.forEach((element) {
-    if (element['formatted_version'] == value) {
-      print(element);
-      a = element['name'];
-      return;
-    }
-  });
-  return a;
-}
-
-Container fixedContainer({required Widget child}) => Container(
-      padding: const EdgeInsets.all(12),
-      child: child,
-    );
-
-InputDecoration inputDecoration(String label) => InputDecoration(border: const OutlineInputBorder(), labelText: label);
-AlertDialog saveDialog = AlertDialog(
-  title: const Text('Conform save'),
-  actions: [
-    TextButton(onPressed: () {}, child: const Text('Save and Add Unit')),
-    TextButton(
-        onPressed: () {
-          Get.back();
-          // Get.back();
-        },
-        child: const Text('Save'))
-  ],
-);
