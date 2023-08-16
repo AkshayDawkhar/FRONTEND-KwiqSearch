@@ -201,7 +201,12 @@ class _ImagePageState extends State<ImagePage> {
     return null;
   }
 
-  Widget unitContainer(Unit unit, int index) => Container(
+  Widget unitContainer(Unit unit, int index) {
+    String imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Sample_Floorplan.jpg';
+    if(unit.floorMap.firstOrNull != null) {
+      imageUrl = HOSTNAME + unit.floorMap.firstOrNull!.image;
+    }
+    return Container(
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
@@ -210,25 +215,35 @@ class _ImagePageState extends State<ImagePage> {
         ),
         child: InkWell(
           onTap: () {
+            print(unit.floorMap.firstOrNull!.image);
             Get.dialog(
               InteractiveViewer(
                 clipBehavior: Clip.none,
                 maxScale: 90,
-                child: Image.network('https://upload.wikimedia.org/wikipedia/commons/9/9a/Sample_Floorplan.jpg'),
+                child: Image.network(imageUrl),
               ),
             );
             // interestedController.switchUnit(index, unit.id);
           },
           child: Column(
             children: [
-              Text(' ${unitToName(unit.unit)} | ${unit.carpetArea} sqft | ${numberToLCr(unit.price.toDouble())}'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(' ${unitToName(unit.unit)} | ${unit.carpetArea} sqft | ${numberToLCr(unit.price.toDouble())}'),
+                IconButton(onPressed: (){
+                  uploadUnitImage(unit);
+
+                }, color: Colors.black,icon: Icon(Icons.add_photo_alternate))
+                ],
+              ),
               Stack(
                 alignment: Alignment.bottomRight, // Align items to the right bottom corner
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.network(
-                      'https://upload.wikimedia.org/wikipedia/commons/9/9a/Sample_Floorplan.jpg',
+                      imageUrl,
                       width: double.infinity,
                       // height: 200, // Adjust the height as needed
                       fit: BoxFit.cover,
@@ -242,7 +257,6 @@ class _ImagePageState extends State<ImagePage> {
                         ElevatedButton(
                           onPressed: () {
                             // Handle edit button press
-                            uploadUnitImage(unit);
                           },
                           child: Icon(Icons.edit),
                         ),
@@ -263,4 +277,5 @@ class _ImagePageState extends State<ImagePage> {
           ),
         ),
       );
+  }
 }

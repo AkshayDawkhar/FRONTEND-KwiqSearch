@@ -202,7 +202,10 @@ class ProjectPage extends StatelessWidget {
     );
   }
 
-  Widget unitContainer(Unit unit, int index) => Container(
+  Widget unitContainer(Unit unit, int index) {
+    print('----');
+    print(unit.floorMap.firstOrNull.runtimeType);
+    return Container(
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
@@ -216,7 +219,7 @@ class ProjectPage extends StatelessWidget {
               clipBehavior: Clip.none,
               maxScale: 90,
               child: Image.network(
-                  'https://upload.wikimedia.org/wikipedia/commons/9/9a/Sample_Floorplan.jpg'),
+                  '$HOSTNAME${unit.floorMap.firstOrNull!.image}',),
             ),);
             // interestedController.switchUnit(index, unit.id);
           },
@@ -234,6 +237,7 @@ class ProjectPage extends StatelessWidget {
           ),
         ),
       );
+  }
 }
 
 String getFormat(List<dynamic> fields, String value) {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:takeahome/constants.dart';
@@ -17,20 +19,23 @@ class InterestedController extends GetxController {
   int selectedUnitIndex = 0;
 
   Future<void> fetchProjectUnits() async {
-    try {
+    // try {
       final response = await http.get(Uri.parse('$HOSTNAME/home/unit/$projectId/'));
       if (response.statusCode == 200) {
+        print('-----------------------------');
+        List a = jsonDecode(response.body);
+        print(a.first);
         units = unitFromJson(response.body);
         print(units);
       } else {
         throw Exception('Failed to load followup notifications');
       }
-    } catch (e) {
-      throw Exception('Error: $e');
-    } finally {
-      isLoad = true;
-      update();
-    }
+    // } catch (e) {
+    //   throw Exception('Error: $e');
+    // } finally {
+    //   isLoad = true;
+    //   update();
+    // }
   }
 
   void switchUnit(int index, id) {

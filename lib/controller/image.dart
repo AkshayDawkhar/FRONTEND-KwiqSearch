@@ -45,7 +45,7 @@ class ImageController extends GetxController {
 Future<int> uploadUnitImage(File image,int unitID) async {
     final url = Uri.parse('$HOSTNAME/home/FloorMaps/');
     var request = http.MultipartRequest('POST',url);
-    request.fields['unit_id'] = unitID.toString();
+    request.fields['unit'] = unitID.toString();
     request.fields['name'] = 'name';
     request.files.add(
       await http.MultipartFile.fromPath(

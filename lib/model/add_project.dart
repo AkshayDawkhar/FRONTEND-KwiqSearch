@@ -179,6 +179,7 @@ class Unit {
   int carpetArea;
   int price;
   int projectId;
+  List<FloorMap> floorMap;
 
   Unit({
     required this.id,
@@ -186,6 +187,7 @@ class Unit {
     required this.carpetArea,
     required this.price,
     required this.projectId,
+    required this.floorMap,
   });
 
   factory Unit.fromJson(Map<String, dynamic> json) => Unit(
@@ -194,6 +196,7 @@ class Unit {
     carpetArea: json["CarpetArea"],
     price: json["price"],
     projectId: json["project_id"],
+    floorMap: List<FloorMap>.from(json['floor_map'].map((x) => FloorMap.fromMap(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -202,9 +205,42 @@ class Unit {
     "CarpetArea": carpetArea,
     "price": price,
     "project_id": projectId,
+    "floor_map": floorMap.map((x) => x.toMap()).toList(),
   };
 }
+
 
 // AddProject addProjectFromJson(String str) => AddProject.fromJson(json.decode(str));
 
 // String addProjectToJson(AddProject data) => json.encode(data.toJson());
+class FloorMap {
+  int id;
+  String image;
+  String name;
+  int unit;
+
+  FloorMap({
+    required this.id,
+    required this.image,
+    required this.name,
+    required this.unit,
+  });
+
+  factory FloorMap.fromJson(String str) => FloorMap.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory FloorMap.fromMap(Map<String, dynamic> json) => FloorMap(
+    id: json["id"],
+    image: json["image"],
+    name: json["name"],
+    unit: json["unit"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "image": image,
+    "name": name,
+    "unit": unit,
+  };
+}
