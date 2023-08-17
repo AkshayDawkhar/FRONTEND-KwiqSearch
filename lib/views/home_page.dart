@@ -474,11 +474,12 @@ class HomePage extends StatelessWidget {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                unit.image != null?
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
                                   child: Image.network(
-                                      'https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w='),
-                                ),
+                                      '$HOSTNAME/${unit.image}'),
+                                ):Container(),
                                 // NetworkImage(
                                 //     'https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w='),
                                 ListTile(
@@ -526,7 +527,7 @@ class HomePage extends StatelessWidget {
                             ));
                         // return Text(dummyFlats.elementAt(index).name);
                       })
-                  : CircularProgressIndicator();
+                  : Center(child: CircularProgressIndicator());
             }),
           ),
         ),

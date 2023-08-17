@@ -63,7 +63,7 @@ class EditProjectController extends GetxController {
   bool readyToMove = false;
   bool power = false;
   bool goods = false;
-
+  String imageUrl='$HOSTNAME/media/Images/default/0.png';
   // DateTime rera = DateTime.now();
   // DateTime possession = DateTime.now();
   int reraMonth = 1;
@@ -202,7 +202,6 @@ class EditProjectController extends GetxController {
       brokerage: a["brokerage"],
       incentive: a["incentive"],
       units: a['units'].map((e) => Map<String, dynamic>.from(json.decode(json.encode(e).toString()))).toList(),
-
       bhk: 0,
       carpetArea: 0,
       price: 1,
@@ -242,7 +241,9 @@ class EditProjectController extends GetxController {
     bhk.text = model.bhk.toString();
     carpetArea.text = model.carpetArea.toString();
     price.text = model.price.toString();
-
+    if(a['image'] != null) {
+      imageUrl = '$HOSTNAME${a['image']}';
+    }
     // Update fields for units list (assuming units is a list of maps)
     units = model.units
         .map((unit) => {

@@ -12,6 +12,7 @@ class UnitDetails {
   double latitude;
   String amenities;
   List<ProjectUnit> projectUnits;
+  String? image;
 
   UnitDetails({
     required this.projectId,
@@ -25,6 +26,7 @@ class UnitDetails {
     required this.latitude,
     required this.amenities,
     required this.projectUnits,
+    required this.image,
   });
 
   factory UnitDetails.fromJson(String str) => UnitDetails.fromMap(json.decode(str));
@@ -43,6 +45,7 @@ class UnitDetails {
         latitude: json["latitude"]?.toDouble(),
         amenities: json["amenities"],
         projectUnits: List<ProjectUnit>.from(json["project_units"].map((x) => ProjectUnit.fromMap(x))),
+        image: json["image"],
       );
 
   Map<String, dynamic> toMap() => {

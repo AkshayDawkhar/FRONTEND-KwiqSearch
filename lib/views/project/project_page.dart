@@ -3,91 +3,32 @@ import 'package:get/get.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:takeahome/constants.dart';
 import 'package:takeahome/controller/project.dart';
+import 'package:takeahome/model/project.dart' as project;
 
+import '../../controller/image.dart';
 import '../../controller/interested.dart';
+import '../../controller/project_page.dart';
 import '../../model/add_project.dart';
 
 class ProjectPage extends StatelessWidget {
   var editProjectController = Get.put(EditProjectController(projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
+
   var interestedController = Get.put(InterestedController(projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
+
+  var projectDetailsController = Get.put(ProjectDetailsController(projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
 
   @override
   Widget build(BuildContext context) {
-    Widget myContainer(int index) {
-      return fixedContainer(
-        child: Row(
-          children: [
-            Expanded(
-              flex: 6,
-              child: DropdownButtonFormField(
-                  validator: (value) {
-                    if (value == null) {
-                      return "Enter something";
-                    }
-                    return null;
-                  },
-                  decoration: inputDecoration('BHK'),
-                  value: double.tryParse(editProjectController.units.elementAt(index)['unit']!.text),
-                  hint: const Text('BHK'),
-                  items: bhks,
-                  onChanged: (value) {
-                    editProjectController.units.elementAt(index)['unit']!.text = value.toString();
-                  }),
-            ),
-            const SizedBox(
-              width: 5,
-            ),
-            Expanded(
-              flex: 4,
-              child: TextFormField(
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Enter something";
-                  }
-                  return null;
-                },
-                keyboardType: TextInputType.number,
-                decoration: inputDecoration('Carpet Area'),
-                controller: editProjectController.units.elementAt(index)['CarpetArea'],
-              ),
-            ),
-            const SizedBox(
-              width: 5,
-            ),
-            Expanded(
-              flex: 4,
-              child: TextFormField(
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Enter something";
-                  }
-                  return null;
-                },
-                keyboardType: TextInputType.number,
-                // decoration: inputDecoration('Price ₹ in L'),
-                decoration: const InputDecoration(labelText: 'Price', border: OutlineInputBorder(), suffixText: 'L'),
-                controller: editProjectController.units.elementAt(index)['price'],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
-        title: GetBuilder<EditProjectController>(
-          builder: (context) {
-            return Text('${editProjectController.projectName.text}');
-          }
-        ),
+        title: GetBuilder<EditProjectController>(builder: (c) {
+          return Text('${editProjectController.projectName.text}');
+        }),
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'interested') {
                 Get.toNamed('/interested', parameters: {'project_id': editProjectController.projectId.toString()});
-                // Handle edit action here
-                // For example, navigate to edit user screen
               } else if (value == 'delete') {
                 // Handle delete action here
                 // For example, show a confirmation dialog
@@ -136,10 +77,18 @@ class ProjectPage extends StatelessWidget {
           child: SingleChildScrollView(
               child: Column(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                    'https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w='),
+              InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return BottomImageDialog(id: controller.projectId);
+                      });
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network('${editProjectController.imageUrl}'),
+                ),
               ),
               GetBuilder<InterestedController>(builder: (controller) {
                 return Container(
@@ -148,7 +97,7 @@ class ProjectPage extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: controller.units.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return unitContainer(controller.units.elementAt(index), index);
+                        return unitContainer(context,controller.units.elementAt(index), index);
                       }),
                 );
               }),
@@ -163,7 +112,6 @@ class ProjectPage extends StatelessWidget {
                 leading: Text('Amenities :'),
                 title: Text('${controller.amenities.text.toUpperCase()}'),
                 trailing: Icon(Icons.pool),
-
               ),
               ListTile(
                 leading: Text('Developer :'),
@@ -174,7 +122,8 @@ class ProjectPage extends StatelessWidget {
                 leading: Text('Area :'),
                 title: Text('${getFormat(controller.a, controller.area.text)}'),
                 trailing: Icon(Icons.location_on_outlined),
-              ),ListTile(
+              ),
+              ListTile(
                 leading: Text('Project Type :'),
                 title: Text('${controller.projectType.text}'),
                 trailing: Icon(Icons.home_work_outlined),
@@ -183,7 +132,8 @@ class ProjectPage extends StatelessWidget {
                 leading: Text('Under :'),
                 title: Text('${controller.areaIn.text.toUpperCase()}'),
                 trailing: Icon(Icons.business),
-              ),ListTile(
+              ),
+              ListTile(
                 leading: Text('LandMark :'),
                 title: Text('${controller.landmark.text}'),
                 trailing: Icon(Icons.map_outlined),
@@ -198,45 +148,155 @@ class ProjectPage extends StatelessWidget {
           )),
         );
       }),
-
     );
   }
 
-  Widget unitContainer(Unit unit, int index) {
+  Widget unitContainer(BuildContext context,Unit unit, int index) {
     print('----');
     print(unit.floorMap.firstOrNull.runtimeType);
     return Container(
-        margin: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(width:  1),
-          color:  Colors.blue[200],
-        ),
-        child: InkWell(
-          onTap: () {
-            Get.dialog(
-              InteractiveViewer(
-              clipBehavior: Clip.none,
-              maxScale: 90,
-              child: Image.network(
-                  '$HOSTNAME${unit.floorMap.firstOrNull!.image}',),
-            ),);
-            // interestedController.switchUnit(index, unit.id);
-          },
-          child: AspectRatio(
-            aspectRatio: 1.2,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(unitToName(unit.unit)),
-                Text('${unit.carpetArea} sqft'),
-                Text(numberToLCr(unit.price.toDouble())),
-              ],
-            ),
+      margin: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(width: 1),
+        color: Colors.blue[200],
+      ),
+      child: InkWell(
+        onTap: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return BottomUnitImageDialog(id: unit.id);
+              });
+
+          // Get.dialog(
+          //   InteractiveViewer(
+          //     clipBehavior: Clip.none,
+          //     maxScale: 90,
+          //     child: Image.network(
+          //       '$HOSTNAME${unit.floorMap.firstOrNull!.image}',
+          //     ),
+          //   ),
+          // );
+          // interestedController.switchUnit(index, unit.id);
+        },
+        child: AspectRatio(
+          aspectRatio: 1.2,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(unitToName(unit.unit)),
+              Text('${unit.carpetArea} sqft'),
+              Text(numberToLCr(unit.price.toDouble())),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
+}
+
+class BottomImageDialog extends StatelessWidget {
+  int id;
+
+  BottomImageDialog({Key? key, required this.id}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var imageController = Get.put(ImageController(projectID: id));
+    imageController.getProjectImage(id);
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(' Images'),
+          Expanded(
+            child: GetBuilder<ImageController>(
+                init: ImageController(projectID: id),
+                builder: (controller) {
+                  return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                      shrinkWrap: true,
+                      itemCount: controller.projectImages.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        project.ProjectImage image = controller.projectImages.elementAt(index);
+                        return InkWell(
+                          onTap: () {
+                            Get.dialog(
+                              InteractiveViewer(
+                                clipBehavior: Clip.none,
+                                maxScale: 90,
+                                child: Image.network(
+                                  '$HOSTNAME${image.image}',
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                              padding: EdgeInsets.all(6),
+                              child: Image.network(
+                                '$HOSTNAME${image.image}',
+                                fit: BoxFit.cover,
+                              )),
+                        );
+                      });
+                }),
+          ),
+        ],
+      ),
+    );
+  }
+}
+class BottomUnitImageDialog extends StatelessWidget {
+  int id;
+
+  BottomUnitImageDialog({Key? key, required this.id}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var imageController = Get.put(ImageController(projectID: id));
+    imageController.getUnitImage(id);
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(' Images'),
+          Expanded(
+            child: GetBuilder<ImageController>(
+                init: ImageController(projectID: id),
+                builder: (controller) {
+                  return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                      shrinkWrap: true,
+                      itemCount: controller.unitImages.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        project.FloorMap image = controller.unitImages.elementAt(index);
+                        return InkWell(
+                          onTap: () {
+                            Get.dialog(
+                              InteractiveViewer(
+                                clipBehavior: Clip.none,
+                                maxScale: 90,
+                                child: Image.network(
+                                  '$HOSTNAME${image.image}',
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                              padding: EdgeInsets.all(6),
+                              child: Image.network(
+                                '$HOSTNAME${image.image}',
+                                fit: BoxFit.cover,
+                              )),
+                        );
+                      });
+                }),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -251,22 +311,3 @@ String getFormat(List<dynamic> fields, String value) {
   });
   return a;
 }
-
-Container fixedContainer({required Widget child}) => Container(
-      padding: const EdgeInsets.all(12),
-      child: child,
-    );
-
-InputDecoration inputDecoration(String label) => InputDecoration(border: const OutlineInputBorder(), labelText: label);
-AlertDialog saveDialog = AlertDialog(
-  title: const Text('Conform save'),
-  actions: [
-    TextButton(onPressed: () {}, child: const Text('Save and Add Unit')),
-    TextButton(
-        onPressed: () {
-          Get.back();
-          // Get.back();
-        },
-        child: const Text('Save'))
-  ],
-);
