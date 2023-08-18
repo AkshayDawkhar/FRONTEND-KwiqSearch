@@ -144,7 +144,9 @@ class ClientController extends GetxController {
 }
 
 class ClientsController extends GetxController {
+  TextEditingController searchController = TextEditingController();
   List<Clients> clients = [];
+  List<Clients> displayClients = [];
   bool isLoad = false;
 
   @override
@@ -153,7 +155,12 @@ class ClientsController extends GetxController {
     super.onInit();
     fetchClient();
   }
-
+  void search()async{
+    print(searchController.text);
+    displayClients = clients.where((element) => element.fname.toLowerCase().startsWith(searchController.text) ).toList();
+    // print();
+    update();
+  }
   void fetchClient() async {
     final url = Uri.parse('$HOSTNAME/client/client/');
     final response = await http.get(
@@ -164,6 +171,7 @@ class ClientsController extends GetxController {
     );
     // Map<String, dynamic> a = json.decode(response.body);
     clients = clientsFromJson(response.body);
+    displayClients = clients;
     // print(clients);
     isLoad = true;
     update();

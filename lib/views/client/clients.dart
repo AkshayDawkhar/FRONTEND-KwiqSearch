@@ -34,18 +34,24 @@ class ClientsPage extends StatelessWidget {
                     Expanded(
                       child: SearchBar(
                         hintText: 'Search',
+                        controller: controller.searchController,
+                        onChanged: (s){
+                          controller.search();
+                        },
                       ),
                     ),
-                    TextButton.icon(onPressed: (){}, icon: Icon(Icons.search), label: Text('Search'))
+                    TextButton.icon(onPressed: (){
+
+                    }, icon: Icon(Icons.search), label: Text('Search'))
                   ],
                 ),
               ),
               Divider(),
               Expanded(
                 child: ListView.builder(
-                    itemCount: controller.clients.length,
+                    itemCount: controller.displayClients.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return clientContainer(controller.clients.elementAt(index));
+                      return clientContainer(controller.displayClients.elementAt(index));
                     }),
               ),
             ],

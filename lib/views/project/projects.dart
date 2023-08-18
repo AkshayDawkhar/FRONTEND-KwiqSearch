@@ -28,18 +28,24 @@ class ProjectsPage extends StatelessWidget {
                       Expanded(
                         child: SearchBar(
                           hintText: 'Search',
+                          controller: controller.searchController,
+                          onChanged: (s){
+                            controller.search();
+                          },
                         ),
                       ),
-                      TextButton.icon(onPressed: () {}, icon: Icon(Icons.search), label: Text('Search'))
+                      TextButton.icon(onPressed: () {
+                        controller.search();
+                      }, icon: Icon(Icons.search), label: Text('Search'))
                     ],
                   ),
                 ),
                 Divider(),
                 Expanded(
                   child: ListView.builder(
-                      itemCount: controller.projects.length,
+                      itemCount: controller.displayProjects.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return projectContainer(controller.projects.elementAt(index));
+                        return projectContainer(controller.displayProjects.elementAt(index));
                       }),
                 ),
               ],

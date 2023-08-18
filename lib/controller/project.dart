@@ -9,8 +9,9 @@ import '../model/add_project.dart';
 import '../model/project.dart';
 
 class ProjectsController extends GetxController {
-
+  TextEditingController searchController = TextEditingController();
   List<Projects> projects = [];
+  List<Projects> displayProjects = [];
   bool isLoad = false;
 
   @override
@@ -19,7 +20,12 @@ class ProjectsController extends GetxController {
     super.onInit();
     fetchProject();
   }
-
+  void search()async{
+    print(searchController.text);
+    displayProjects = projects.where((element) => element.projectName.toLowerCase().startsWith(searchController.text) ).toList();
+    // print();
+  update();
+  }
   void fetchProject() async {
     final url = Uri.parse('$HOSTNAME/home/project/');
     final response = await http.get(
@@ -30,6 +36,7 @@ class ProjectsController extends GetxController {
     );
     // Map<String, dynamic> a = json.decode(response.body);
     projects = projectsFromJson(response.body);
+    displayProjects = projects;
     // print(clients);
     isLoad = true;
     update();
