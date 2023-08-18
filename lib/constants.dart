@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-String HOSTNAME = 'http://192.168.43.45:8000';
+String HOSTNAME = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
 String DEPLOY = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
 String LOCAL = 'http://192.168.1.36:8000';
 
@@ -177,7 +177,25 @@ class Locations {
 
   Locations(this.latitude, this.longitude);
 }
+String convertToCamelCase(String input) {
+  List<String> words = input.split(' ');
+  String result = '';
 
+  for (String word in words) {
+    result += word.toLowerCase();
+  }
+
+  return result;
+}
+bool getMatch(List<String> values,String query){
+  query = convertToCamelCase(query);
+  for(String value in values){
+      if(convertToCamelCase(value).startsWith(query)){
+        return true;
+      };
+  }
+  return false;
+}
 List<Locations> locations = [
   Locations(18.604925, 73.746217),
   Locations(18.583439, 73.770803),

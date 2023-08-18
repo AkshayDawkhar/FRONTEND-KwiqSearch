@@ -156,8 +156,9 @@ class ClientsController extends GetxController {
     fetchClient();
   }
   void search()async{
-    print(searchController.text);
-    displayClients = clients.where((element) => element.fname.toLowerCase().startsWith(searchController.text) ).toList();
+    // print(searchController.text);
+    displayClients = clients.where((element) => getMatch([element.fname,element.lname], searchController.text ) ).toList();
+
     // print();
     update();
   }
