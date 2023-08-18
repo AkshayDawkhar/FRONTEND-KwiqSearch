@@ -37,6 +37,7 @@ class ImageController extends GetxController {
     });
     print(response.statusCode);
     // onInit();
+
     return response.statusCode;
     // if (response.statusCode == 201) {
     //   Get.back();

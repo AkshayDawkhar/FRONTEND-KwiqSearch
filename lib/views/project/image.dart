@@ -38,167 +38,173 @@ class _ImagePageState extends State<ImagePage> {
             controller.onInit();
           },
           child: SingleChildScrollView(
-              child: Column(
-            children: [
-              InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        imageController.getProjectImage(editProjectController.projectId);
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(' Images'),
-                                IconButton(onPressed: (){
-                                  Navigator.pop(context);
-                                  uploadProjectImage(editProjectController.projectId);
-
-                                  }, icon: Icon(Icons.add_photo_alternate))
-                              ],
-                            ),
-                            Expanded(
-                              child: GetBuilder<ImageController>(
-                                  init: ImageController(projectID:editProjectController.projectId),
-                                  builder: (controller) {
-                                    return GridView.builder(
-                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                                        shrinkWrap: true,
-                                        itemCount: controller.projectImages.length,
-                                        itemBuilder: (BuildContext context, int index) {
-                                          project.ProjectImage image = controller.projectImages.elementAt(index);
-                                          return Container(
-                                            padding: EdgeInsets.all(6),
-                                            child: Stack(
-                                              alignment: Alignment.bottomRight, // Align items to the right bottom corner
-                                              children: [
-                                                InkWell(
-                                                  onTap: (){
-                                                    Get.dialog(
-                                                      InteractiveViewer(
-                                                        clipBehavior: Clip.none,
-                                                        maxScale: 90,
-                                                        child: Image.network(
-                                                          '$HOSTNAME${image.image}',
+            child: Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          imageController.getProjectImage(editProjectController.projectId);
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(' Images'),
+                                  IconButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        uploadProjectImage(editProjectController.projectId);
+                                      },
+                                      icon: Icon(Icons.add_photo_alternate))
+                                ],
+                              ),
+                              Expanded(
+                                child: GetBuilder<ImageController>(
+                                    init: ImageController(projectID: editProjectController.projectId),
+                                    builder: (controller) {
+                                      return GridView.builder(
+                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                                          shrinkWrap: true,
+                                          itemCount: controller.projectImages.length,
+                                          itemBuilder: (BuildContext context, int index) {
+                                            project.ProjectImage image = controller.projectImages.elementAt(index);
+                                            return Container(
+                                              padding: EdgeInsets.all(6),
+                                              child: Stack(
+                                                alignment: Alignment.bottomRight, // Align items to the right bottom corner
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      Get.dialog(
+                                                        InteractiveViewer(
+                                                          clipBehavior: Clip.none,
+                                                          maxScale: 90,
+                                                          child: Image.network(
+                                                            '$HOSTNAME${image.image}',
+                                                          ),
                                                         ),
+                                                      );
+                                                    },
+                                                    child: AspectRatio(
+                                                      aspectRatio: 1,
+                                                      child: Image.network(
+                                                        '$HOSTNAME${image.image}',
+                                                        fit: BoxFit.cover,
                                                       ),
-                                                    );
-                                                  },
-                                                  child: AspectRatio(
-                                                    aspectRatio: 1,
-                                                    child: Image.network(
-                                                      '$HOSTNAME${image.image}',
-                                                      fit: BoxFit.cover,
                                                     ),
                                                   ),
-                                                ),
-                                                Positioned(
-                                                  bottom: 1, // Adjust the position as needed
-                                                  right: 1, // Adjust the position as needed
-                                                  child: Row(
-                                                    children: [
-                                                      ElevatedButton(
-                                                        onPressed: () {
-                                                          // imageController.updateImage(ima, imageID)
-                                                          updateProjectImage(editProjectController.projectId,image.id);
-                                                        },
-                                                        child: Icon(Icons.edit),
-                                                      ),
-                                                      SizedBox(width: 10),
-                                                      ElevatedButton(
-                                                        style: ElevatedButton.styleFrom(foregroundColor: Colors.red),
-                                                        child: Icon(Icons.delete),
-                                                        onPressed: () {
-                                                          imageController.deleteProjectImage(image.id);
-                                                          Navigator.pop(context);
-
-                                                          // Handle delete button press
-                                                        },
-                                                      ),
-                                                    ],
+                                                  Positioned(
+                                                    bottom: 1, // Adjust the position as needed
+                                                    right: 1, // Adjust the position as needed
+                                                    child: Row(
+                                                      children: [
+                                                        ElevatedButton(
+                                                          onPressed: () {
+                                                            // imageController.updateImage(ima, imageID)
+                                                            updateProjectImage(editProjectController.projectId, image.id);
+                                                          },
+                                                          child: Icon(Icons.edit),
+                                                        ),
+                                                        SizedBox(width: 10),
+                                                        ElevatedButton(
+                                                          style: ElevatedButton.styleFrom(foregroundColor: Colors.red),
+                                                          child: Icon(Icons.delete),
+                                                          onPressed: () {
+                                                            imageController.deleteProjectImage(image.id);
+                                                            Navigator.pop(context);
+                                                            editProjectController.onInit();
+                                                            setState(() {});
+                                                            // Handle delete button press
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        });
-                                  }),
-                            ),
-                          ],
-                        );
-                      });
-                },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network('${editProjectController.imageUrl}'),
+                                                ],
+                                              ),
+                                            );
+                                          });
+                                    }),
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network('${editProjectController.imageUrl}'),
+                  ),
                 ),
-              ),
-              GetBuilder<InterestedController>(builder: (controller) {
-                return Container(
-                  height: 100,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: controller.units.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return unitContainer(controller.units.elementAt(index), index);
-                      }),
-                );
-              }),
-              // Stack(
-              //   alignment: Alignment.bottomRight, // Align items to the right bottom corner
-              //   children: [
-              //     ClipRRect(
-              //       borderRadius: BorderRadius.circular(12),
-              //       child: Image.network(
-              //         'https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w=',
-              //         width: double.infinity,
-              //         // height: 200, // Adjust the height as needed
-              //         fit: BoxFit.cover,
-              //       ),
-              //     ),
-              //     Positioned(
-              //       bottom: 1, // Adjust the position as needed
-              //       right: 1, // Adjust the position as needed
-              //       child: Row(
-              //         children: [
-              //           ElevatedButton(
-              //             onPressed: () {
-              //               // Handle edit button press
-              //               // imagePickerDialog();
-              //               uploadProjectImage(89);
-              //             },
-              //             child: Icon(Icons.edit),
-              //           ),
-              //           SizedBox(width: 10),
-              //           ElevatedButton(
-              //             style: ElevatedButton.styleFrom(foregroundColor: Colors.red),
-              //             child: Icon(Icons.delete),
-              //             onPressed: () {
-              //               // Handle delete button press
-              //             },
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // Divider(),
-              // GetBuilder<InterestedController>(builder: (controller) {
-              //   return SizedBox(
-              //     height: 120,
-              //     child: ListView.builder(
-              //         scrollDirection: Axis.horizontal,
-              //         itemCount: controller.units.length,
-              //         itemBuilder: (BuildContext context, int index) {
-              //           return unitContainer(controller.units.elementAt(index), index);
-              //         }),
-              //   );
-              // }),
-            ],
-          )),
+                GetBuilder<InterestedController>(builder: (controller) {
+                  return Container(
+                    height: 100,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.units.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return unitContainer(controller.units.elementAt(index), index);
+                        }),
+                  );
+                }),
+                SizedBox(
+                  height: 500,
+                )
+                // Stack(
+                //   alignment: Alignment.bottomRight, // Align items to the right bottom corner
+                //   children: [
+                //     ClipRRect(
+                //       borderRadius: BorderRadius.circular(12),
+                //       child: Image.network(
+                //         'https://media.istockphoto.com/id/511061090/photo/business-office-building-in-london-england.jpg?s=612x612&w=0&k=20&c=nYAn4JKoCqO1hMTjZiND1PAIWoABuy1BwH1MhaEoG6w=',
+                //         width: double.infinity,
+                //         // height: 200, // Adjust the height as needed
+                //         fit: BoxFit.cover,
+                //       ),
+                //     ),
+                //     Positioned(
+                //       bottom: 1, // Adjust the position as needed
+                //       right: 1, // Adjust the position as needed
+                //       child: Row(
+                //         children: [
+                //           ElevatedButton(
+                //             onPressed: () {
+                //               // Handle edit button press
+                //               // imagePickerDialog();
+                //               uploadProjectImage(89);
+                //             },
+                //             child: Icon(Icons.edit),
+                //           ),
+                //           SizedBox(width: 10),
+                //           ElevatedButton(
+                //             style: ElevatedButton.styleFrom(foregroundColor: Colors.red),
+                //             child: Icon(Icons.delete),
+                //             onPressed: () {
+                //               // Handle delete button press
+                //             },
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // Divider(),
+                // GetBuilder<InterestedController>(builder: (controller) {
+                //   return SizedBox(
+                //     height: 120,
+                //     child: ListView.builder(
+                //         scrollDirection: Axis.horizontal,
+                //         itemCount: controller.units.length,
+                //         itemBuilder: (BuildContext context, int index) {
+                //           return unitContainer(controller.units.elementAt(index), index);
+                //         }),
+                //   );
+                // }),
+              ],
+            ),
+          ),
         );
       }),
     );
@@ -242,9 +248,35 @@ class _ImagePageState extends State<ImagePage> {
         actions: [
           TextButton(
               onPressed: () async {
-                int i = await imageController.uploadImage(pickedImage,editProjectController.projectId);
+                int i = await imageController.uploadImage(pickedImage, editProjectController.projectId);
                 if (i == 201) {
                   Get.back();
+                  editProjectController.onInit();
+                  // setState(() {
+                  //   print('setting state');
+                  // });
+                }
+                //
+              },
+              child: Text('Save'))
+        ],
+      ));
+    }
+  }
+
+  void updateProjectImage(int projectID, int id) async {
+    File? pickedImage = await imagePickerDialog();
+    print(pickedImage);
+    if (pickedImage != null) {
+      Get.dialog(AlertDialog(
+        content: Image.file(pickedImage),
+        actions: [
+          TextButton(
+              onPressed: () async {
+                int i = await imageController.updateImage(pickedImage, projectID, id);
+                if (i == 201) {
+                  Get.back();
+                  editProjectController.onInit();
                   setState(() {
                     print('setting state');
                   });
@@ -256,7 +288,8 @@ class _ImagePageState extends State<ImagePage> {
       ));
     }
   }
-  void updateProjectImage(int projectID,int id) async {
+
+  void updateUnitImage(int projectID, int id) async {
     File? pickedImage = await imagePickerDialog();
     print(pickedImage);
     if (pickedImage != null) {
@@ -265,32 +298,10 @@ class _ImagePageState extends State<ImagePage> {
         actions: [
           TextButton(
               onPressed: () async {
-                int i = await imageController.updateImage(pickedImage,projectID,id);
+                int i = await imageController.updateUnitImage(pickedImage, projectID, id);
                 if (i == 201) {
                   Get.back();
-                  setState(() {
-                    print('setting state');
-                  });
-                }
-                //
-              },
-              child: Text('Save'))
-        ],
-      ));
-    }
-  }
-  void updateUnitImage(int projectID,int id) async {
-    File? pickedImage = await imagePickerDialog();
-    print(pickedImage);
-    if (pickedImage != null) {
-      Get.dialog(AlertDialog(
-        content: Image.file(pickedImage),
-        actions: [
-          TextButton(
-              onPressed: () async {
-                int i = await imageController.updateUnitImage(pickedImage,projectID,id);
-                if (i == 201) {
-                  Get.back();
+                  editProjectController.onInit();
                   setState(() {
                     print('setting state');
                   });
@@ -313,6 +324,7 @@ class _ImagePageState extends State<ImagePage> {
               onPressed: () async {
                 int i = await imageController.uploadUnitImage(pickedImage, unit.id);
                 if (i == 201) {
+                  editProjectController.onInit();
                   Get.back();
                 }
               },
@@ -353,83 +365,6 @@ class _ImagePageState extends State<ImagePage> {
     return null;
   }
 
-  // Widget unitContainer(Unit unit, int index) {
-  //   return Container(
-  //     margin: EdgeInsets.all(5),
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(12),
-  //       border: Border.all(width: 2),
-  //       color: Colors.blue[200],
-  //     ),
-  //     child: Column(
-  //       children: [
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             Text(' ${unitToName(unit.unit)} | ${unit.carpetArea} sqft | ${numberToLCr(unit.price.toDouble())}'),
-  //             IconButton(
-  //                 onPressed: () {
-  //                   uploadUnitImage(unit);
-  //                 },
-  //                 color: Colors.black,
-  //                 icon: Icon(Icons.add_photo_alternate))
-  //           ],
-  //         ),
-  //         unit.floorMap.isNotEmpty
-  //             ? Stack(
-  //                 alignment: Alignment.bottomRight, // Align items to the right bottom corner
-  //                 children: [
-  //                   InkWell(
-  //                     onTap: () {
-  //                       print(unit.floorMap.firstOrNull!.image);
-  //                       Get.dialog(
-  //                         InteractiveViewer(
-  //                           clipBehavior: Clip.none,
-  //                           maxScale: 90,
-  //                           child: Image.network('$HOSTNAME${unit.floorMap.first.image}'),
-  //                         ),
-  //                       );
-  //                     },
-  //                     child: ClipRRect(
-  //                       borderRadius: BorderRadius.circular(12),
-  //                       child: Image.network(
-  //                         '$HOSTNAME${unit.floorMap.first.image}',
-  //                         width: double.infinity,
-  //                         // height: 200, // Adjust the height as needed
-  //                         fit: BoxFit.cover,
-  //                       ),
-  //                     ),
-  //                   ),
-  //                   Positioned(
-  //                     bottom: 1, // Adjust the position as needed
-  //                     right: 1, // Adjust the position as needed
-  //                     child: Row(
-  //                       children: [
-  //                         ElevatedButton(
-  //                           onPressed: () {
-  //                             // Handle edit button press
-  //                           },
-  //                           child: Icon(Icons.edit),
-  //                         ),
-  //                         SizedBox(width: 10),
-  //                         ElevatedButton(
-  //                           style: ElevatedButton.styleFrom(foregroundColor: Colors.red),
-  //                           child: Icon(Icons.delete),
-  //                           onPressed: () {
-  //                             // imageController.deleteUnitImage();
-  //                             // Handle delete button press
-  //                           },
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 ],
-  //               )
-  //             : Container(),
-  //       ],
-  //     ),
-  //   );
-  // }
   Widget unitContainer(Unit unit, int index) {
     print('----');
     print(unit.floorMap.firstOrNull.runtimeType);
@@ -453,16 +388,17 @@ class _ImagePageState extends State<ImagePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(' Unit Images'),
-                        IconButton(onPressed: (){
-                          Navigator.pop(context);
-                          uploadUnitImage(unit);
-
-                        }, icon: Icon(Icons.add_photo_alternate))
+                        IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              uploadUnitImage(unit);
+                            },
+                            icon: Icon(Icons.add_photo_alternate))
                       ],
                     ),
                     Expanded(
                       child: GetBuilder<ImageController>(
-                          init: ImageController(projectID:editProjectController.projectId),
+                          init: ImageController(projectID: editProjectController.projectId),
                           builder: (controller) {
                             return GridView.builder(
                                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
@@ -476,7 +412,7 @@ class _ImagePageState extends State<ImagePage> {
                                       alignment: Alignment.bottomRight, // Align items to the right bottom corner
                                       children: [
                                         InkWell(
-                                          onTap: (){
+                                          onTap: () {
                                             Get.dialog(
                                               InteractiveViewer(
                                                 clipBehavior: Clip.none,
@@ -503,7 +439,7 @@ class _ImagePageState extends State<ImagePage> {
                                               ElevatedButton(
                                                 onPressed: () {
                                                   // imageController.updateImage(ima, imageID)
-                                                  updateUnitImage(unit.id,image.id);
+                                                  updateUnitImage(unit.id, image.id);
                                                 },
                                                 child: Icon(Icons.edit),
                                               ),
@@ -514,7 +450,8 @@ class _ImagePageState extends State<ImagePage> {
                                                 onPressed: () {
                                                   imageController.deleteUnitImage(image.id);
                                                   Navigator.pop(context);
-
+                                                  editProjectController.onInit();
+                                                  setState(() {});
                                                   // Handle delete button press
                                                 },
                                               ),
@@ -529,7 +466,7 @@ class _ImagePageState extends State<ImagePage> {
                     ),
                   ],
                 );
-              });// interestedController.switchUnit(index, unit.id);
+              }); // interestedController.switchUnit(index, unit.id);
         },
         child: AspectRatio(
           aspectRatio: 1.2,
