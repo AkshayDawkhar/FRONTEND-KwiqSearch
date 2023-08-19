@@ -240,23 +240,26 @@ class _ImagePageState extends State<ImagePage> {
   }
 
   void uploadProjectImage(int id) async {
-    File? pickedImage = await imagePickerDialog();
-    print(pickedImage);
-    if (pickedImage != null) {
+    List<File> pickedImage = await pickImages();
+    if (pickedImage.isNotEmpty) {
       Get.dialog(AlertDialog(
-        content: Image.file(pickedImage),
+        content: SizedBox(
+          width: 400,
+          child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              itemCount: pickedImage.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Image.file(pickedImage.elementAt(index));
+              }),
+        ),
         actions: [
           TextButton(
               onPressed: () async {
-                int i = await imageController.uploadImage(pickedImage, editProjectController.projectId);
-                if (i == 201) {
-                  Get.back();
-                  editProjectController.onInit();
-                  // setState(() {
-                  //   print('setting state');
-                  // });
+                for (File image in pickedImage) {
+                  await imageController.uploadImage(image, editProjectController.projectId);
                 }
-                //
+                editProjectController.onInit();
+                Get.back();
               },
               child: Text('Save'))
         ],
@@ -265,7 +268,7 @@ class _ImagePageState extends State<ImagePage> {
   }
 
   void updateProjectImage(int projectID, int id) async {
-    File? pickedImage = await imagePickerDialog();
+    File? pickedImage = await pickImage();
     print(pickedImage);
     if (pickedImage != null) {
       Get.dialog(AlertDialog(
@@ -290,7 +293,7 @@ class _ImagePageState extends State<ImagePage> {
   }
 
   void updateUnitImage(int projectID, int id) async {
-    File? pickedImage = await imagePickerDialog();
+    File? pickedImage = await pickImage();
     print(pickedImage);
     if (pickedImage != null) {
       Get.dialog(AlertDialog(
@@ -315,18 +318,26 @@ class _ImagePageState extends State<ImagePage> {
   }
 
   void uploadUnitImage(Unit unit) async {
-    File? pickedImage = await imagePickerDialog();
-    if (pickedImage != null) {
+    List<File> pickedImage = await pickImages();
+    if (pickedImage.isNotEmpty) {
       Get.dialog(AlertDialog(
-        content: Image.file(pickedImage),
+        content: SizedBox(
+          width: 400,
+          child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              itemCount: pickedImage.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Image.file(pickedImage.elementAt(index));
+              }),
+        ),
         actions: [
           TextButton(
               onPressed: () async {
-                int i = await imageController.uploadUnitImage(pickedImage, unit.id);
-                if (i == 201) {
-                  editProjectController.onInit();
-                  Get.back();
+                for (File image in pickedImage) {
+                  await imageController.uploadUnitImage(image, unit.id);
                 }
+                editProjectController.onInit();
+                Get.back();
               },
               child: Text('Save'))
         ],
@@ -334,35 +345,45 @@ class _ImagePageState extends State<ImagePage> {
     }
   }
 
-  Future<File?> imagePickerDialog() async {
-    var pickedImage;
-    await Get.dialog(AlertDialog(
-      title: Text('Change Image'),
-      actions: [
-        IconButton(
-            onPressed: () async {
-              pickedImage = pickImage(ImageSource.camera);
-              Get.back();
-            },
-            icon: Icon(Icons.camera)),
-        IconButton(
-            onPressed: () {
-              pickedImage = pickImage(ImageSource.gallery);
-              Get.back();
-            },
-            icon: Icon(Icons.folder)),
-      ],
-    ));
-    return pickedImage;
-  }
+  // Future<File?> imagePickerDialog() async {
+  //   var pickedImage;
+  //   await Get.dialog(AlertDialog(
+  //     title: Text('Change Image'),
+  //     actions: [
+  //       IconButton(
+  //           onPressed: () async {
+  //             pickedImage = pickImage();
+  //             Get.back();
+  //           },
+  //           icon: Icon(Icons.camera)),
+  //       IconButton(
+  //           onPressed: () {
+  //             pickedImage = pickImage();
+  //             Get.back();
+  //           },
+  //           icon: Icon(Icons.folder)),
+  //     ],
+  //   ));
+  //   return pickedImage;
+  // }
 
-  Future<File?> pickImage(ImageSource source) async {
-    final pickedImage = await ImagePicker().pickImage(source: source);
+  Future<File?> pickImage() async {
+    final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       File _pickedImage = File(pickedImage.path);
       return _pickedImage;
     }
     return null;
+  }
+
+  Future<List<File>> pickImages() async {
+    List<File> _pickedImage = [];
+    final pickedImage = await ImagePicker().pickMultiImage();
+    if (pickedImage != null) {
+      _pickedImage = pickedImage.map((e) => File(e.path)).toList();
+      return _pickedImage;
+    }
+    return _pickedImage;
   }
 
   Widget unitContainer(Unit unit, int index) {
