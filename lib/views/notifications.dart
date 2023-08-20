@@ -57,6 +57,7 @@ class NotificationsPage extends StatelessWidget {
                   controller.isLoad
                       ? ListView.builder(
                           shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.followupNotifications.length,
                           itemBuilder: (BuildContext buildContext, int index) {
                             return Container(
