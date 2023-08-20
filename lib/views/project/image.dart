@@ -261,7 +261,7 @@ class _ImagePageState extends State<ImagePage> {
                 editProjectController.onInit();
                 Get.back();
               },
-              child: Text('Save'))
+              child: Obx(() => Text(imageController.sending.value? 'Saving......':'Save'))),
         ],
       ));
     }

@@ -13,8 +13,10 @@ class ImageController extends GetxController {
   int projectID;
   List<ProjectImage> projectImages = [];
   List<FloorMap> unitImages = [];
-
+  var sending = false.obs;
   Future<int> uploadImage(File image,int projectID) async {
+    sending.value = true;
+    update();
     // Map m = {"name": 'akshay', 'project_id': projectID};
     final url = Uri.parse('$HOSTNAME/home/images/');
     // final response = await http.post(url,
@@ -37,7 +39,8 @@ class ImageController extends GetxController {
     });
     print(response.statusCode);
     // onInit();
-
+  sending.value = false;
+    update();
     return response.statusCode;
     // if (response.statusCode == 201) {
     //   Get.back();
