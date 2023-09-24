@@ -6,6 +6,7 @@ import 'package:takeahome/views/client/client_page.dart';
 import 'package:takeahome/views/client/clients.dart';
 import 'package:takeahome/views/client/search_page.dart';
 import 'package:takeahome/views/home_page.dart';
+import 'package:takeahome/views/login.dart';
 import 'package:takeahome/views/map_page.dart';
 import 'package:takeahome/views/notifications.dart';
 import 'package:takeahome/views/project/add.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         // appBarTheme: AppBarTheme(backgroundColor: Colors.blueGrey[50])
       ),
       // home: HomePage(),
-      initialRoute: '/home',
+      initialRoute: '/login',
       debugShowCheckedModeBanner: false,
       getPages: [
         GetPage(name: '/home', page: () => TabControllerExample()),
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/notifications', page: () => NotificationsPage(), title: 'notifications'),
         GetPage(name: '/interested', page: () => InterestedPage(), title: 'interested'),
         GetPage(name: '/image', page: () => ImagePage(), title: 'interested'),
-
+        GetPage(name: '/login', page: () => Login(), title: 'interested'),
         // GetPage(name: '/about', page: () => AboutPage()),
       ],
     );

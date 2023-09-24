@@ -33,6 +33,7 @@ class AddProject {
   int carpetArea;
   int price;
   List units;
+  String? url;
 
   AddProject(
       {required this.area,
@@ -66,7 +67,9 @@ class AddProject {
       required this.bhk,
       required this.carpetArea,
       required this.price,
-      required this.units});
+      required this.units,
+      required this.url
+      });
 
   Map<String, dynamic> toMap() {
     return {
@@ -101,7 +104,8 @@ class AddProject {
       'bhk': bhk,
       'carpetArea': carpetArea,
       'price': price,
-      'units': units
+      'units': units,
+      'url':url
     };
   }
 //

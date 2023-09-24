@@ -4,6 +4,7 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:takeahome/constants.dart';
 import 'package:takeahome/controller/project.dart';
 import 'package:takeahome/model/project.dart' as project;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../controller/image.dart';
 import '../../controller/interested.dart';
@@ -11,14 +12,32 @@ import '../../controller/project_page.dart';
 import '../../model/add_project.dart';
 
 class ProjectPage extends StatelessWidget {
-  var editProjectController = Get.put(EditProjectController(projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
+  var editProjectController = Get.put(EditProjectController(
+      projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
 
-  var interestedController = Get.put(InterestedController(projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
+  var interestedController = Get.put(InterestedController(
+      projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
 
-  var projectDetailsController = Get.put(ProjectDetailsController(projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
+  var projectDetailsController = Get.put(ProjectDetailsController(
+      projectId: int.tryParse(Get.parameters['project_id'] ?? '') ?? 0));
 
   @override
   Widget build(BuildContext context) {
+    void sendMassage() async {
+
+      Get.defaultDialog(
+          title: 'Link',
+          content: Text(editProjectController.urlLink.toString()),
+          actions: [TextButton(onPressed: () async{
+            final Uri url = Uri.parse(
+                "whatsapp://send?text=${Uri.encodeComponent(editProjectController.urlLink.toString())}");
+            try {
+              await launchUrl(url);
+            } catch (e) {}
+          }, child: Text('share'))]);
+
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: GetBuilder<EditProjectController>(builder: (c) {
@@ -28,7 +47,9 @@ class ProjectPage extends StatelessWidget {
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'interested') {
-                Get.toNamed('/interested', parameters: {'project_id': editProjectController.projectId.toString()});
+                Get.toNamed('/interested', parameters: {
+                  'project_id': editProjectController.projectId.toString()
+                });
               } else if (value == 'delete') {
                 // Handle delete action here
                 // For example, show a confirmation dialog
@@ -47,22 +68,42 @@ class ProjectPage extends StatelessWidget {
                     print('Delete action canceled!');
                   },
                 );
+              } else if (value == 'share') {
+                sendMassage();
               } else if (value == 'details') {
-                Get.toNamed('/project/edit', parameters: {"project_id": editProjectController.projectId.toString()});
+                Get.toNamed('/project/edit', parameters: {
+                  "project_id": editProjectController.projectId.toString()
+                });
               }
             },
             itemBuilder: (BuildContext context) => [
               PopupMenuItem<String>(
                 value: 'interested',
-                child: ListTile(leading: Icon(Icons.person_search), iconColor: Colors.blueAccent, title: Text('Interested')),
+                child: ListTile(
+                    leading: Icon(Icons.person_search),
+                    iconColor: Colors.blueAccent,
+                    title: Text('Interested')),
               ),
               PopupMenuItem<String>(
                 value: 'details',
-                child: ListTile(leading: Icon(Icons.details), iconColor: Colors.blueAccent, title: Text('Details')),
+                child: ListTile(
+                    leading: Icon(Icons.details),
+                    iconColor: Colors.blueAccent,
+                    title: Text('Details')),
               ),
               PopupMenuItem<String>(
                 value: 'delete',
-                child: ListTile(leading: Icon(Icons.delete), iconColor: Colors.red, title: Text('Delete')),
+                child: ListTile(
+                    leading: Icon(Icons.delete),
+                    iconColor: Colors.red,
+                    title: Text('Delete')),
+              ),
+              PopupMenuItem<String>(
+                value: 'share',
+                child: ListTile(
+                    leading: Icon(Icons.share),
+                    iconColor: Colors.blue,
+                    title: Text('share')),
               ),
             ],
           ),
@@ -97,7 +138,8 @@ class ProjectPage extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: controller.units.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return unitContainer(context,controller.units.elementAt(index), index);
+                        return unitContainer(
+                            context, controller.units.elementAt(index), index);
                       }),
                 );
               }),
@@ -140,7 +182,8 @@ class ProjectPage extends StatelessWidget {
               ),
               ListTile(
                 leading: Text('Possession :'),
-                title: Text('${getMonthName(controller.developerMonth)} ${controller.developerYear}'),
+                title: Text(
+                    '${getMonthName(controller.developerMonth)} ${controller.developerYear}'),
                 trailing: Icon(Icons.calendar_month),
               ),
               // controller.areas.where((element) => element.value == controller.area.text ? element.child: Container()).first,
@@ -151,7 +194,7 @@ class ProjectPage extends StatelessWidget {
     );
   }
 
-  Widget unitContainer(BuildContext context,Unit unit, int index) {
+  Widget unitContainer(BuildContext context, Unit unit, int index) {
     print('----');
     print(unit.floorMap.firstOrNull.runtimeType);
     return Container(
@@ -216,11 +259,13 @@ class BottomImageDialog extends StatelessWidget {
                 init: ImageController(projectID: id),
                 builder: (controller) {
                   return GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
                       shrinkWrap: true,
                       itemCount: controller.projectImages.length,
                       itemBuilder: (BuildContext context, int index) {
-                        project.ProjectImage image = controller.projectImages.elementAt(index);
+                        project.ProjectImage image =
+                            controller.projectImages.elementAt(index);
                         return InkWell(
                           onTap: () {
                             Get.dialog(
@@ -248,6 +293,7 @@ class BottomImageDialog extends StatelessWidget {
     );
   }
 }
+
 class BottomUnitImageDialog extends StatelessWidget {
   int id;
 
@@ -267,11 +313,13 @@ class BottomUnitImageDialog extends StatelessWidget {
                 init: ImageController(projectID: id),
                 builder: (controller) {
                   return GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
                       shrinkWrap: true,
                       itemCount: controller.unitImages.length,
                       itemBuilder: (BuildContext context, int index) {
-                        project.FloorMap image = controller.unitImages.elementAt(index);
+                        project.FloorMap image =
+                            controller.unitImages.elementAt(index);
                         return InkWell(
                           onTap: () {
                             Get.dialog(

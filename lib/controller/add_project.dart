@@ -52,6 +52,7 @@ class NewProductController extends GetxController {
   TextEditingController price = TextEditingController();
 
   TextEditingController output = TextEditingController();
+  TextEditingController urlController = TextEditingController();
 
   // Map<String,TextEditingController> unit = {'unit':TextEditingController(),'CarpetArea':TextEditingController(),'price':TextEditingController()};
   List<Map<String, TextEditingController>> units = [];
@@ -164,6 +165,7 @@ class NewProductController extends GetxController {
         bhk: double.tryParse(bhk.text) ?? 0.0,
         carpetArea: int.tryParse(carpetArea.text) ?? 0,
         price: int.tryParse(price.text) ?? 0,
+        url: urlController.text,
         units: units
             .map((e) => {
                   'unit': e['unit']!.text,

@@ -89,7 +89,8 @@ class EditProjectController extends GetxController {
   TextEditingController price = TextEditingController();
 
   TextEditingController output = TextEditingController();
-
+  TextEditingController urlController = TextEditingController();
+  String? urlLink = '';
   // Map<String,TextEditingController> unit = {'unit':TextEditingController(),'CarpetArea':TextEditingController(),'price':TextEditingController()};
   List<Map<String, TextEditingController>> units = [];
   List<DropdownMenuItem> areas = [];
@@ -212,6 +213,7 @@ class EditProjectController extends GetxController {
       bhk: 0,
       carpetArea: 0,
       price: 1,
+      url: a['url']
     );
     print(model.toMap());
 
@@ -248,6 +250,7 @@ class EditProjectController extends GetxController {
     bhk.text = model.bhk.toString();
     carpetArea.text = model.carpetArea.toString();
     price.text = model.price.toString();
+    urlLink = model.url;
     if(a['image'] != null) {
       imageUrl = '$HOSTNAME${a['image']}';
     }
@@ -311,6 +314,7 @@ class EditProjectController extends GetxController {
         bhk: double.tryParse(bhk.text) ?? 0.0,
         carpetArea: int.tryParse(carpetArea.text) ?? 0,
         price: int.tryParse(price.text) ?? 0,
+        url:urlController.text ,
         units: units
             .map((e) => {
                   'unit': e['unit']!.text,
@@ -368,6 +372,7 @@ void editProject() async {
         bhk: double.tryParse(bhk.text) ?? 0.0,
         carpetArea: int.tryParse(carpetArea.text) ?? 0,
         price: int.tryParse(price.text) ?? 0,
+        url: urlController.text,
         units: units
             .map((e) => {
                   'unit': e['unit']!.text,

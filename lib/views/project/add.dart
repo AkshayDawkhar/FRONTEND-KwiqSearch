@@ -640,6 +640,20 @@ class AddProject extends StatelessWidget {
                     const SizedBox(
                       height: 100,
                     ),
+                    fixedContainer(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return null;
+                            // return "Enter something";
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.url,
+                        decoration: inputDecoration('Link'),
+                        controller: controller.urlController,
+                      ),
+                    ),
                     SizedBox(
                         height: 200,
                         child: fixedContainer(
