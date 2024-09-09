@@ -37,6 +37,7 @@ class UnitController extends GetxController {
     try {
       // Replace the URL below with the actual API endpoint that provides the JSON data
       final response = await http.get(Uri.parse('$HOSTNAME/home/projects/'));
+
       if (response.statusCode == 200) {
         // If the request is successful, parse the JSON data and update the units list
         final List<dynamic> jsonData = json.decode(response.body);

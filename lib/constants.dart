@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
-String HOSTNAME = 'http://174.138.122.18';
+String HOSTNAME = 'https://19c8-2409-4090-2006-a001-575-78b7-10b1-b454.ngrok-free.app';
 String DEPLOY = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
-String LOCAL = 'http://192.168.1.36:8000';
+String LOCAL = 'https://19c8-2409-4090-2006-a001-575-78b7-10b1-b454.ngrok-free.app';
 
 List<String> places = [
   'Mamurdi',
@@ -374,3 +376,30 @@ List<MyRout> routs = [
   MyRout(name: 'Project', url: '/projects'),
   MyRout(name: 'Client', url: '/clients'),
 ];
+Future<void> Logout() async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('auth_token');
+
+  if (token != null) {
+    try {
+      final response = await http.post(
+        Uri.parse('$HOSTNAME/organization/logout/'),
+        headers: {
+          'Authorization': 'Token $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 401) {
+        await prefs.remove('auth_token');
+        Get.offAllNamed('/login');
+      } else {
+        Get.snackbar('Error', 'Logout failed. Please try again.');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred. Please try again.');
+    }
+  } else {
+    Get.snackbar('Error', 'No user is logged in.');
+  }
+}

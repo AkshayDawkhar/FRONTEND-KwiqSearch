@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:takeahome/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Import your pages
 import 'package:takeahome/views/client/add.dart';
 import 'package:takeahome/views/client/client_page.dart';
 import 'package:takeahome/views/client/clients.dart';
@@ -15,6 +17,22 @@ import 'package:takeahome/views/project/image.dart';
 import 'package:takeahome/views/project/interested.dart';
 import 'package:takeahome/views/project/project_page.dart';
 import 'package:takeahome/views/project/projects.dart';
+import 'package:takeahome/views/profile_page.dart';
+import 'package:takeahome/views/splash_screen.dart'; // Import Profile Page
+
+// Define your primary color
+const Color primaryColor = Colors.blue; // Update this with your actual primary color
+
+// Function to get the initial route
+Future<String> getInitialRoute() async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('auth_token');
+  if (token != null) {
+    return '/home';
+  } else {
+    return '/login';
+  }
+}
 
 void main() {
   runApp(const MyApp());
@@ -23,62 +41,78 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
-        useMaterial3: true,
-        // appBarTheme: AppBarTheme(backgroundColor: Colors.blueGrey[50])
-      ),
-      // home: HomePage(),
-      initialRoute: '/login',
-      debugShowCheckedModeBanner: false,
-      getPages: [
-        GetPage(name: '/home', page: () => TabControllerExample()),
-        GetPage(name: '/search', page: () => SearchPage()),
-        GetPage(name: '/add-project', page: () => AddProject()),
-        GetPage(name: '/clients', page: () => ClientsPage()),
-        GetPage(name: '/clients/add', page: () => AddClientPage()),
-        GetPage(name: '/client', page: () => ClientPage()),
-        GetPage(name: '/projects', page: () => ProjectsPage()),
-        GetPage(name: '/projects/add', page: () => AddProject()),
-        GetPage(name: '/project/edit', page: () => EditProject()),
-        GetPage(name: '/project', page: () => ProjectPage()),
-        GetPage(name: '/map', page: () => MapPage()),
-        GetPage(name: '/notifications', page: () => NotificationsPage(), title: 'notifications'),
-        GetPage(name: '/interested', page: () => InterestedPage(), title: 'interested'),
-        GetPage(name: '/image', page: () => ImagePage(), title: 'interested'),
-        GetPage(name: '/login', page: () => Login(), title: 'interested'),
-        // GetPage(name: '/about', page: () => AboutPage()),
-      ],
+    return FutureBuilder<String>(
+      future: getInitialRoute(),
+      builder: (context, snapshot) {
+        // Show a loading spinner while the initial route is being determined
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        }
+
+        // Handle the error if necessary
+        if (snapshot.hasError) {
+          return MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: Text('Error: ${snapshot.error}'),
+              ),
+            ),
+          );
+        }
+
+        // Return the GetMaterialApp with the determined initial route
+        return GetMaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
+            useMaterial3: true,
+          ),
+          initialRoute: '/splash',
+          debugShowCheckedModeBanner: false,
+          getPages: [
+            GetPage(name: '/home', page: () => TabControllerExample()),
+            GetPage(name: '/search', page: () => SearchPage()),
+            GetPage(name: '/add-project', page: () => AddProject()),
+            GetPage(name: '/clients', page: () => ClientsPage()),
+            GetPage(name: '/clients/add', page: () => AddClientPage()),
+            GetPage(name: '/client', page: () => ClientPage()),
+            GetPage(name: '/projects', page: () => ProjectsPage()),
+            GetPage(name: '/projects/add', page: () => AddProject()),
+            GetPage(name: '/project/edit', page: () => EditProject()),
+            GetPage(name: '/project', page: () => ProjectPage()),
+            GetPage(name: '/map', page: () => MapPage()),
+            GetPage(name: '/notifications', page: () => NotificationsPage(), title: 'notifications'),
+            GetPage(name: '/interested', page: () => InterestedPage(), title: 'interested'),
+            GetPage(name: '/image', page: () => ImagePage(), title: 'interested'),
+            GetPage(name: '/login', page: () => Login(), title: 'Login'),
+            GetPage(name: '/profile', page: () => ProfilePage(), title: 'Profile'),
+            GetPage(name: '/splash', page: () => SplashScreen()),
+            // Add other pages here
+          ],
+        );
+      },
     );
   }
 }
 
-// class Room {
-//   String name;
-//   int bhk;
-//   int cp;
-//   bool amn;
-//   int price;
-//   String location;
-//
-//   Room({required this.name, required this.bhk, required this.cp, required this.amn, required this.price, required this.location});
-// }
-
+// Define your tabs
 const List<Tab> tabs = <Tab>[
   Tab(
-
     child: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(Icons.home),
-        SizedBox(height: 2,),
-        Text('Home')
+        SizedBox(height: 2),
+        Text('Home'),
       ],
     ),
   ),
@@ -88,23 +122,33 @@ const List<Tab> tabs = <Tab>[
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(Icons.home_work),
-        SizedBox(height: 2,),
-        Text('Project')
+        SizedBox(height: 2),
+        Text('Project'),
       ],
     ),
   ),
-  Tab( child: Column(
-    mainAxisSize: MainAxisSize.min,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Icon(Icons.person),
-      SizedBox(height: 2,),
-      Text('Client')
-    ],
+  Tab(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(Icons.supervised_user_circle),
+        SizedBox(height: 2),
+        Text('Client'),
+      ],
+    ),
   ),
+  Tab(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(Icons.person),
+        SizedBox(height: 2),
+        Text('Profile'),
+      ],
+    ),
   ),
-  // Tab(text: 'First'),
-  // Tab(text: 'Second'),
 ];
 
 class TabControllerExample extends StatefulWidget {
@@ -114,10 +158,9 @@ class TabControllerExample extends StatefulWidget {
 
 class _TabControllerExampleState extends State<TabControllerExample> {
   HomePage homePage = HomePage();
-
   ProjectsPage projectsPage = ProjectsPage();
-
   ClientsPage clientsPage = ClientsPage();
+  ProfilePage profilePage = ProfilePage();
 
   Widget _getFabForTab(int tabIndex) {
     switch (tabIndex) {
@@ -125,11 +168,12 @@ class _TabControllerExampleState extends State<TabControllerExample> {
         return homePage.floatingActionButton();
       case 1:
         return FloatingActionButton.extended(
-            onPressed: () {
-              Get.toNamed('/projects/add');
-            },
-            label: Text('Project'),
-            icon: Icon(Icons.add));
+          onPressed: () {
+            Get.toNamed('/projects/add');
+          },
+          label: Text('Project'),
+          icon: Icon(Icons.add),
+        );
       case 2:
         return clientsPage.floatingActionButton();
       default:
@@ -141,49 +185,35 @@ class _TabControllerExampleState extends State<TabControllerExample> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: tabs.length,
-      // The Builder widget is used to have a different BuildContext to access
-      // closest DefaultTabController.
       child: Builder(builder: (BuildContext context) {
         final TabController tabController = DefaultTabController.of(context);
         tabController.addListener(() {
           if (!tabController.indexIsChanging) {
             setState(() {});
-            // Your code goes here.
-            // To get index of current tab use tabController.index
           }
         });
         return Scaffold(
           appBar: AppBar(
-            title: Text(['Home', 'Projects', 'Clients'].elementAt(tabController.index)),
+            title: Text(['Home', 'Projects', 'Clients', 'Profile'].elementAt(tabController.index)),
             actions: [
               IconButton(
-                  onPressed: () {
-                    Get.toNamed('/clients/add');
-                  },
-                  icon: Icon(Icons.person_add_alt)),
+                onPressed: () {
+                  Get.toNamed('/clients/add');
+                },
+                icon: Icon(Icons.person_add_alt),
+              ),
               IconButton(
-                  onPressed: () {
-                    Get.toNamed('/notifications');
-                  },
-                  icon: Icon(Icons.notifications)),
+                onPressed: () {
+                  Get.toNamed('/notifications');
+                },
+                icon: Icon(Icons.notifications),
+              ),
             ],
-            // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            // backgroundColor: Colors.,
           ),
-          // AppBar(
-          //   bottom: const TabBar(
-          //     tabs: tabs,
-          //   ),
-          // ),
-          body: TabBarView(children: [homePage, projectsPage, clientsPage]),
+          body: TabBarView(
+            children: [homePage, projectsPage, clientsPage, profilePage],
+          ),
           floatingActionButton: _getFabForTab(tabController.index),
-          // FloatingActionButton(
-          //   heroTag: null,
-          //   onPressed: () {
-          //     Get.toNamed('/map', arguments: {"filteredList": [] , "units": []});
-          //   },
-          //   child: Icon(Icons.location_on),
-          // ),
           bottomNavigationBar: TabBar(
             enableFeedback: true,
             indicatorSize: TabBarIndicatorSize.label,
@@ -191,9 +221,6 @@ class _TabControllerExampleState extends State<TabControllerExample> {
             indicatorPadding: EdgeInsets.all(0),
             tabs: tabs,
           ),
-          // bottomSheet: TabBar(
-          //   tabs: tabs,
-          // ),
         );
       }),
     );
