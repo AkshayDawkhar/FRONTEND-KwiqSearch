@@ -9,6 +9,7 @@ class ProfileController extends GetxController {
   var name = ''.obs;
   var email = ''.obs;
   var organization = ''.obs;
+  var phoneNumber = ''.obs;
   var locality = ''.obs;
   var userType = ''.obs;
   var assignedTo = ''.obs;
@@ -35,13 +36,18 @@ class ProfileController extends GetxController {
 
         if (response.statusCode == 200) {
           var data = json.decode(response.body);
-          name.value = data['name'] ?? '-';
-          email.value = data['email'] ?? 'Unknown';
-          organization.value = data['organization'] ?? 'Unknown';
-          locality.value = data['locality'] ?? 'Unknown';
-          userType.value = data['user_type'] ?? 'Unknown';
-          assignedTo.value = data['assigned_to'] != null ? data['assigned_to'].toString() : '-'; // Handle if there's no manager
-        } else {
+          name.value = data['name'] ?? '';
+          email.value = data['email'] ?? '';
+          organization.value = data['organization'] ?? '';
+          locality.value = data['locality'] ?? '';
+          userType.value = data['user_type'] ?? '';
+          assignedTo.value = data['assigned_to'] != null ? data['assigned_to'].toString() : ''; // Handle if there's no manager
+          phoneNumber.value = data['phone_number'] ?? '';
+        }
+        else if (response.statusCode == 401) {
+          Logout(); // Logout if token is invalid
+        }
+        else {
           Get.snackbar('Error', 'Failed to load profile data');
         }
       }

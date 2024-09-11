@@ -6,6 +6,14 @@ import '../controller/ProfileController.dart';
 class ProfilePage extends StatelessWidget {
   final ProfileController profileController = Get.put(ProfileController());
 
+  FloatingActionButton floatingActionButton() => FloatingActionButton.extended(
+      onPressed: () {
+        Get.toNamed('/edit-profile');
+      },
+      label: Text('Edit'),
+      icon: Icon(Icons.add)
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,6 +148,8 @@ class ProfilePage extends StatelessWidget {
             Divider(color: Colors.grey[300]),
             _buildProfileDetailRow('Organization', profileController.organization.value),
             Divider(color: Colors.grey[300]),
+            _buildProfileDetailRow('Phone number', profileController.phoneNumber.value),
+            Divider(color: Colors.grey[300]),
             _buildProfileDetailRow('Locality', profileController.locality.value),
             Divider(color: Colors.grey[300]),
             _buildProfileDetailRow('Assigned To', profileController.assignedTo.value),
@@ -152,17 +162,17 @@ class ProfilePage extends StatelessWidget {
   // Profile Detail Row
   Widget _buildProfileDetailRow(String title, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 1.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             '$title:',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.blue[900]),
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.blue[900]),
           ),
           Text(
             value,
-            style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+            style: TextStyle(fontSize: 15, color: Colors.grey[600]),
           ),
         ],
       ),

@@ -7,6 +7,7 @@ import 'package:takeahome/views/client/add.dart';
 import 'package:takeahome/views/client/client_page.dart';
 import 'package:takeahome/views/client/clients.dart';
 import 'package:takeahome/views/client/search_page.dart';
+import 'package:takeahome/views/editprofile.dart';
 import 'package:takeahome/views/home_page.dart';
 import 'package:takeahome/views/login.dart';
 import 'package:takeahome/views/map_page.dart';
@@ -94,6 +95,7 @@ class MyApp extends StatelessWidget {
             GetPage(name: '/image', page: () => ImagePage(), title: 'interested'),
             GetPage(name: '/login', page: () => Login(), title: 'Login'),
             GetPage(name: '/profile', page: () => ProfilePage(), title: 'Profile'),
+            GetPage(name: '/edit-profile', page: () => EditProfilePage(), title: 'Edit Profile'),
             GetPage(name: '/splash', page: () => SplashScreen()),
             // Add other pages here
           ],
@@ -176,6 +178,9 @@ class _TabControllerExampleState extends State<TabControllerExample> {
         );
       case 2:
         return clientsPage.floatingActionButton();
+
+      case 3:
+        return profilePage.floatingActionButton();
       default:
         return FloatingActionButton(onPressed: () {});
     }
