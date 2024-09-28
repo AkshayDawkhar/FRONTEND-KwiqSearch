@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:takeahome/views/create_employee.dart';
+import 'controller/ProfileController.dart';
 // Import your pages
 import 'package:takeahome/views/client/add.dart';
 import 'package:takeahome/views/client/client_page.dart';
@@ -21,9 +22,9 @@ import 'package:takeahome/views/project/projects.dart';
 import 'package:takeahome/views/profile_page.dart';
 import 'package:takeahome/views/splash_screen.dart'; // Import Profile Page
 
+// import 'package:takeahome/controller/ProfileController.dart' as profileController;
 // Define your primary color
 const Color primaryColor = Colors.blue; // Update this with your actual primary color
-
 // Function to get the initial route
 Future<String> getInitialRoute() async {
   final prefs = await SharedPreferences.getInstance();
@@ -97,6 +98,7 @@ class MyApp extends StatelessWidget {
             GetPage(name: '/profile', page: () => ProfilePage(), title: 'Profile'),
             GetPage(name: '/edit-profile', page: () => EditProfilePage(), title: 'Edit Profile'),
             GetPage(name: '/splash', page: () => SplashScreen()),
+            GetPage(name: '/create-employee', page: () => CreateEmployeePage()),
             // Add other pages here
           ],
         );
@@ -188,6 +190,8 @@ class _TabControllerExampleState extends State<TabControllerExample> {
 
   @override
   Widget build(BuildContext context) {
+    final ProfileController profileController = Get.put(ProfileController());
+
     return DefaultTabController(
       length: tabs.length,
       child: Builder(builder: (BuildContext context) {
@@ -200,12 +204,22 @@ class _TabControllerExampleState extends State<TabControllerExample> {
         return Scaffold(
           appBar: AppBar(
             title: Text(['Home', 'Projects', 'Clients', 'Profile'].elementAt(tabController.index)),
+            // backgroundColor: Colors.blue[50],
+            leading: Builder(
+              builder: (context) => IconButton(
+                icon: Icon(Icons.menu, color: Colors.black),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              ),
+            ),
+
             actions: [
               IconButton(
                 onPressed: () {
                   Get.toNamed('/clients/add');
                 },
-                icon: Icon(Icons.person_add_alt),
+                icon: Icon(Icons.list_alt),
               ),
               IconButton(
                 onPressed: () {
@@ -214,6 +228,66 @@ class _TabControllerExampleState extends State<TabControllerExample> {
                 icon: Icon(Icons.notifications),
               ),
             ],
+          ),
+          drawer: Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.blue[800],
+                  ),
+                  child: Obx(() {
+                    if (profileController.isLoading.value) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.white,
+                                child: Icon(Icons.person, size: 30, color: Colors.blue[800]),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                profileController.name.value,
+                                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+                              ),
+
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            profileController.organization.value,
+                            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            profileController.email.value,
+                            style: TextStyle(color: Colors.white70, fontSize: 16),
+                          ),
+                        ],
+                      );
+                    }
+                  }),
+                ),
+                _buildDrawerItem(Icons.edit, 'Edit Profile', () {
+                  Get.toNamed('/edit-profile');
+                }),
+                _buildDrawerItem(Icons.circle
+                    , 'Organization', () {
+                  Get.toNamed('/create-employee');
+                }),
+
+                _buildDrawerItem(Icons.logout, 'Logout', () {
+                  Navigator.of(context).pop();
+                  // Implement logout functionality here
+                }),
+
+              ],
+            ),
           ),
           body: TabBarView(
             children: [homePage, projectsPage, clientsPage, profilePage],
@@ -230,4 +304,17 @@ class _TabControllerExampleState extends State<TabControllerExample> {
       }),
     );
   }
+}
+// Profile Header Section
+
+
+// Profile Detail Row
+
+// Drawer Item
+Widget _buildDrawerItem(IconData icon, String title, Function() onTap) {
+  return ListTile(
+    leading: Icon(icon, color: Colors.blue[800]),
+    title: Text(title, style: TextStyle(fontSize: 16)),
+    onTap: onTap,
+  );
 }

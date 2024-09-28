@@ -17,62 +17,62 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w600)),
-        backgroundColor: Colors.blue[800],
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(Icons.menu, color: Colors.white),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          ),
-        ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue[800],
-              ),
-              child: Obx(() {
-                if (profileController.isLoading.value) {
-                  return Center(child: CircularProgressIndicator());
-                } else {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundColor: Colors.white,
-                        child: Icon(Icons.person, size: 30, color: Colors.blue[800]),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        profileController.name.value,
-                        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        profileController.email.value,
-                        style: TextStyle(color: Colors.white70, fontSize: 16),
-                      ),
-                    ],
-                  );
-                }
-              }),
-            ),
-            _buildDrawerItem(Icons.edit, 'Edit Profile', () {
-              Get.toNamed('/edit-profile');
-            }),
-            _buildDrawerItem(Icons.logout, 'Logout', () {
-              Navigator.of(context).pop();
-              // Implement logout functionality here
-            }),
-          ],
-        ),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Profile', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w600)),
+      //   backgroundColor: Colors.blue[800],
+      //   leading: Builder(
+      //     builder: (context) => IconButton(
+      //       icon: Icon(Icons.menu, color: Colors.white),
+      //       onPressed: () {
+      //         Scaffold.of(context).openDrawer();
+      //       },
+      //     ),
+      //   ),
+      // ),
+      // drawer: Drawer(
+      //   child: ListView(
+      //     padding: EdgeInsets.zero,
+      //     children: <Widget>[
+      //       DrawerHeader(
+      //         decoration: BoxDecoration(
+      //           color: Colors.blue[800],
+      //         ),
+      //         child: Obx(() {
+      //           if (profileController.isLoading.value) {
+      //             return Center(child: CircularProgressIndicator());
+      //           } else {
+      //             return Column(
+      //               crossAxisAlignment: CrossAxisAlignment.start,
+      //               children: <Widget>[
+      //                 CircleAvatar(
+      //                   radius: 30,
+      //                   backgroundColor: Colors.white,
+      //                   child: Icon(Icons.person, size: 30, color: Colors.blue[800]),
+      //                 ),
+      //                 SizedBox(height: 10),
+      //                 Text(
+      //                   profileController.name.value,
+      //                   style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+      //                 ),
+      //                 Text(
+      //                   profileController.email.value,
+      //                   style: TextStyle(color: Colors.white70, fontSize: 16),
+      //                 ),
+      //               ],
+      //             );
+      //           }
+      //         }),
+      //       ),
+      //       _buildDrawerItem(Icons.edit, 'Edit Profile', () {
+      //         Get.toNamed('/edit-profile');
+      //       }),
+      //       _buildDrawerItem(Icons.logout, 'Logout', () {
+      //         Navigator.of(context).pop();
+      //         // Implement logout functionality here
+      //       }),
+      //     ],
+      //   ),
+      // ),
       body: Obx(() {
         if (profileController.isLoading.value) {
           return Center(child: CircularProgressIndicator());

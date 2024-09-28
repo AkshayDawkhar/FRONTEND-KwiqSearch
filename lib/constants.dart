@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-String HOSTNAME = 'https://19c8-2409-4090-2006-a001-575-78b7-10b1-b454.ngrok-free.app';
+String HOSTNAME = 'https://7313-2409-4090-2006-a200-780-f49c-c98b-480b.ngrok-free.app';
 String DEPLOY = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
-String LOCAL = 'https://19c8-2409-4090-2006-a001-575-78b7-10b1-b454.ngrok-free.app';
+String LOCAL = 'https://7313-2409-4090-2006-a200-780-f49c-c98b-480b.ngrok-free.app';
 
 List<String> places = [
   'Mamurdi',
