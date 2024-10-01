@@ -22,7 +22,6 @@ class EmployeeController extends GetxController {
 
   // Dropdown options for userType and locality (actual backend values and display values)
   final Map<String, String> userTypes = {
-    'CEO': 'CEO',
     'Manager': 'Manager',
     'LocalityManager': 'Locality Manager',
     'Caller': 'Caller',
@@ -49,8 +48,28 @@ class EmployeeController extends GetxController {
 
   // Function to create an employee
   Future<void> createEmployee() async {
-    if (email.value.isEmpty || password.value.isEmpty) {
-      errorMessage.value = "Email and password are required";
+    // if (email.value.isEmpty || password.value.isEmpty) {
+    //   errorMessage.value = "Email and password are required";
+    //   return;
+    // }
+    if (username.value.isEmpty) {
+      fieldErrors['username'] = "Username is required";
+      return;
+    }
+    if (email.value.isEmpty) {
+      fieldErrors['email'] = "Email is required";
+      return;
+    }
+    // len of password should be greater than 8
+    if (password.value.length < 8) {
+      print(password.value.length);
+      fieldErrors['password'] = "Password should be at least 8 characters long";
+      return;
+    }
+    if (userType.value.isEmpty) {
+      // errorMessage.value = "User type is required";
+      print("User type is required");
+      fieldErrors['user_type'] = "User type is required";
       return;
     }
 
@@ -88,8 +107,12 @@ class EmployeeController extends GetxController {
 
         // Map errors to fields (for example: {"email": ["Enter a valid email address."]})
         responseBody.forEach((key, value) {
+          if (key == "non_field_errors") {
+            fieldErrors['email'] = value[0];
+          }
           if (value is List && value.isNotEmpty) {
             fieldErrors[key] = value[0];
+            print("$key: ${value[0]}");
           }
         });
 

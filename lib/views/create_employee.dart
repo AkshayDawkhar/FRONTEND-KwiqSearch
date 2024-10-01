@@ -53,24 +53,39 @@ class CreateEmployeePage extends StatelessWidget {
                   ),
                 ),
               ),
-              // User Type dropdown
-              DropdownButton<String>(
-                value: employeeController.userType.value.isEmpty
-                    ? null
-                    : employeeController.userType.value,
-                hint: Text('Select User Type'),
-                items: employeeController.userTypes.entries.map((entry) {
-                  return DropdownMenuItem<String>(
-                    value: entry.key,
-                    child: Text(entry.value),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    employeeController.userType.value = newValue;
-                  }
-                },
+// User Type dropdown
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DropdownButton<String>(
+                    value: employeeController.userType.value.isEmpty
+                        ? null
+                        : employeeController.userType.value,
+                    hint: Text('Select User Type'),
+                    items: employeeController.userTypes.entries.map((entry) {
+                      return DropdownMenuItem<String>(
+                        value: entry.key,
+                        child: Text(entry.value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        employeeController.userType.value = newValue;
+                      }
+                    },
+                  ),
+                  // Error text for User Type
+                  if (employeeController.fieldErrors['user_type'] != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        employeeController.fieldErrors['user_type']!,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                ],
               ),
+
               // Locality dropdown
               DropdownButton<String>(
                 value: employeeController.locality.value.isEmpty
