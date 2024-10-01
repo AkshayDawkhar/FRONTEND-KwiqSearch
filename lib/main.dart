@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:takeahome/views/create_employee.dart';
+import 'package:takeahome/views/organization/employees.dart';
 import 'controller/ProfileController.dart';
 // Import your pages
 import 'package:takeahome/views/client/add.dart';
@@ -99,6 +100,7 @@ class MyApp extends StatelessWidget {
             GetPage(name: '/edit-profile', page: () => EditProfilePage(), title: 'Edit Profile'),
             GetPage(name: '/splash', page: () => SplashScreen()),
             GetPage(name: '/create-employee', page: () => CreateEmployeePage()),
+            GetPage(name: '/employees', page: () => EmployeeListPage()),
             // Add other pages here
           ],
         );
@@ -278,7 +280,8 @@ class _TabControllerExampleState extends State<TabControllerExample> {
                 }),
                 _buildDrawerItem(Icons.circle
                     , 'Organization', () {
-                  Get.toNamed('/create-employee');
+                  // Get.toNamed('/create-employee');
+                  Get.toNamed('/employees');
                 }),
 
                 _buildDrawerItem(Icons.logout, 'Logout', () {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:takeahome/model/client.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
 
@@ -84,6 +85,8 @@ class ClientController extends GetxController {
   }
 
   void fetchClient() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
     final url = Uri.parse('$HOSTNAME/client/client/$id/');
     final response = await http.get(
       url,
@@ -163,11 +166,14 @@ class ClientsController extends GetxController {
     update();
   }
   void fetchClient() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
     final url = Uri.parse('$HOSTNAME/client/client/');
     final response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Token $token',
       },
     );
     // Map<String, dynamic> a = json.decode(response.body);

@@ -44,8 +44,10 @@ class LoginController extends GetxController {
         await prefs.setString('user_type', userType);
 
         // Navigate to the appropriate screen based on user type
-        if (userType == 'LocalityManager') {
-          Get.offNamed('/home'); // Navigate based on user type
+        // if (userType == 'LocalityManager'|| userType == 'CEO' || userType == 'Manager'|| userType == 'Caller'|| userType == 'Visitor'|| userType == 'VisitorCaller'|| userType == 'caller' || userType == 'visitor') {
+        // if usertype in ['LocalityManager', 'CEO', 'Manager', 'Caller', 'Visitor', 'VisitorCaller', 'caller', 'visitor']:
+        if ([ 'LocalityManager', 'CEO', 'Manager', 'Caller', 'Visitor', 'VisitorCaller', 'caller', 'visitor' ].contains(userType)) {
+        Get.offNamed('/home'); // Navigate based on user type
         } else {
           Get.snackbar('Info', 'Unknown user type');
         }

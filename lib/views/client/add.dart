@@ -45,10 +45,10 @@ class AddClientPage extends StatelessWidget {
                           controller: controller.lastNameController,
                           decoration: inputDecoration('Last name'),
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter last name';
-                            }
-                            return null;
+                            // if (value == null || value.isEmpty) {
+                            //   return 'Please enter last name';
+                            // }
+                            // return null;
                           },
                         ),
                       ),
@@ -60,13 +60,13 @@ class AddClientPage extends StatelessWidget {
                     controller: controller.emailController,
                     decoration: inputDecoration('Email'),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter email';
-                      }
-                      // if (!isValidEmail(value)) {
-                      //   return 'Please enter a valid email';
+                      // if (value == null || value.isEmpty) {
+                      //   return 'Please enter email';
                       // }
-                      return null;
+                      // // if (!isValidEmail(value)) {
+                      // //   return 'Please enter a valid email';
+                      // // }
+                      // return null;
                     },
                   ),
                 ),
@@ -75,9 +75,15 @@ class AddClientPage extends StatelessWidget {
                       controller: controller.phoneController,
                       decoration: inputDecoration('Phone Number'),
                       validator: (value) {
-                        if (!validPhoneNumberRegExp.hasMatch(value!)) {
-                          return 'Please enter a valid 10-digit phone number';
+                        if (value == null || value.isEmpty) {
+                          // return 'Please enter phone number';
+                          controller.phoneController.text = '0';
                         }
+                        // if (!validPhoneNumberRegExp.hasMatch(value!)) {
+                          // return 'Please enter a valid 10-digit phone number';
+                          // controller.phoneController.text = '0';
+                          // return null;
+                        // }
                         return null; // Return null if the phone number is valid
                       }),
                 ),
@@ -86,10 +92,14 @@ class AddClientPage extends StatelessWidget {
                       controller: controller.messageController,
                       decoration: inputDecoration('WhatsApp Number'),
                       validator: (value) {
-                        if (!validPhoneNumberRegExp.hasMatch(value!)) {
-                          return 'Please enter a valid 10-digit phone number';
+                        if (value == null || value.isEmpty) {
+                          // return 'Please enter phone number';
+                          controller.messageController.text = '0';
                         }
-                        return null; // Return null if the phone number is valid
+                        // if (!validPhoneNumberRegExp.hasMatch(value!)) {
+                        //   return 'Please enter a valid 10-digit phone number';
+                        // }
+                        // return null; // Return null if the phone number is valid
                       }),
                 ),
                 fixedContainer(
@@ -100,10 +110,10 @@ class AddClientPage extends StatelessWidget {
                     maxLines: 5,
                     decoration: inputDecoration('Requirements'),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter requirements';
-                      }
-                      return null;
+                      // if (value == null || value.isEmpty) {
+                      //   return 'Please enter requirements';
+                      // }
+                      // return null;
                     },
                   ),
                 ),
