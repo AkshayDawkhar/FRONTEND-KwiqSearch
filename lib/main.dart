@@ -7,7 +7,7 @@ import 'controller/ProfileController.dart';
 // Import your pages
 import 'package:takeahome/views/client/add.dart';
 import 'package:takeahome/views/client/client_page.dart';
-import 'package:takeahome/views/client/clients.dart';
+import 'package:takeahome/views/client/new_clients.dart';
 import 'package:takeahome/views/client/search_page.dart';
 import 'package:takeahome/views/editprofile.dart';
 import 'package:takeahome/views/home_page.dart';
