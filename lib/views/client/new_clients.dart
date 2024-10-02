@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart'; // Import SharedPreferences
 import 'package:takeahome/constants.dart';
 
 class ClientsController extends GetxController {
@@ -19,16 +20,33 @@ class ClientsController extends GetxController {
     fetchClients(); // Initial fetch of clients
   }
 
+  // Fetch token from SharedPreferences
+  Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_token');
+  }
+
   // Fetch clients with pagination and search query support
   void fetchClients({String? url, String? searchQuery}) async {
     isLoad(true);
     try {
+      final token = await getToken(); // Get the token
+      if (token == null) {
+        // Handle token not found error
+        isLoad(false);
+        return;
+      }
+
       String apiUrl = url ?? '$HOSTNAME/client/clients/?limit=10';
       if (searchQuery != null && searchQuery.isNotEmpty) {
         apiUrl += '&search_query=$searchQuery'; // Add search query to the URL
       }
+      final response = await http.get(Uri.parse(apiUrl),
+        headers: {
+          'Authorization': 'Token $token', // Pass the token in headers
+        },
+      );
 
-      final response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         displayClients.value = data['results']; // Replace the list with new data
@@ -43,8 +61,18 @@ class ClientsController extends GetxController {
   void loadMoreClients() async {
     if (nextUrl.value.isEmpty || isLoadingMore.value) return;
     isLoadingMore(true);
+
     try {
-      final response = await http.get(Uri.parse(nextUrl.value));
+      final token = await getToken(); // Get the token for loading more
+      if (token == null) {
+        isLoadingMore(false);
+        return;
+      }
+      final response = await http.get(Uri.parse(nextUrl.value),
+        headers: {
+          'Authorization': 'Token $token', // Pass the token in headers
+        },
+      );
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         displayClients.addAll(data['results']); // Append new clients to the list
@@ -103,7 +131,7 @@ class ClientsPage extends StatelessWidget {
                         decoration: InputDecoration(hintText: 'Search'),
                         controller: clientsPage.searchController,
                         onChanged: (s) {
-                          // clientsPage.search(); // Trigger search on typing
+                          // Optionally: Trigger search on typing
                         },
                       ),
                     ),

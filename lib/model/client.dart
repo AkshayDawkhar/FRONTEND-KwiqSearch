@@ -258,6 +258,7 @@ class Client {
   List<Followup> followups;
   List<Feedbacks> feedback;
   SearchFilter searchFilter;
+  String assignedTo;
 
   Client({
     required this.id,
@@ -269,6 +270,7 @@ class Client {
     required this.followups,
     required this.feedback,
     required this.searchFilter,
+    required this.assignedTo,
   });
 
   factory Client.fromJson(Map<String, dynamic> json) => Client(
@@ -281,6 +283,7 @@ class Client {
     followups: List<Followup>.from(json["followups"].map((x) => Followup.fromJson(x))),
     feedback: List<Feedbacks>.from(json["feedback"].map((x) => Feedbacks.fromJson(x))),
     searchFilter: SearchFilter.fromJson(json["searchFilter"]),
+    assignedTo: json["assignedTo"] ?? '-',
   );
 
   Map<String, dynamic> toJson() => {
@@ -293,6 +296,7 @@ class Client {
     "followups": List<dynamic>.from(followups.map((x) => x.toJson())),
     "feedback": List<dynamic>.from(feedback.map((x) => x.toJson())),
     "searchFilter": searchFilter.toJson(),
+    "assignedTo": assignedTo,
   };
 }
 
