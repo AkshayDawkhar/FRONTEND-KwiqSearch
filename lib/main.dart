@@ -221,7 +221,7 @@ class _TabControllerExampleState extends State<TabControllerExample> {
                 onPressed: () {
                   Get.toNamed('/clients/add');
                 },
-                icon: Icon(Icons.list_alt),
+                icon: Icon(Icons.person_add_alt),
               ),
               IconButton(
                 onPressed: () {
