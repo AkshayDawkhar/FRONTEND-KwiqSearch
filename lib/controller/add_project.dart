@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:takeahome/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/add_project.dart';
 
@@ -178,10 +179,13 @@ class NewProductController extends GetxController {
     // json.encoder;
     // output.text = a.toMap().toString();
     // addProject(a.toMap());
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
     final url = Uri.parse('$HOSTNAME/home/projects/');
     final responce = await http.post(url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Token $token',
         },
         body: jsonEncode(a.toMap()));
     print(responce.body);

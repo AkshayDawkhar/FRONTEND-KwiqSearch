@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http; // Import the http package
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:takeahome/constants.dart';
 import 'package:takeahome/model/unit.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'unit.dart';
 
 // Import the Unit model class
@@ -33,10 +33,17 @@ class UnitController extends GetxController {
   // Function to fetch the JSON data and update the units list
   Future<void> fetchUnits() async {
     isLoad = false;
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
     update();
     try {
       // Replace the URL below with the actual API endpoint that provides the JSON data
-      final response = await http.get(Uri.parse('$HOSTNAME/home/projects/'));
+      final response = await http.get(Uri.parse('$HOSTNAME/home/projects/'),
+      headers: {
+        'Authorization': 'Token $token',
+        // 'Content-Type': 'application/json',
+      },
+      );
 
       if (response.statusCode == 200) {
         // If the request is successful, parse the JSON data and update the units list

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart';
 import '../model/add_project.dart';
 import '../model/project.dart';
@@ -327,10 +327,13 @@ class EditProjectController extends GetxController {
     // json.encoder;
     // output.text = a.toMap().toString();
     // addProject(a.toMap());
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
     final url = Uri.parse('$HOSTNAME/home/projects/');
     final responce = await http.post(url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Token $token',
         },
         body: jsonEncode(a.toMap()));
     print(responce.body);
