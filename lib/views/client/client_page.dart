@@ -321,6 +321,27 @@ class ClientPage extends StatelessWidget {
                   Text('Unit : ${clientController.client.searchFilter.units.map((e) => unitToName(e)).toList().join(',')}'),
                   Text(
                       'Carpet Area : ${clientController.client.searchFilter.startCarpetArea.round()} - ${clientController.client.searchFilter.stopCarpetArea.round()} '),
+                  Row(
+                    children: [
+                      Text('Assigned To : '), // Regular non-clickable text
+                      GestureDetector(
+                        onTap: () {
+                          // Add your logic for what happens when the username is clicked
+                          print('Username clicked: ${clientController.client.assignedTo['username']}');
+                        },
+                        child: Text(
+                          '${clientController.client.assignedTo['username']}',
+                          style: TextStyle(
+                            color: Colors.blue, // Optional: Make it look like a link
+                            fontWeight: FontWeight.bold, // Optional: Make it bold
+                            decoration: TextDecoration.underline, // Optional: Underline the text
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+
+
                 ],
               ),
               IconButton(

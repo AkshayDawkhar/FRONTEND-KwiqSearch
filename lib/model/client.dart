@@ -258,7 +258,8 @@ class Client {
   List<Followup> followups;
   List<Feedbacks> feedback;
   SearchFilter searchFilter;
-  String assignedTo;
+  // String assignedTo;
+  dynamic assignedTo;
 
   Client({
     required this.id,
@@ -275,15 +276,15 @@ class Client {
 
   factory Client.fromJson(Map<String, dynamic> json) => Client(
     id: json["id"],
-    fname: json["fname"],
-    lname: json["lname"],
-    phoneNo: json["phoneNO"],
-    massageNo: json["massageNO"],
-    email: json["email"],
+    fname: json["fname"] ?? '',
+    lname: json["lname"] ?? '',
+    phoneNo: json["phoneNO"] ?? 0,
+    massageNo: json["massageNO"] ?? 0,
+    email: json["email"] ?? '',
     followups: List<Followup>.from(json["followups"].map((x) => Followup.fromJson(x))),
     feedback: List<Feedbacks>.from(json["feedback"].map((x) => Feedbacks.fromJson(x))),
     searchFilter: SearchFilter.fromJson(json["searchFilter"]),
-    assignedTo: json["assignedTo"] ?? '-',
+    assignedTo: json["assigned_to"] ?? {'id': 0, 'username': '-'},
   );
 
   Map<String, dynamic> toJson() => {
