@@ -447,3 +447,76 @@ void editProject() async {
     get();
   }
 }
+
+class Projects2Controller extends GetxController {
+  var displayProjects = <Projects>[].obs;
+  var isLoad = false.obs;
+  var searchController = TextEditingController();
+  String? nextPageUrl;
+  bool isLoadingMore = false;
+  // get token
+  Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_token');
+  }
+
+  @override
+  void onInit() {
+    fetchProjects();
+    super.onInit();
+  }
+
+  // Fetch projects with pagination
+  Future<void> fetchProjects({String? url}) async {
+    isLoad(true);
+    var token = await getToken();
+    final response = await http.get(Uri.parse(url ?? '$HOSTNAME/home/list/project/?limit=15&offset=0'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Token $token',
+    }
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      List<dynamic> projectList = data['results'];
+
+      displayProjects.assignAll(
+        projectList.map((project) => Projects.fromJson(project)).toList(),
+      );
+      nextPageUrl = data['next'];
+    } else {
+      print('Failed to load projects');
+    }
+    isLoad(false);
+  }
+
+  // Load more projects (next page)
+  Future<void> loadMore() async {
+    if (nextPageUrl != null && !isLoadingMore) {
+      isLoadingMore = true;
+      final response = await http.get(Uri.parse(nextPageUrl!),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Token ${await getToken()}',
+      }
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        List<dynamic> projectList = data['results'];
+
+        displayProjects.addAll(
+          projectList.map((project) => Projects.fromJson(project)).toList(),
+        );
+        nextPageUrl = data['next'];
+      }
+      isLoadingMore = false;
+    }
+  }
+
+  // Search projects by keyword
+  void search() async {
+    fetchProjects(url: '$HOSTNAME/home/list/project/?search=${searchController.text}');
+  }
+}

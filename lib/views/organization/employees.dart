@@ -124,9 +124,12 @@ class _EmployeeListPageState extends State<EmployeeListPage> {
                         children: [
                           Icon(Icons.email, color: Colors.grey[600]),
                           SizedBox(width: 8.0),
-                          Text(
-                            'Email: ${employee['email'] ?? 'N/A'}',
-                            style: TextStyle(color: Colors.grey[700]),
+                          Expanded( // This will allow the text to adjust
+                            child: Text(
+                              'Email: ${employee['email'] ?? 'N/A'}',
+                              style: TextStyle(color: Colors.grey[700]),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),

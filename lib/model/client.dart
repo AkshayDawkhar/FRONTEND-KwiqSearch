@@ -284,7 +284,7 @@ class Client {
     followups: List<Followup>.from(json["followups"].map((x) => Followup.fromJson(x))),
     feedback: List<Feedbacks>.from(json["feedback"].map((x) => Feedbacks.fromJson(x))),
     searchFilter: SearchFilter.fromJson(json["searchFilter"]),
-    assignedTo: json["assigned_to"] ?? {'id': 0, 'username': '-'},
+    assignedTo: json["assignees_to"] ?? [],
   );
 
   Map<String, dynamic> toJson() => {

@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-String HOSTNAME = 'https://7313-2409-4090-2006-a200-780-f49c-c98b-480b.ngrok-free.app';
+String HOSTNAME = 'https://bf86-2409-4090-2006-a200-21d3-418e-ed5a-c29d.ngrok-free.app';
 String DEPLOY = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
-String LOCAL = 'https://7313-2409-4090-2006-a200-780-f49c-c98b-480b.ngrok-free.app';
+String LOCAL = HOSTNAME;
 
 List<String> places = [
   'Mamurdi',
@@ -402,4 +402,20 @@ Future<void> Logout() async {
   } else {
     Get.snackbar('Error', 'No user is logged in.');
   }
+}
+
+// final prefs = await SharedPreferences.getInstance();
+// a= prefs.getString('auth_token');
+// create a function to get the token and configure the headers
+Future<String?> getToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('auth_token');
+}
+
+Map<String, String> getHeaders() {
+  var t = getToken();
+  return {
+    'Content-Type': 'application/json; charset=UTF-8',
+    'Authorization': 'Token $t'
+  };
 }

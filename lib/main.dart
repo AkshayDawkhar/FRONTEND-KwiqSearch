@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:takeahome/views/create_employee.dart';
+import 'package:takeahome/views/home_page.dart';
 import 'package:takeahome/views/organization/employees.dart';
+import 'package:takeahome/views/project/projects_scaffold.dart';
+import 'constants.dart';
 import 'controller/ProfileController.dart';
 // Import your pages
 import 'package:takeahome/views/client/add.dart';
@@ -10,7 +13,7 @@ import 'package:takeahome/views/client/client_page.dart';
 import 'package:takeahome/views/client/new_clients.dart';
 import 'package:takeahome/views/client/search_page.dart';
 import 'package:takeahome/views/editprofile.dart';
-import 'package:takeahome/views/home_page.dart';
+import 'package:takeahome/views/search_home_page.dart';
 import 'package:takeahome/views/login.dart';
 import 'package:takeahome/views/map_page.dart';
 import 'package:takeahome/views/notifications.dart';
@@ -87,7 +90,7 @@ class MyApp extends StatelessWidget {
             GetPage(name: '/clients', page: () => ClientsPage()),
             GetPage(name: '/clients/add', page: () => AddClientPage()),
             GetPage(name: '/client', page: () => ClientPage()),
-            GetPage(name: '/projects', page: () => ProjectsPage()),
+            GetPage(name: '/projects', page: () => ProjectsPageScaffold()),
             GetPage(name: '/projects/add', page: () => AddProject()),
             GetPage(name: '/project/edit', page: () => EditProject()),
             GetPage(name: '/project', page: () => ProjectPage()),
@@ -127,7 +130,7 @@ const List<Tab> tabs = <Tab>[
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(Icons.home_work),
+        Icon(Icons.search),
         SizedBox(height: 2),
         Text('Project'),
       ],
@@ -163,23 +166,19 @@ class TabControllerExample extends StatefulWidget {
 }
 
 class _TabControllerExampleState extends State<TabControllerExample> {
-  HomePage homePage = HomePage();
-  ProjectsPage projectsPage = ProjectsPage();
+  SearchHomePage searchHomePage = SearchHomePage();
+  ProfileHomePage profileHomePage = ProfileHomePage();
+  // ProjectsPageScaffold projectsPage = ProjectsPageScaffold();
   ClientsPage clientsPage = ClientsPage();
   ProfilePage profilePage = ProfilePage();
 
   Widget _getFabForTab(int tabIndex) {
     switch (tabIndex) {
       case 0:
-        return homePage.floatingActionButton();
+        // if case is 0 return nothing
+        return Container();
       case 1:
-        return FloatingActionButton.extended(
-          onPressed: () {
-            Get.toNamed('/projects/add');
-          },
-          label: Text('Project'),
-          icon: Icon(Icons.add),
-        );
+        return searchHomePage.floatingActionButton();
       case 2:
         return clientsPage.floatingActionButton();
 
@@ -258,7 +257,6 @@ class _TabControllerExampleState extends State<TabControllerExample> {
                                 profileController.name.value,
                                 style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
                               ),
-
                             ],
                           ),
                           SizedBox(height: 10),
@@ -278,22 +276,55 @@ class _TabControllerExampleState extends State<TabControllerExample> {
                 _buildDrawerItem(Icons.edit, 'Edit Profile', () {
                   Get.toNamed('/edit-profile');
                 }),
-                _buildDrawerItem(Icons.circle
-                    , 'Organization', () {
-                  // Get.toNamed('/create-employee');
+                _buildDrawerItem(Icons.circle, 'Organization', () {
                   Get.toNamed('/employees');
                 }),
 
+                // New Section for Projects and Areas
+                Divider(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 0.0, bottom: 0.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Projects & Areas',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      IconButton(onPressed: () {
+                        Get.toNamed('/projects/add');
+                      },
+                                  icon: Icon(Icons.add_box, color: Colors.blue[800]),
+                                  padding: EdgeInsets.zero,
+                      )
+                    ],
+                  ),
+                ),
+                _buildDrawerItem(Icons.home_work, 'Projects', () {
+                  Get.toNamed('/projects'); // Add the route for Projects page
+                }),
+                _buildDrawerItem(Icons.map, 'Areas', () {
+                  Get.toNamed('/areas'); // Add the route for Areas page
+                }),
+                Divider(),
+
+                // Logout option
                 _buildDrawerItem(Icons.logout, 'Logout', () {
-                  Navigator.of(context).pop();
+                  // Navigator.of(context).pop();
+                  Get.offAllNamed('/login');
+                  Logout();
+
                   // Implement logout functionality here
                 }),
-
               ],
             ),
           ),
           body: TabBarView(
-            children: [homePage, projectsPage, clientsPage, profilePage],
+            children: [profileHomePage,searchHomePage, clientsPage, profilePage],
           ),
           floatingActionButton: _getFabForTab(tabController.index),
           bottomNavigationBar: TabBar(

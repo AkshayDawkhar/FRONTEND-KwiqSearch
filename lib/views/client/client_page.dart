@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
 import '../../model/client.dart';
-
+import 'checkbox_popup.dart';
 class ClientPage extends StatelessWidget {
   var clientController = Get.put(ClientController(id: int.tryParse(Get.parameters['client_id'] ?? '') ?? 0));
 
@@ -312,44 +312,67 @@ class ClientPage extends StatelessWidget {
           ),
           Text(
               'Budget : ${numberToLCr(clientController.client.searchFilter.startBudget)} - ${numberToLCr(clientController.client.searchFilter.stopBudget)} '),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Unit : ${clientController.client.searchFilter.units.map((e) => unitToName(e)).toList().join(',')}'),
-                  Text(
-                      'Carpet Area : ${clientController.client.searchFilter.startCarpetArea.round()} - ${clientController.client.searchFilter.stopCarpetArea.round()} '),
-                  Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Assigned To : '), // Regular non-clickable text
-                      GestureDetector(
-                        onTap: () {
-                          // Add your logic for what happens when the username is clicked
-                          print('Username clicked: ${clientController.client.assignedTo['username']}');
-                        },
-                        child: Text(
-                          '${clientController.client.assignedTo['username']}',
-                          style: TextStyle(
-                            color: Colors.blue, // Optional: Make it look like a link
-                            fontWeight: FontWeight.bold, // Optional: Make it bold
-                            decoration: TextDecoration.underline, // Optional: Underline the text
-                          ),
-                        ),
-                      ),
+                      Text('Unit : ${clientController.client.searchFilter.units.map((e) => unitToName(e)).toList().join(',')}'),
+                      Text(
+                          'Carpet Area : ${clientController.client.searchFilter.startCarpetArea.round()} - ${clientController.client.searchFilter.stopCarpetArea.round()} '),
                     ],
-                  )
-
-
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        Get.toNamed('/search', parameters: {'search_filter': clientController.client.searchFilter.id.toString()});
+                      },
+                      icon: Icon(Icons.search))
                 ],
               ),
-              IconButton(
-                  onPressed: () {
-                    Get.toNamed('/search', parameters: {'search_filter': clientController.client.searchFilter.id.toString()});
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text('Assigned To: '), // Regular non-clickable text
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...clientController.client.assignedTo.map<Widget>((user) {
+                return GestureDetector(
+                  onTap: () {
+                    // Add your logic for what happens when the username is clicked
+                    print('Username clicked: ${user['email']}');
                   },
-                  icon: Icon(Icons.search))
+                  child: Text(
+                    user['name'] ?? user['email'], // Fallback to email if name is null
+                    overflow: TextOverflow.ellipsis, // Truncate the text with ellipsis if it's too long
+                    maxLines: 1, // Ensure it stays on one line
+                    style: TextStyle(
+                      color: Colors.blue, // Make it look like a link
+                      fontWeight: FontWeight.bold, // Optional: Make it bold
+                      decoration: TextDecoration.underline, // Optional: Underline the text
+                    ),
+                  ),
+                );
+              }).toList(), // Convert the map to a list of widgets
             ],
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            showCheckboxBottomSheet(Get.context!); // Show bottom sheet when clicked
+          },
+          icon: Icon(Icons.add_box),
+        ),
+      ],
+    ),
+
+
+    ],
           ),
         ],
       ));

@@ -85,14 +85,15 @@ class ClientController extends GetxController {
   }
 
   void fetchClient() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('auth_token');
     final url = Uri.parse('$HOSTNAME/client/client/$id/');
+    final headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Token ${await getToken()}',
+    };
+    print(headers);
     final response = await http.get(
       url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: headers,
     );
     // print(response.body);
     Map<String, dynamic> a = json.decode(response.body);

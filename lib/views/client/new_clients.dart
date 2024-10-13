@@ -37,7 +37,7 @@ class ClientsController extends GetxController {
         return;
       }
 
-      String apiUrl = url ?? '$HOSTNAME/client/clients/?limit=10';
+      String apiUrl = url ?? '$HOSTNAME/client/clients/?limit=15';
       if (searchQuery != null && searchQuery.isNotEmpty) {
         apiUrl += '&search_query=$searchQuery'; // Add search query to the URL
       }
