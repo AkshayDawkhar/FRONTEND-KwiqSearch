@@ -31,6 +31,7 @@ void getTime(TimeOfDay timeOfDay) async {
     final response = await http.post(url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Token ${await getToken()}',
         },
         body: jsonEncode({
           "message": message.text,

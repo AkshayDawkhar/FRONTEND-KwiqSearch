@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-String HOSTNAME = 'https://bf86-2409-4090-2006-a200-21d3-418e-ed5a-c29d.ngrok-free.app';
+String HOSTNAME = 'https://2660-49-36-51-146.ngrok-free.app';
 String DEPLOY = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
 String LOCAL = HOSTNAME;
 

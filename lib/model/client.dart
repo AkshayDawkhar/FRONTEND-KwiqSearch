@@ -306,12 +306,14 @@ class Feedbacks {
   String response;
   String message;
   int followUp;
+  String addedByName;
 
   Feedbacks({
     required this.id,
     required this.response,
     required this.message,
     required this.followUp,
+    required this.addedByName,
   });
 
   factory Feedbacks.fromJson(Map<String, dynamic> json) => Feedbacks(
@@ -319,6 +321,7 @@ class Feedbacks {
     response: json["response"],
     message: json["message"],
     followUp: json["follow_up"],
+    addedByName: json["added_by"] ?? '',
   );
 
   Map<String, dynamic> toJson() => {
@@ -336,6 +339,7 @@ class Followup {
   DateTime dateSent;
   bool done;
   int client;
+  String addedByName;
 
   Followup({
     required this.id,
@@ -344,6 +348,7 @@ class Followup {
     required this.dateSent,
     required this.done,
     required this.client,
+    required this.addedByName,
   });
 
   factory Followup.fromJson(Map<String, dynamic> json) => Followup(
@@ -353,6 +358,7 @@ class Followup {
     dateSent: DateTime.parse(json["date_sent"]),
     done: json["done"],
     client: json["client"],
+    addedByName: json["added_by"] ?? '',
   );
 
   Map<String, dynamic> toJson() => {

@@ -5,6 +5,7 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart'; // Import SharedPreferences
 import 'package:takeahome/constants.dart';
+import 'package:takeahome/views/client/client_page.dart';
 
 class ClientsController extends GetxController {
   var displayClients = <dynamic>[].obs; // Observable list
@@ -174,7 +175,8 @@ class ClientsPage extends StatelessWidget {
   Widget clientContainer(dynamic client) => Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(12),
-      color: Colors.blue.shade200,
+        // if client is active then color is green else red
+        color: getStatusColor(client['status']),
     ),
     margin: EdgeInsets.all(6),
     child: ListTile(
@@ -182,7 +184,13 @@ class ClientsPage extends StatelessWidget {
         Get.toNamed('/client', parameters: {"client_id": client['id'].toString()});
       },
       leading: Icon(Icons.person),
-      title: Text('${client['fname']} ${client['lname']}'),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('${client['fname']} ${client['lname'] ?? ''}'),
+          Text(client['assignees_to_self'] == 1 ?'ASSIGNED':'')
+        ],
+      ),
       trailing: Icon(Icons.arrow_forward_ios),
     ),
   );

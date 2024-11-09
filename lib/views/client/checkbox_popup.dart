@@ -8,8 +8,9 @@ import 'package:takeahome/constants.dart';
 import '../../controller/client.dart';
 
 // Reusable function to show the Checkbox Bottom Sheet
-Future<void> showCheckboxBottomSheet(BuildContext context) async {
-  var clientController = Get.put(ClientController(id: int.tryParse(Get.parameters['client_id'] ?? '') ?? 0));
+Future<void> showCheckboxBottomSheet(BuildContext context,int clientId,var clientController) async {
+  // var clientController = Get.put(ClientController(id: int.tryParse(Get.parameters['client_id'] ?? '') ?? 0));
+  var clientId = Get.parameters['client_id'] ?? '';
   List<dynamic> apiData = [];
   Map<String, bool> selectedCheckboxes = {};
 
@@ -18,7 +19,7 @@ Future<void> showCheckboxBottomSheet(BuildContext context) async {
     final token = await getToken();
 
     final response = await http.get(
-        Uri.parse('$HOSTNAME/client/clients/employee/?client_id=30'),
+        Uri.parse('$HOSTNAME/client/clients/employee/?client_id=$clientId'), // Replace with your API endpoint
         headers: {
           'Authorization': 'Token $token', // Pass the token in headers
         }
@@ -72,11 +73,10 @@ Future<void> showCheckboxBottomSheet(BuildContext context) async {
                                 .where((entry) => entry.value == true)
                                 .map((entry) => entry.key)
                                 .toList();
-
-                            assignEmployeesToClient(context, '30', selectedEmployeeIds);
+                            Navigator.of(context).pop();
+                            assignEmployeesToClient(context, clientId, selectedEmployeeIds);
                             clientController.onInit();
 
-                            Navigator.of(context).pop();
                           },
                           child: Text('Save'),
                         ),

@@ -307,6 +307,7 @@ class ClientPage extends StatelessWidget {
               ),
             ],
           ),
+          Text('active'),
           Text(
             'Area : ${clientController.client.searchFilter.area.join(', ')}', /*style: TextStyle(overflow: TextOverflow.ellipsis),*/
           ),
@@ -364,7 +365,7 @@ class ClientPage extends StatelessWidget {
         ),
         IconButton(
           onPressed: () {
-            showCheckboxBottomSheet(Get.context!); // Show bottom sheet when clicked
+            showCheckboxBottomSheet(Get.context!, clientController.client.id, clientController);
           },
           icon: Icon(Icons.add_box),
         ),
@@ -382,6 +383,7 @@ class ClientPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(dateToString(followup.dateSent)),
+            Text(followup.addedByName),
             Text(formatTime(followup.dateSent)),
           ],
         ),
@@ -488,4 +490,16 @@ class ClientPage extends StatelessWidget {
         leading: Icon(getActionIcon(followup.actions)),
         // style: ,
       );
+}
+Color getStatusColor(String status) {
+  switch (status) {
+    case 'active':
+      return Colors.blue[200]!;
+    case 'inactive':
+      return Colors.red;
+    case 'sold':
+      return Colors.green;
+    default:
+      return Colors.grey;
+  }
 }
