@@ -1,10 +1,11 @@
 import 'dart:async';
-
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show ByteData, Uint8List, rootBundle;
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:takeahome/constants.dart';
 
+import '../constants.dart';
 import '../model/unit.dart';
 
 class MapPage extends StatefulWidget {
@@ -13,284 +14,133 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  // final mapController = MapController(
-  //   initMapWithUserPosition: UserTrackingOption(),
-  // );
-
   List<UnitDetails> filteredList = Get.arguments['filteredList'];
   List<UnitDetails> units = Get.arguments['units'];
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(18.604925, 73.746217),
-    zoom: 10.4746,
+    zoom: 12.0,
   );
 
-  // static const CameraPosition _kLake = CameraPosition(
-  //     bearing: 192.8334901395799,
-  //     target: LatLng(18.604925, 73.746217),
-  //     tilt: 59.440717697143555,
-  //     zoom: 19.151926040649414);
   final List<Marker> _markers = <Marker>[];
+  Set<Polyline> _polylines = {}; // Train track storage
+  Set<Marker> _stationMarkers = {}; // Train stations
+  BitmapDescriptor? trainIcon; // Train station icon
+
+  // Example Multiple Train Routes
+  final List<List<LatLng>> _trainRoutes = [
+    [
+      LatLng(18.604925, 73.746217),
+      LatLng(18.615345, 73.756111),
+      LatLng(18.629876, 73.769888),
+      LatLng(18.645789, 73.780000),
+    ],
+    [
+      LatLng(18.601111, 73.741234),
+      LatLng(18.610567, 73.750987),
+      LatLng(18.625876, 73.865432),
+      LatLng(18.640111, 73.775678),
+    ]
+  ];
 
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < units.length; i++) {
-      UnitDetails unit = units.elementAt(i);
-      _markers.add(Marker(
-          markerId: MarkerId(unit.projectId.toString()),
-          position: LatLng(unit.latitude, unit.longitude),
-          infoWindow: InfoWindow(
-              title: '${unit.projectName}',
-              snippet: '${unit.projectUnits.map((e) => unitToName(e.unit)).toList().join(',')}',
-              onTap: () {
-                // Get.offNamed('/home');
-                // Get.dialog(AlertDialog(title: Text(units.elementAt(i).projectId.toString()),));
-                // Get.dialog(AlertDialog(title: Text(unit.projectId.toString()),));
-                Get.toNamed('/project', parameters: {"project_id": unit.projectId.toString()});
-                // showBottomSheet(
-                //     context: context,
-                //     builder: (q) {
-                //       return Text('name');
-                //     });
-              }),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan)));
-    }
-    for (int i = 0; i < filteredList.length; i++) {
-      UnitDetails unit = filteredList.elementAt(i);
+    _loadTrainIcon();
+    _addMarkers();
+    _addTrainLines();
+  }
+
+  /// Loads and resizes the train station icon
+  void _loadTrainIcon() async {
+    final ByteData data = await rootBundle.load('images/train_icon.png');
+    final ui.Codec codec = await ui.instantiateImageCodec(
+      data.buffer.asUint8List(),
+      targetWidth: 80, // Increased icon size
+      targetHeight: 80,
+    );
+    final ui.FrameInfo frame = await codec.getNextFrame();
+    final ByteData? byteData = await frame.image.toByteData(format: ui.ImageByteFormat.png);
+    final Uint8List resizedIcon = byteData!.buffer.asUint8List();
+
+    setState(() {
+      trainIcon = BitmapDescriptor.fromBytes(resizedIcon);
+      _addTrainStations();
+    });
+  }
+
+  /// Adds project markers
+  void _addMarkers() {
+    for (var unit in units) {
       _markers.add(Marker(
         markerId: MarkerId(unit.projectId.toString()),
         position: LatLng(unit.latitude, unit.longitude),
         infoWindow: InfoWindow(
-            title: '${unit.projectName}',
-            snippet: '${unit.projectUnits.map((e) => unitToName(e.unit)).toList().join(',')}',
-            onTap: () {
-              // Get.offNamed('/home');
-              // Get.dialog(AlertDialog(title: Text(units.elementAt(i).projectId.toString()),));
-              // Get.dialog(AlertDialog(title: Text(unit.projectId.toString()),));
-              Get.toNamed('/project', parameters: {"project_id": unit.projectId.toString()});
-            }),
+          title: '${unit.projectName}',
+          snippet: '${unit.projectUnits.map((e) => unitToName(e.unit)).toList().join(',')}',
+          onTap: () {
+            Get.toNamed('/project', parameters: {"project_id": unit.projectId.toString()});
+          },
+        ),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
       ));
     }
   }
 
-// InfoWindow
-// Marker
-// <Marker> []
+  /// Adds multiple train routes (Polyline)
+  void _addTrainLines() {
+    List<Color> routeColors = [Colors.blue, Colors.red];
+
+    for (int i = 0; i < _trainRoutes.length; i++) {
+      Polyline trainPolyline = Polyline(
+        polylineId: PolylineId("train_route_$i"),
+        color: routeColors[i],
+        width: 5,
+        points: _trainRoutes[i],
+        patterns: [PatternItem.dash(10), PatternItem.gap(5)],
+      );
+      _polylines.add(trainPolyline);
+    }
+    setState(() {});
+  }
+
+  /// Adds train station markers
+  void _addTrainStations() {
+    if (trainIcon == null) return;
+
+    for (int i = 0; i < _trainRoutes.length; i++) {
+      for (int j = 0; j < _trainRoutes[i].length; j++) {
+        _stationMarkers.add(Marker(
+          markerId: MarkerId("station_${i}_$j"),
+          position: _trainRoutes[i][j],
+          icon: trainIcon!,
+          infoWindow: InfoWindow(
+            title: "Train Station ${j + 1}",
+            snippet: "Station at ${_trainRoutes[i][j].latitude}, ${_trainRoutes[i][j].longitude}",
+          ),
+        ));
+      }
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Map'),
-      ),
+      appBar: AppBar(title: Text('Train Map')),
       body: GoogleMap(
-        mapType: MapType.hybrid,
+        mapType: MapType.normal,
+        trafficEnabled: true,
+        myLocationButtonEnabled: true,
+        myLocationEnabled: true,
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
-        markers: Set<Marker>.of(_markers),
+        markers: Set<Marker>.of(_markers)..addAll(_stationMarkers),
+        polylines: _polylines,
       ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: _goToTheLake,
-      //   label: const Text('To the lake!'),
-      //   icon: const Icon(Icons.directions_boat),
-      // ),
-      // bottomNavigationBar: bottomNavigationBar(index: 0,off: true),
-
     );
-  }
-
-// OSMFlutter(
-//   controller: mapController,
-//   mapIsLoading: Center(
-//     child: CircularProgressIndicator(),
-//   ),
-//   initZoom: 16,
-//   minZoomLevel: 3,
-//   stepZoom: 1,
-//   userLocationMarker: UserLocationMaker(
-//     personMarker: MarkerIcon(
-//       icon: Icon(
-//         Icons.location_on,
-//         color: Colors.greenAccent,
-//         size: 148,
-//       ),
-//     ),
-//     directionArrowMarker: MarkerIcon(
-//       icon: Icon(
-//         Icons.location_on,
-//         color: Colors.red,
-//         size: 148,
-//       ),
-//     ),
-//   ),
-//   markerOption: MarkerOption(
-//     defaultMarker: MarkerIcon(
-//       icon: Icon(
-//         Icons.location_on,
-//         color: Colors.black,
-//         size: 148,
-//       ),
-//     ),
-//   ),
-//   onMapIsReady: (isR) async {
-//     if (isR) {
-//       print('----------Ready---------');
-//       units.forEach((element) {
-//         mapController.addMarker(
-//           GeoPoint(latitude: element.latitude, longitude: element.longitude),
-//           markerIcon: MarkerIcon(
-//             iconWidget: InkWell(
-//               onTap: () {
-//                 // Handle onTap for each marker here
-//                 print(element.projectName);
-//               },
-//               child: Column(
-//                 mainAxisSize: MainAxisSize.min,
-//                 children: [
-//                   Icon(
-//                     Icons.home,
-//                     size: 140,
-//                   ),
-//                   Text(
-//                     element.projectName,
-//                     style: TextStyle(fontSize: 30),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         );
-//       });
-//     }
-//   },
-// ),
-}
-
-// class _MapPageState extends State<MapPage> {
-//   final mapController = MapController(
-//     initMapWithUserPosition: UserTrackingOption(),
-//   );
-//
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     super.initState();
-//     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-//       mapController.listenerMapSingleTapping.addListener(() async {
-//         // print()
-//         //   var position = mapController.listenerMapSingleTapping.value;
-//         //   print(position!.latitude);
-//         //   if (position != null) {
-//         //     await mapController.addMarker(position,
-//         //         markerIcon: MarkerIcon(
-//         //           icon: Icon(
-//         //             Icons.location_on,
-//         //             color: Colors.black,
-//         //             size: 148,
-//         //           ),
-//         //         ));
-//         //   }
-//       });
-//     });
-//   }
-//
-//   List<Unit> units = Get.arguments['selected'];
-//
-//   // @override
-//   @override
-//   Widget build(BuildContext context) {
-//     print(units);
-//     return MaterialApp(
-//       home: Scaffold(
-//           appBar: AppBar(
-//             title: Text('Map'),
-//           ),
-//           body: OSMFlutter(
-//             controller: mapController,
-//             mapIsLoading: Center(
-//               child: CircularProgressIndicator(),
-//             ),
-//             initZoom: 16,
-//             minZoomLevel: 3,
-//             stepZoom: 1,
-//             // androidHotReloadSupport: true,
-//             userLocationMarker: UserLocationMaker(
-//               personMarker: MarkerIcon(
-//                 icon: Icon(
-//                   Icons.location_on,
-//                   color: Colors.greenAccent,
-//                   size: 148,
-//                 ),
-//               ),
-//               directionArrowMarker: MarkerIcon(
-//                 icon: Icon(
-//                   Icons.location_on,
-//                   color: Colors.red,
-//                   size: 148,
-//                 ),
-//               ),
-//             ),
-//             markerOption: MarkerOption(
-//                 defaultMarker: MarkerIcon(
-//               icon: Icon(
-//                 Icons.location_on,
-//                 color: Colors.black,
-//                 size: 148,
-//               ),
-//             )),
-//             // onGeoPointClicked: (GeoPoint g) {
-//             //   print(g.latitude);
-//             // },
-//             // onGeoPointClicked: (GeoPoint geoPoint) {
-//             //   print(geoPoint.latitude);
-//             // },
-//             onMapIsReady: (isR) async {
-//               if (isR) {
-//                 print('----------Ready---------');
-//                 units.forEach((element) async {
-//                   print(element.toJson());
-//                   // await Future.delayed(Duration(seconds: 5));
-//                   mapController.addMarker(GeoPoint(latitude: element.latitude, longitude: element.longitude),
-//                       markerIcon: MarkerIcon(
-//                         // icon: Icon(
-//                         //   Icons.home,
-//                         //   color: Colors.black,
-//                         //   size: 148,
-//                         // ),
-//                         iconWidget: InkWell(
-//                           onTap: () {
-//                             print(element.toJson());
-//                           },
-//                           child: Column(
-//                             mainAxisSize: MainAxisSize.min,
-//                             children: [
-//                               Icon(
-//                                 Icons.home,
-//                                 size: 140,
-//                               ),
-//                               Text(
-//                                 element.projectName,
-//                                 style: TextStyle(fontSize: 30),
-//                               )
-//                             ],
-//                           ),
-//                         ),
-//                       ));
-//                 });
-//               }
-//             },
-//           )),
-//     );
-//   }
-// }
-class MapDialog extends StatelessWidget {
-  const MapDialog({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(title: Text('projectname'),);
   }
 }

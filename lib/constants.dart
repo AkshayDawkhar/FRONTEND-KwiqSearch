@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-String HOSTNAME = 'https://2660-49-36-51-146.ngrok-free.app';
+String HOSTNAME = 'http://143.244.139.72:25000';
 String DEPLOY = 'http://ec2-65-1-248-145.ap-south-1.compute.amazonaws.com:8080';
 String LOCAL = HOSTNAME;
 
@@ -120,6 +120,14 @@ List<String> projectType = [
   'Multiple Wings',
   'N/A Plot',
   'Town Ship',
+  'R Zone',
+  'Agriculture Plot',
+];
+List<String> projectCategory = [
+  'New launch',
+  'Resale',
+  'Under construction',
+  'Pre Launch',
 ];
 List<int> years = [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 3036, 2037];
 final List<DropdownMenuItem<int>> months = [
@@ -284,7 +292,7 @@ int getAmenitiesNumebr(String amenities) {
 }
 
 final validPhoneNumberRegExp = RegExp(r'^\d{10}$'); // 10 digits, all numeric
-String unitToName(double unit) {
+  String unitToName(double unit) {
   if (unit < 1) {
     switch (unit) {
       case 0.0:

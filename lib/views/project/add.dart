@@ -191,6 +191,26 @@ class AddProject extends StatelessWidget {
                           }),
                     ),
                     fixedContainer(
+                      child: DropdownButtonFormField(
+                          validator: (value) {
+                            if (value == null) {
+                              return "Enter something";
+                            }
+                            return null;
+                          },
+                          decoration: inputDecoration('Category'),
+                          hint: const Text('Category Type'),
+                          items: projectCategory
+                              .map((e) => DropdownMenuItem(
+                            child: Text(e),
+                            value: e.toLowerCase(),
+                          ))
+                              .toList(),
+                          onChanged: (value) {
+                            controller.projectType.text = value!;
+                          }),
+                    ),
+                    fixedContainer(
                         child: TextFormField(
                       validator: (value) {
                         if (value!.isEmpty) {
